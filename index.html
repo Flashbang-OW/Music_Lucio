@@ -4,28 +4,955 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lúcio.fm - Vamos Aumentar o Som!</title>
-    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============ VARIÁVEIS TEMÁTICAS ============ */
+        :root {
+            --lucio-green: #A4D615;
+            --lucio-green-dark: #7BA800;
+            --lucio-yellow: #F9ED32;
+            --overwatch-blue: #218FFE;
+            --dark-blue: #0F2343;
+            --darker-blue: #091428;
+            --overwatch-dark: #1A1A2E;
+            --heal-yellow: #FFD700;
+            --speed-green: #00FF00;
+            --text-white: #FFFFFF;
+            --text-gray: #8B9DC3;
+            --gradient-lucio: linear-gradient(135deg, var(--lucio-green), var(--lucio-yellow));
+            --gradient-overwatch: linear-gradient(135deg, var(--overwatch-blue), var(--lucio-green));
+        }
+
+        /* ============ RESET E BASE ============ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+            background: var(--darker-blue);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============ ONDAS SONORAS DE FUNDO ============ */
+        .sound-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wave {
+            position: absolute;
+            border: 2px solid rgba(164, 214, 21, 0.2);
+            border-radius: 50%;
+            animation: soundWave 4s infinite;
+            opacity: 0;
+        }
+
+        .wave1 { width: 300px; height: 300px; top: 20%; left: 30%; animation-delay: 0s; }
+        .wave2 { width: 400px; height: 400px; top: 60%; right: 20%; animation-delay: 1s; }
+        .wave3 { width: 200px; height: 200px; bottom: 10%; left: 10%; animation-delay: 2s; }
+        .wave4 { width: 350px; height: 350px; top: 40%; right: 40%; animation-delay: 3s; }
+
+        @keyframes soundWave {
+            0% { transform: scale(0.5); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* ============ ECRÃ DE LOGIN ============ */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-blue);
+            background-image: 
+                radial-gradient(ellipse at 30% 50%, rgba(164, 214, 21, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 30%, rgba(249, 237, 50, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(33, 143, 254, 0.15) 0%, transparent 50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.5s ease;
+        }
+
+        .login-container {
+            text-align: center;
+            z-index: 1;
+            width: 90%;
+            max-width: 420px;
+        }
+
+        .lucio-symbol-large {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(164, 214, 21, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .login-logo { margin-bottom: 30px; }
+
+        .login-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--text-white);
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(164, 214, 21, 0.6);
+            margin-bottom: 5px;
+        }
+
+        .login-subtitle {
+            color: var(--lucio-green);
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        .login-form { margin-bottom: 25px; }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--lucio-green);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            background: rgba(15, 35, 67, 0.8);
+            border: 2px solid rgba(164, 214, 21, 0.3);
+            border-radius: 10px;
+            color: var(--text-white);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--lucio-green);
+            box-shadow: 0 0 20px rgba(164, 214, 21, 0.3);
+        }
+
+        .input-wrapper input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-lucio);
+            border: none;
+            border-radius: 10px;
+            color: var(--darker-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(164, 214, 21, 0.4);
+            margin-bottom: 15px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
+        }
+
+        .button-icon {
+            font-size: 22px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .login-options a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .login-options a:hover { color: var(--lucio-green); }
+
+        .divider { color: rgba(255, 255, 255, 0.3); }
+
+        .login-voiceline {
+            margin-bottom: 20px;
+            min-height: 30px;
+        }
+
+        .login-voiceline p {
+            color: var(--lucio-green);
+            font-style: italic;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+
+        .error-message {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            color: #ff6b6b;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .skip-login {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-gray);
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .skip-login:hover {
+            border-color: var(--lucio-green);
+            color: var(--lucio-green);
+        }
+
+        /* Partículas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -30px;
+            animation: floatUp linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ============ APP CONTAINER ============ */
+        .app-container {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.5s ease;
+        }
+
+        .app-container.visible {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ============ SIDEBAR ============ */
+        .sidebar {
+            width: 240px;
+            background: rgba(9, 20, 40, 0.95);
+            border-right: 1px solid rgba(164, 214, 21, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .lucio-symbol {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text-white);
+        }
+
+        .logo-accent { color: var(--lucio-green); }
+
+        .nav-menu { list-style: none; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-gray);
+        }
+
+        .nav-item:hover {
+            background: rgba(164, 214, 21, 0.1);
+            color: var(--text-white);
+        }
+
+        .nav-item.active {
+            background: rgba(164, 214, 21, 0.15);
+            color: var(--lucio-green);
+        }
+
+        .nav-icon { font-size: 20px; }
+
+        .playlists-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+
+        .playlists-section h4 {
+            color: var(--text-gray);
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .playlists-section ul { list-style: none; }
+
+        .playlists-section li {
+            padding: 8px 0;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        .playlists-section li:hover { color: var(--lucio-green); }
+
+        .user-info {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar { font-size: 25px; }
+
+        .user-name {
+            color: var(--lucio-green);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 30px;
+            background: linear-gradient(to bottom, rgba(15, 35, 67, 0.5), var(--darker-blue));
+        }
+
+        .hero {
+            position: relative;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(164, 214, 21, 0.2), rgba(15, 35, 67, 0.8));
+            border: 1px solid rgba(164, 214, 21, 0.3);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 50%, rgba(164, 214, 21, 0.3), transparent 70%);
+            z-index: 0;
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--text-white);
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(164, 214, 21, 0.5);
+        }
+
+        .hero-subtitle {
+            color: var(--lucio-yellow);
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .cta-button {
+            background: var(--gradient-lucio);
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--darker-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(164, 214, 21, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
+        }
+
+        .section { margin-bottom: 35px; }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--text-white);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(15, 35, 67, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card:hover {
+            background: rgba(15, 35, 67, 0.9);
+            transform: translateY(-3px);
+            border-color: rgba(164, 214, 21, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-emoji { font-size: 50px; }
+
+        .card h3 {
+            font-size: 16px;
+            color: var(--text-white);
+            margin-bottom: 4px;
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============ BOTTOM BAR ============ */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(9, 20, 40, 0.95);
+            border-top: 1px solid rgba(164, 214, 21, 0.3);
+            padding: 12px 20px;
+            z-index: 100;
+        }
+
+        .mini-player {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .mini-album { width: 45px; height: 45px; }
+
+        .mini-disc {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--lucio-green), var(--darker-blue));
+            border-radius: 50%;
+            border: 2px solid var(--lucio-green);
+        }
+
+        .mini-info { flex: 1; }
+
+        .mini-title {
+            color: var(--text-white);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mini-artist {
+            color: var(--text-gray);
+            font-size: 12px;
+        }
+
+        .mini-controls { display: flex; gap: 10px; }
+
+        .mini-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .mini-btn:hover { transform: scale(1.2); }
+
+        /* ============ PLAYER OVERLAY ============ */
+        .player-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .player-overlay.active { display: flex; }
+
+        .player-modal {
+            background: var(--darker-blue);
+            border: 2px solid rgba(164, 214, 21, 0.4);
+            border-radius: 25px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(164, 214, 21, 0.2);
+        }
+
+        .close-player {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-white);
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1;
+            transition: color 0.3s;
+        }
+
+        .close-player:hover { color: var(--lucio-green); }
+
+        /* ============ PLAYER INTERNO ============ */
+        .player-full {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .album-art {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .album-glow {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(164, 214, 21, 0.3), transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        #albumCover {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--lucio-green);
+            box-shadow: 0 0 40px rgba(164, 214, 21, 0.4);
+            z-index: 1;
+            animation: rotate 8s linear infinite;
+            animation-play-state: paused;
+            transition: all 0.3s;
+        }
+
+        #albumCover.playing { animation-play-state: running; }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .vinyl-disc {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #1a1a2e 30%, #0a0a1a 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .equalizer {
+            position: absolute;
+            bottom: -30px;
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .equalizer .bar {
+            width: 4px;
+            background: var(--lucio-green);
+            border-radius: 2px;
+            animation: equalize 0.8s infinite;
+        }
+
+        .bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
+        .bar:nth-child(2) { height: 20px; animation-delay: 0.3s; }
+        .bar:nth-child(3) { height: 15px; animation-delay: 0.5s; }
+        .bar:nth-child(4) { height: 25px; animation-delay: 0.2s; }
+        .bar:nth-child(5) { height: 12px; animation-delay: 0.4s; }
+
+        @keyframes equalize {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+            50% { transform: scaleY(1.5); opacity: 1; }
+        }
+
+        .track-info {
+            text-align: center;
+            margin: 25px 0 20px;
+        }
+
+        #trackTitle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--lucio-green);
+            text-shadow: 0 0 10px rgba(164, 214, 21, 0.5);
+            margin-bottom: 5px;
+        }
+
+        #trackArtist {
+            color: var(--text-gray);
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--text-gray);
+            font-size: 12px;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: visible;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--gradient-lucio);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        .progress-dot {
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            width: 16px;
+            height: 16px;
+            background: var(--lucio-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(164, 214, 21, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .progress-bar:hover .progress-dot { opacity: 1; }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-gray);
+            padding: 5px;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.2);
+            color: var(--lucio-green);
+        }
+
+        .ability-btn { font-size: 18px; opacity: 0.7; }
+        .ability-btn:hover { opacity: 1; }
+
+        #speedBoost:hover { color: var(--speed-green); }
+        #healBoost:hover { color: var(--heal-yellow); }
+
+        .play-btn {
+            background: var(--gradient-lucio);
+            border: none;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--darker-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(164, 214, 21, 0.6);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(164, 214, 21, 0.9);
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--lucio-green);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(164, 214, 21, 0.8);
+        }
+
+        .playlist-section {
+            border-top: 1px solid rgba(164, 214, 21, 0.3);
+            padding-top: 20px;
+            width: 100%;
+        }
+
+        .playlist-section h3 {
+            color: var(--lucio-yellow);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .playlist {
+            list-style: none;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .playlist::-webkit-scrollbar { width: 4px; }
+        .playlist::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 2px; }
+        .playlist::-webkit-scrollbar-thumb { background: var(--lucio-green); border-radius: 2px; }
+
+        .playlist li {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid transparent;
+        }
+
+        .playlist li:hover {
+            background: rgba(164, 214, 21, 0.1);
+            border-left-color: var(--lucio-yellow);
+        }
+
+        .playlist li.active {
+            background: rgba(164, 214, 21, 0.15);
+            border-left: 3px solid var(--lucio-green);
+        }
+
+        .song-number {
+            color: var(--lucio-green);
+            font-weight: 700;
+            margin-right: 10px;
+            min-width: 25px;
+        }
+
+        .song-info { flex: 1; }
+
+        .song-title { font-weight: 600; font-size: 15px; }
+        .song-artist { color: var(--text-gray); font-size: 12px; }
+        .song-duration { color: var(--lucio-yellow); font-size: 12px; font-weight: 600; }
+
+        /* ============ RESPONSIVO ============ */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { padding: 15px; }
+            .hero-title { font-size: 28px; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .login-title { font-size: 36px; }
+        }
+    </style>
 </head>
 <body>
     <!-- ============ ECRÃ DE LOGIN ============ -->
     <div class="login-screen" id="loginScreen">
-        <!-- Ondas sonoras de fundo -->
         <div class="sound-waves">
             <div class="wave wave1"></div>
             <div class="wave wave2"></div>
             <div class="wave wave3"></div>
             <div class="wave wave4"></div>
         </div>
-
-        <!-- Partículas flutuantes -->
         <div class="particles" id="particles"></div>
 
         <div class="login-container">
-            <!-- Símbolo do Lúcio -->
             <div class="login-logo">
                 <div class="lucio-symbol-large">
-                    <svg viewBox="0 0 100 100" class="frog-svg-large">
+                    <svg viewBox="0 0 100 100" width="120" height="120">
                         <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3">
                             <animate attributeName="r" values="45;48;45" dur="2s" repeatCount="indefinite"/>
                         </circle>
@@ -35,11 +962,10 @@
                         <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
                     </svg>
                 </div>
-                <h1 class="login-title">LÚCIO<span class="accent">.fm</span></h1>
+                <h1 class="login-title">LÚCIO<span style="color:#A4D615">.fm</span></h1>
                 <p class="login-subtitle">Vamos aumentar o som!</p>
             </div>
 
-            <!-- Formulário de Login -->
             <form class="login-form" id="loginForm">
                 <div class="input-group">
                     <label for="username">Nome de Herói</label>
@@ -48,7 +974,6 @@
                         <input type="text" id="username" placeholder="Ex: DJ_Lucio_OW" required>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label for="password">Código de Acesso</label>
                     <div class="input-wrapper">
@@ -56,43 +981,36 @@
                         <input type="password" id="password" placeholder="••••••••" required>
                     </div>
                 </div>
-
                 <button type="submit" class="login-button">
-                    <span class="button-text">ENTRAR NO JOGO</span>
+                    <span>ENTRAR NO JOGO</span>
                     <span class="button-icon">🎧</span>
                 </button>
-
                 <div class="login-options">
-                    <a href="#" class="forgot-password">Esqueceu o código?</a>
+                    <a href="#">Esqueceu o código?</a>
                     <span class="divider">|</span>
-                    <a href="#" class="create-account">Criar conta</a>
+                    <a href="#">Criar conta</a>
                 </div>
             </form>
 
-            <!-- Voiceline aleatória -->
             <div class="login-voiceline">
                 <p id="loginVoiceline">"Isso é Lúcio-oh-oh!"</p>
             </div>
 
-            <!-- Mensagem de erro (escondida) -->
             <div class="error-message" id="errorMessage">
                 <span>⚠️</span> Código incorreto! Tenta novamente.
             </div>
 
-            <!-- Botão para saltar login (demo) -->
-            <button class="skip-login" id="skipLoginBtn">
-                Entrar como convidado 🐸
-            </button>
+            <button class="skip-login" id="skipLoginBtn">Entrar como convidado 🐸</button>
         </div>
     </div>
 
-    <!-- ============ LANDING PAGE (ESCONDIDA INICIALMENTE) ============ -->
-    <div class="app-container" id="appContainer" style="display: none;">
-        <!-- Sidebar estilo Spotify/Overwatch -->
+    <!-- ============ APP PRINCIPAL ============ -->
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-logo">
                 <div class="lucio-symbol">
-                    <svg viewBox="0 0 100 100" class="frog-svg">
+                    <svg viewBox="0 0 100 100" width="40" height="40">
                         <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
                         <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
                         <circle cx="42" cy="40" r="4" fill="#0F2343"/>
@@ -102,880 +1020,7 @@
                 </div>
                 <span class="logo-text">LÚCIO<span class="logo-accent">.fm</span></span>
             </div>
-            
             <ul class="nav-menu">
-                <li class="nav-item active">
-                    <span class="nav-icon">🏠</span>
-                    <span>Início</span>
-                </li>
-                <li class="nav-item">
-                    <span class="nav-icon">🔍</span>
-                    <span>Explorar</span>
-                </li>
-                <li class="nav-item">
-                    <span class="nav-icon">📚</span>
-                    <span>Biblioteca</span>
-                </li>
-                <li class="nav-item" id="openPlayerBtn">
-                    <span class="nav-icon">🎵</span>
-                    <span>Player</span>
-                </li>
-            </ul>
-            
-            <div class="playlists-section">
-                <h4>PLAYLISTS</h4>
-                <ul>
-                    <li>❤️ Favela Classics</li>
-                    <li>⚡ Speed Boost Mix</li>
-                    <li>💚 Healing Beats</li>
-                    <li>🎤 Ultimate Drops</li>
-                </ul>
-            </div>
-
-            <!-- Utilizador logado -->
-            <div class="user-info">
-                <span class="user-avatar">🐸</span>
-                <span class="user-name" id="displayUsername">DJ_Lucio_OW</span>
-            </div>
-        </nav>
-
-        <!-- Conteúdo Principal -->
-        <main class="main-content">
-            <!-- Hero Section -->
-            <section class="hero">
-                <div class="hero-bg"></div>
-                <div class="hero-content">
-                    <h1 class="hero-title">VAMOS AUMENTAR O SOM</h1>
-                    <p class="hero-subtitle">A tua playlist inspirada no DJ mais rápido do mundo</p>
-                    <button class="cta-button" id="heroCTA">
-                        <span>🎧</span> ABRIR PLAYER
-                    </button>
-                </div>
-            </section>
-
-            <!-- Seção: Para Ti -->
-            <section class="section">
-                <h2 class="section-title">🎯 Para Ti</h2>
-                <div class="cards-grid">
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #0F2343);">
-                            <span class="card-emoji">🐸</span>
-                        </div>
-                        <h3>Daily Mix Lúcio</h3>
-                        <p>As tuas favoritas</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #A4D615);">
-                            <span class="card-emoji">⚡</span>
-                        </div>
-                        <h3>Speed Training</h3>
-                        <p>Para treinos intensos</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #218FFE, #A4D615);">
-                            <span class="card-emoji">💚</span>
-                        </div>
-                        <h3>Healing Vibes</h3>
-                        <p>Relaxa e recupera</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Seção: Em Alta -->
-            <section class="section">
-                <h2 class="section-title">🔥 Em Alta</h2>
-                <div class="cards-grid">
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #000000);">
-                            <span class="card-emoji">🎤</span>
-                        </div>
-                        <h3>Synaesthesia Auditiva</h3>
-                        <p>Lúcio • 3:45</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #218FFE);">
-                            <span class="card-emoji">🛹</span>
-                        </div>
-                        <h3>Favela Nights</h3>
-                        <p>Lúcio • 5:12</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #F9ED32);">
-                            <span class="card-emoji">🔊</span>
-                        </div>
-                        <h3>Barrier Sound</h3>
-                        <p>Lúcio • 4:18</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Seção: Colaborações -->
-            <section class="section">
-                <h2 class="section-title">🎮 Colaborações Overwatch</h2>
-                <div class="cards-grid">
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #FF69B4, #FF1493);">
-                            <span class="card-emoji">🐰</span>
-                        </div>
-                        <h3>D.Va Gaming Beats</h3>
-                        <p>Mix para jogar</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #00CED1, #008B8B);">
-                            <span class="card-emoji">🔷</span>
-                        </div>
-                        <h3>Symmetra Order</h3>
-                        <p>Música ordeira</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-image" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
-                            <span class="card-emoji">⛑️</span>
-                        </div>
-                        <h3>Mercy Healing</h3>
-                        <p>Música relaxante</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Barra Inferior (Mini Player) -->
-        <div class="bottom-bar" id="bottomBar">
-            <div class="mini-player">
-                <div class="mini-album">
-                    <div class="mini-disc"></div>
-                </div>
-                <div class="mini-info">
-                    <p class="mini-title" id="miniTitle">Escolhe uma música</p>
-                    <p class="mini-artist" id="miniArtist">Para começares</p>
-                </div>
-                <div class="mini-controls">
-                    <button class="mini-btn" id="miniPlayBtn">▶️</button>
-                    <button class="mini-btn" id="miniNextBtn">⏭️</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Player Overlay (Modal) -->
-        <div class="player-overlay" id="playerOverlay">
-            <div class="player-modal">
-                <button class="close-player" id="closePlayerBtn">✕</button>
-                
-                <div class="player-full">
-                    <div class="album-art">
-                        <div class="vinyl-disc" id="vinylDisc"></div>
-                        <div class="album-glow"></div>
-                        <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
-                             alt="Álbum do Lúcio" 
-                             id="albumCover">
-                        <div class="equalizer" id="equalizer">
-                            <span class="bar"></span>
-                            <span class="bar"></span>
-                            <span class="bar"></span>
-                            <span class="bar"></span>
-                            <span class="bar"></span>
-                        </div>
-                    </div>
-
-                    <div class="track-info">
-                        <h2 id="trackTitle">Escolhe uma faixa</h2>
-                        <p id="trackArtist">Lúcio Correia dos Santos</p>
-                    </div>
-
-                    <div class="progress-container">
-                        <span id="currentTime">0:00</span>
-                        <div class="progress-bar" id="progressBar">
-                            <div class="progress" id="progress">
-                                <div class="progress-dot"></div>
-                            </div>
-                        </div>
-                        <span id="duration">0:00</span>
-                    </div>
-
-                    <div class="controls">
-                        <button class="control-btn ability-btn" id="speedBoost" title="Speed Boost">⚡</button>
-                        <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
-                        <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
-                        <button class="play-btn" id="playBtn" title="Play/Pause">▶️</button>
-                        <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
-                        <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
-                        <button class="control-btn ability-btn" id="healBoost" title="Healing Boost">💚</button>
-                    </div>
-
-                    <div class="volume-container">
-                        <span>🔊</span>
-                        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
-                    </div>
-
-                    <div class="playlist-section">
-                        <h3>🎵 Playlist</h3>
-                        <ul class="playlist" id="playlist"></ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/playlist.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/landing.js"></script>
-    <script src="js/login.js"></script>
-</body>
-</html>
-
-/* ============ ECRÃ DE LOGIN ============ */
-.login-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--darker-blue);
-    background-image: 
-        radial-gradient(ellipse at 30% 50%, rgba(164, 214, 21, 0.2) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 30%, rgba(249, 237, 50, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, rgba(33, 143, 254, 0.15) 0%, transparent 50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: all 0.5s ease;
-}
-
-.login-container {
-    text-align: center;
-    z-index: 1;
-    width: 90%;
-    max-width: 420px;
-}
-
-/* Símbolo do Lúcio Grande */
-.lucio-symbol-large {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 20px;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(164, 214, 21, 0.5));
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-.frog-svg-large {
-    width: 100%;
-    height: 100%;
-}
-
-.login-logo {
-    margin-bottom: 30px;
-}
-
-.login-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 48px;
-    font-weight: 900;
-    color: var(--text-white);
-    letter-spacing: 3px;
-    text-shadow: 0 0 30px rgba(164, 214, 21, 0.6);
-    margin-bottom: 5px;
-}
-
-.login-subtitle {
-    color: var(--lucio-green);
-    font-size: 18px;
-    font-style: italic;
-}
-
-/* Formulário */
-.login-form {
-    margin-bottom: 25px;
-}
-
-.input-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    color: var(--lucio-green);
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 14px;
-    letter-spacing: 1px;
-}
-
-.input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-icon {
-    position: absolute;
-    left: 15px;
-    font-size: 18px;
-    z-index: 1;
-}
-
-.input-wrapper input {
-    width: 100%;
-    padding: 14px 15px 14px 45px;
-    background: rgba(15, 35, 67, 0.8);
-    border: 2px solid rgba(164, 214, 21, 0.3);
-    border-radius: 10px;
-    color: var(--text-white);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 16px;
-    outline: none;
-    transition: all 0.3s;
-}
-
-.input-wrapper input:focus {
-    border-color: var(--lucio-green);
-    box-shadow: 0 0 20px rgba(164, 214, 21, 0.3);
-}
-
-.input-wrapper input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-/* Botão de Login */
-.login-button {
-    width: 100%;
-    padding: 15px;
-    background: var(--gradient-lucio);
-    border: none;
-    border-radius: 10px;
-    color: var(--darker-blue);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.3s;
-    box-shadow: 0 5px 20px rgba(164, 214, 21, 0.4);
-    margin-bottom: 15px;
-}
-
-.login-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
-}
-
-.login-button:active {
-    transform: translateY(0);
-}
-
-.button-icon {
-    font-size: 22px;
-    animation: bounce 1s infinite;
-}
-
-/* Opções de login */
-.login-options {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.login-options a {
-    color: var(--text-gray);
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
-}
-
-.login-options a:hover {
-    color: var(--lucio-green);
-}
-
-.divider {
-    color: rgba(255, 255, 255, 0.3);
-}
-
-/* Voiceline do login */
-.login-voiceline {
-    margin-bottom: 20px;
-    min-height: 30px;
-}
-
-.login-voiceline p {
-    color: var(--lucio-green);
-    font-style: italic;
-    font-size: 16px;
-    transition: opacity 0.3s;
-}
-
-/* Mensagem de erro */
-.error-message {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: rgba(255, 0, 0, 0.2);
-    border: 1px solid rgba(255, 0, 0, 0.4);
-    color: #ff6b6b;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-/* Botão de saltar login */
-.skip-login {
-    background: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--text-gray);
-    padding: 10px 25px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    transition: all 0.3s;
-}
-
-.skip-login:hover {
-    border-color: var(--lucio-green);
-    color: var(--lucio-green);
-}
-
-/* Partículas */
-.particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.particle {
-    position: absolute;
-    bottom: -30px;
-    animation: floatUp linear infinite;
-    opacity: 0.4;
-}
-
-@keyframes floatUp {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.4;
-    }
-    90% {
-        opacity: 0.4;
-    }
-    100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-    }
-}
-
-/* ============ APP CONTAINER ============ */
-.app-container {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: all 0.5s ease;
-}
-
-/* ============ SIDEBAR ============ */
-.sidebar {
-    width: 240px;
-    background: rgba(9, 20, 40, 0.95);
-    border-right: 1px solid rgba(164, 214, 21, 0.2);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    overflow-y: auto;
-}
-
-.sidebar-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.lucio-symbol {
-    width: 40px;
-    height: 40px;
-}
-
-.frog-svg {
-    width: 100%;
-    height: 100%;
-}
-
-.logo-text {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
-    color: var(--text-white);
-}
-
-.logo-accent {
-    color: var(--lucio-green);
-}
-
-.nav-menu {
-    list-style: none;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-    color: var(--text-gray);
-}
-
-.nav-item:hover {
-    background: rgba(164, 214, 21, 0.1);
-    color: var(--text-white);
-}
-
-.nav-item.active {
-    background: rgba(164, 214, 21, 0.15);
-    color: var(--lucio-green);
-}
-
-.nav-icon {
-    font-size: 20px;
-}
-
-.playlists-section {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 15px;
-}
-
-.playlists-section h4 {
-    color: var(--text-gray);
-    font-size: 12px;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-
-.playlists-section ul {
-    list-style: none;
-}
-
-.playlists-section li {
-    padding: 8px 0;
-    color: var(--text-gray);
-    cursor: pointer;
-    transition: color 0.3s;
-    font-size: 14px;
-}
-
-.playlists-section li:hover {
-    color: var(--lucio-green);
-}
-
-.user-info {
-    margin-top: auto;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-avatar {
-    font-size: 25px;
-}
-
-.user-name {
-    color: var(--lucio-green);
-    font-weight: 600;
-    font-size: 14px;
-}
-
-/* ============ MAIN CONTENT ============ */
-.main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 30px;
-    background: linear-gradient(to bottom, rgba(15, 35, 67, 0.5), var(--darker-blue));
-}
-
-/* Hero Section */
-.hero {
-    position: relative;
-    padding: 40px;
-    border-radius: 20px;
-    margin-bottom: 30px;
-    overflow: hidden;
-    background: linear-gradient(135deg, rgba(164, 214, 21, 0.2), rgba(15, 35, 67, 0.8));
-    border: 1px solid rgba(164, 214, 21, 0.3);
-}
-
-.hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 70% 50%, rgba(164, 214, 21, 0.3), transparent 70%);
-    z-index: 0;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-}
-
-.hero-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 42px;
-    font-weight: 900;
-    color: var(--text-white);
-    margin-bottom: 10px;
-    text-shadow: 0 0 30px rgba(164, 214, 21, 0.5);
-}
-
-.hero-subtitle {
-    color: var(--lucio-yellow);
-    font-size: 18px;
-    margin-bottom: 25px;
-}
-
-.cta-button {
-    background: var(--gradient-lucio);
-    border: none;
-    padding: 14px 30px;
-    border-radius: 30px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--darker-blue);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s;
-    box-shadow: 0 5px 20px rgba(164, 214, 21, 0.4);
-}
-
-.cta-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
-}
-
-/* Seções */
-.section {
-    margin-bottom: 35px;
-}
-
-.section-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 22px;
-    margin-bottom: 20px;
-    color: var(--text-white);
-}
-
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-}
-
-.card {
-    background: rgba(15, 35, 67, 0.6);
-    border-radius: 12px;
-    padding: 15px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.card:hover {
-    background: rgba(15, 35, 67, 0.9);
-    transform: translateY(-3px);
-    border-color: rgba(164, 214, 21, 0.3);
-}
-
-.card-image {
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.card-emoji {
-    font-size: 50px;
-}
-
-.card h3 {
-    font-size: 16px;
-    color: var(--text-white);
-    margin-bottom: 4px;
-}
-
-.card p {
-    font-size: 13px;
-    color: var(--text-gray);
-}
-
-/* ============ BOTTOM BAR ============ */
-.bottom-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(9, 20, 40, 0.95);
-    border-top: 1px solid rgba(164, 214, 21, 0.3);
-    padding: 12px 20px;
-    z-index: 100;
-}
-
-.mini-player {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.mini-album {
-    width: 45px;
-    height: 45px;
-}
-
-.mini-disc {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--lucio-green), var(--darker-blue));
-    border-radius: 50%;
-    border: 2px solid var(--lucio-green);
-}
-
-.mini-info {
-    flex: 1;
-}
-
-.mini-title {
-    color: var(--text-white);
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.mini-artist {
-    color: var(--text-gray);
-    font-size: 12px;
-}
-
-.mini-controls {
-    display: flex;
-    gap: 10px;
-}
-
-.mini-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.mini-btn:hover {
-    transform: scale(1.2);
-}
-
-/* ============ PLAYER OVERLAY ============ */
-.player-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 200;
-    justify-content: center;
-    align-items: center;
-}
-
-.player-overlay.active {
-    display: flex;
-}
-
-.player-modal {
-    background: var(--darker-blue);
-    border: 2px solid rgba(164, 214, 21, 0.4);
-    border-radius: 25px;
-    padding: 30px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(164, 214, 21, 0.2);
-}
-
-.close-player {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: var(--text-white);
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1;
-    transition: color 0.3s;
-}
-
-.close-player:hover {
-    color: var(--lucio-green);
-}
-
-/* ============ RESPONSIVO ============ */
-@media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
-    
-    .main-content {
-        padding: 15px;
-    }
-    
-    .hero-title {
-        font-size: 28px;
-    }
-    
-    .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .cards-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .login-title {
-        font-size: 36px;
-    }
-}
+                <li class="nav-item active"><span class="nav-icon">🏠</span><span>Início</span></li>
+                <li class="nav-item"><span class="nav-icon">🔍</span><span>Explorar</span></li>
+                <li class="nav-item"><
