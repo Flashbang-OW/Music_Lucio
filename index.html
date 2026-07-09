@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lúcio.fm - DJ Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
     <style>
         * {
             margin: 0;
@@ -21,7 +23,7 @@
         }
 
         /* ============================================
-                   LOGIN - SEMPRE VISÍVEL INICIALMENTE
+                   LOGIN SCREEN
                    ============================================ */
         #loginScreen {
             position: fixed;
@@ -41,9 +43,11 @@
             background: #141414;
             border-radius: 12px;
             padding: 40px 32px;
-            width: 380px;
-            max-width: 90%;
+            width: 420px;
+            max-width: 92%;
             border: 1px solid #2A2A2A;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .login-box h1 {
@@ -60,23 +64,41 @@
             text-align: center;
             color: #666;
             font-size: 14px;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
-        .login-box input {
+        .login-box .field {
+            margin-bottom: 14px;
+        }
+
+        .login-box .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #B0B0B0;
+            margin-bottom: 4px;
+        }
+
+        .login-box .field input,
+        .login-box .field select {
             width: 100%;
-            padding: 12px 14px;
+            padding: 10px 14px;
             background: #222;
             border: 1px solid #2A2A2A;
             border-radius: 8px;
             color: #fff;
             font-size: 14px;
-            margin-bottom: 14px;
             outline: none;
+            font-family: 'Inter', sans-serif;
         }
 
-        .login-box input:focus {
+        .login-box .field input:focus,
+        .login-box .field select:focus {
             border-color: #1DB954;
+        }
+
+        .login-box .field select option {
+            background: #222;
         }
 
         .login-box .btn {
@@ -90,13 +112,19 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
+            font-family: 'Inter', sans-serif;
         }
 
         .login-box .btn:hover {
             background: #1ED760;
         }
 
-        .login-box .btn-ghost {
+        .login-box .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .login-box .btn-secondary {
             width: 100%;
             padding: 12px;
             background: transparent;
@@ -107,23 +135,25 @@
             font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
+            font-family: 'Inter', sans-serif;
         }
 
-        .login-box .btn-ghost:hover {
+        .login-box .btn-secondary:hover {
             border-color: #666;
             color: #fff;
         }
 
-        .login-box .toggle {
+        .login-box .toggle-link {
             display: block;
             text-align: center;
             color: #666;
             font-size: 14px;
-            margin: 16px 0 20px 0;
+            margin: 16px 0;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .login-box .toggle:hover {
+        .login-box .toggle-link:hover {
             color: #fff;
         }
 
@@ -131,7 +161,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin: 20px 0;
+            margin: 16px 0;
             color: #666;
             font-size: 13px;
         }
@@ -168,12 +198,15 @@
             color: #1DB954;
         }
 
-        .login-box .field.hidden {
-            display: none;
+        .login-box .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
         }
 
         /* ============================================
-                   APP - INICIALMENTE ESCONDIDA
+                   APP
                    ============================================ */
         #app {
             display: none !important;
@@ -186,7 +219,6 @@
             display: flex !important;
         }
 
-        /* TOP BAR */
         .topbar {
             display: flex;
             align-items: center;
@@ -261,7 +293,6 @@
             color: #EF4444;
         }
 
-        /* DJ DECK */
         .dj-container {
             flex: 1;
             padding: 16px 24px;
@@ -418,7 +449,6 @@
             flex-shrink: 0;
         }
 
-        /* MIXER */
         .mixer {
             display: flex;
             align-items: center;
@@ -465,6 +495,7 @@
         .mixer .mixer-btns {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
         .mixer .mixer-btns button {
@@ -522,51 +553,100 @@
 <body>
 
     <!-- ============================================
-    LOGIN
+    LOGIN / REGISTO
     ============================================ -->
     <div id="loginScreen">
         <div class="login-box">
             <h1>Lúcio<span>.fm</span></h1>
-            <p class="sub">DJ Studio</p>
+            <p class="sub" id="pageSubtitle">DJ Studio</p>
 
-            <form id="loginForm">
-                <input type="text" id="username" placeholder="Utilizador" required />
-                <input type="password" id="password" placeholder="Palavra-passe" required minlength="6" />
+            <!-- FORMULÁRIO DE LOGIN -->
+            <div id="loginFormContainer">
+                <form id="loginForm">
+                    <div class="field">
+                        <label for="loginUsername">Utilizador</label>
+                        <input type="text" id="loginUsername" placeholder="Ex: DJ_Lucio" required />
+                    </div>
+                    <div class="field">
+                        <label for="loginPassword">Palavra-passe</label>
+                        <input type="password" id="loginPassword" placeholder="Palavra-passe" required />
+                    </div>
 
-                <div id="confirmGroup" class="field hidden">
-                    <input type="password" id="confirmPassword" placeholder="Confirmar palavra-passe" />
-                </div>
+                    <div class="msg error" id="loginErrorMsg">
+                        <span id="loginErrorText">Erro</span>
+                    </div>
+                    <div class="msg success" id="loginSuccessMsg">
+                        <span id="loginSuccessText">Sucesso</span>
+                    </div>
 
-                <div id="emailGroup" class="field hidden">
-                    <input type="email" id="email" placeholder="Email (opcional)" />
-                </div>
+                    <button type="submit" class="btn" id="loginBtn">
+                        <span id="loginBtnText">Entrar</span>
+                    </button>
 
-                <div class="msg error" id="errorMsg">
-                    <span id="errorText">Erro</span>
-                </div>
-                <div class="msg success" id="successMsg">
-                    <span id="successText">Sucesso</span>
-                </div>
+                    <span class="toggle-link" id="showRegisterBtn">Não tens conta? Criar conta</span>
 
-                <button type="submit" class="btn" id="loginBtn">
-                    <span id="loginBtnText">Entrar</span>
-                </button>
+                    <div class="divider">ou</div>
 
-                <span class="toggle" id="toggleMode">Criar conta</span>
+                    <button type="button" class="btn-secondary" id="guestBtn">Entrar como convidado</button>
+                </form>
+            </div>
 
-                <div class="divider">ou</div>
+            <!-- FORMULÁRIO DE REGISTO -->
+            <div id="registerFormContainer" style="display:none;">
+                <form id="registerForm">
+                    <div class="form-title">📝 Criar Conta</div>
 
-                <!-- BOTÃO CONVIDADO - COM ID ÚNICO E SIMPLES -->
-                <button type="button" class="btn-ghost" id="btnGuest">Entrar como convidado</button>
-            </form>
+                    <div class="field">
+                        <label for="regNome">Nome completo</label>
+                        <input type="text" id="regNome" placeholder="Ex: João Silva" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="regUsername">Nome de utilizador</label>
+                        <input type="text" id="regUsername" placeholder="Ex: DJ_Lucio" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="regIdade">Idade</label>
+                        <input type="number" id="regIdade" placeholder="Ex: 25" min="12" max="120" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="regGmail">Email</label>
+                        <input type="email" id="regGmail" placeholder="exemplo@gmail.com" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="regPassword">Palavra-passe</label>
+                        <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6" />
+                    </div>
+
+                    <div class="field">
+                        <label for="regConfirmPassword">Confirmar palavra-passe</label>
+                        <input type="password" id="regConfirmPassword" placeholder="Confirme a palavra-passe" required />
+                    </div>
+
+                    <div class="msg error" id="registerErrorMsg">
+                        <span id="registerErrorText">Erro</span>
+                    </div>
+                    <div class="msg success" id="registerSuccessMsg">
+                        <span id="registerSuccessText">Sucesso</span>
+                    </div>
+
+                    <button type="submit" class="btn" id="registerBtn">
+                        <span id="registerBtnText">Criar Conta</span>
+                    </button>
+
+                    <span class="toggle-link" id="showLoginBtn">← Voltar para o login</span>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- ============================================
-    APP
+    APP - DJ STUDIO
     ============================================ -->
     <div id="app">
-        <!-- Top Bar -->
         <div class="topbar">
             <div class="brand">Lúcio<span>.fm</span></div>
             <div class="right">
@@ -577,10 +657,8 @@
             </div>
         </div>
 
-        <!-- DJ -->
         <div class="dj-container">
             <div class="decks">
-                <!-- Deck A -->
                 <div class="deck" id="deckA">
                     <div class="header">
                         <span>🎧 Deck A</span>
@@ -605,7 +683,6 @@
                     </div>
                 </div>
 
-                <!-- Deck B -->
                 <div class="deck" id="deckB">
                     <div class="header">
                         <span>🎧 Deck B</span>
@@ -631,7 +708,6 @@
                 </div>
             </div>
 
-            <!-- Mixer -->
             <div class="mixer">
                 <div class="crossfader">
                     <label>A</label>
@@ -650,63 +726,369 @@
     </div>
 
     <!-- ============================================
-    SCRIPT - VERSÃO SIMPLES E TESTADA
+    SCRIPT
     ============================================ -->
     <script>
         // ============================================
-        // FUNÇÃO PRINCIPAL - ENTRAR NA APP
+        // SUPABASE CONFIG
         // ============================================
-        function entrarApp(username) {
-            console.log('🚀 A entrar como:', username);
+        const SUPABASE_URL = 'https://hijrhoujydouxkvwupgw.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_FrehZQeVQthZW9uQSpAyqg_acRKGIQo';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            // Atualiza o nome do utilizador
-            document.getElementById('userName').textContent = username;
-            document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
+        // ============================================
+        // DOM REFS
+        // ============================================
+        const $ = id => document.getElementById(id);
 
-            // ESCONDE O LOGIN
-            document.getElementById('loginScreen').classList.add('hidden');
+        // Login
+        const loginScreen = $('loginScreen');
+        const app = $('app');
+        const loginForm = $('loginForm');
+        const loginFormContainer = $('loginFormContainer');
+        const registerFormContainer = $('registerFormContainer');
+        const loginUsername = $('loginUsername');
+        const loginPassword = $('loginPassword');
+        const loginBtn = $('loginBtn');
+        const loginBtnText = $('loginBtnText');
+        const loginErrorMsg = $('loginErrorMsg');
+        const loginErrorText = $('loginErrorText');
+        const loginSuccessMsg = $('loginSuccessMsg');
+        const loginSuccessText = $('loginSuccessText');
+        const showRegisterBtn = $('showRegisterBtn');
+        const showLoginBtn = $('showLoginBtn');
+        const guestBtn = $('guestBtn');
+        const logoutBtn = $('logoutBtn');
+        const userName = $('userName');
+        const userAvatar = $('userAvatar');
+        const pageSubtitle = $('pageSubtitle');
 
-            // MOSTRA A APP
-            document.getElementById('app').classList.add('visible');
+        // Registo
+        const registerForm = $('registerForm');
+        const regNome = $('regNome');
+        const regUsername = $('regUsername');
+        const regIdade = $('regIdade');
+        const regGmail = $('regGmail');
+        const regPassword = $('regPassword');
+        const regConfirmPassword = $('regConfirmPassword');
+        const registerBtn = $('registerBtn');
+        const registerBtnText = $('registerBtnText');
+        const registerErrorMsg = $('registerErrorMsg');
+        const registerErrorText = $('registerErrorText');
+        const registerSuccessMsg = $('registerSuccessMsg');
+        const registerSuccessText = $('registerSuccessText');
 
-            console.log('✅ App visível! Login escondido!');
+        let currentUser = null;
+
+        // ============================================
+        // MOSTRA/ESCONDE FORMULÁRIOS
+        // ============================================
+        function showLoginForm() {
+            loginFormContainer.style.display = 'block';
+            registerFormContainer.style.display = 'none';
+            pageSubtitle.textContent = 'DJ Studio';
+            // Limpa mensagens
+            loginErrorMsg.classList.remove('show');
+            loginSuccessMsg.classList.remove('show');
+            registerErrorMsg.classList.remove('show');
+            registerSuccessMsg.classList.remove('show');
+        }
+
+        function showRegisterForm() {
+            loginFormContainer.style.display = 'none';
+            registerFormContainer.style.display = 'block';
+            pageSubtitle.textContent = 'Criar nova conta';
+            // Limpa mensagens
+            loginErrorMsg.classList.remove('show');
+            loginSuccessMsg.classList.remove('show');
+            registerErrorMsg.classList.remove('show');
+            registerSuccessMsg.classList.remove('show');
         }
 
         // ============================================
-        // BOTÃO CONVIDADO - O MAIS SIMPLES POSSÍVEL
+        // MENSAGENS
         // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 Página carregada!');
+        function showLoginError(msg) {
+            loginErrorText.textContent = msg;
+            loginErrorMsg.classList.add('show');
+            loginSuccessMsg.classList.remove('show');
+            setTimeout(() => loginErrorMsg.classList.remove('show'), 5000);
+        }
 
-            // Botão convidado
-            var guestBtn = document.getElementById('btnGuest');
-            if (guestBtn) {
-                console.log('✅ Botão convidado encontrado!');
+        function showLoginSuccess(msg) {
+            loginSuccessText.textContent = msg;
+            loginSuccessMsg.classList.add('show');
+            loginErrorMsg.classList.remove('show');
+            setTimeout(() => loginSuccessMsg.classList.remove('show'), 5000);
+        }
 
-                guestBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('👤 CLICOU NO BOTÃO CONVIDADO!');
+        function showRegisterError(msg) {
+            registerErrorText.textContent = msg;
+            registerErrorMsg.classList.add('show');
+            registerSuccessMsg.classList.remove('show');
+            setTimeout(() => registerErrorMsg.classList.remove('show'), 5000);
+        }
 
-                    var nome = 'Convidado_' + Math.floor(Math.random() * 10000);
-                    console.log('👤 Nome gerado:', nome);
+        function showRegisterSuccess(msg) {
+            registerSuccessText.textContent = msg;
+            registerSuccessMsg.classList.add('show');
+            registerErrorMsg.classList.remove('show');
+            setTimeout(() => registerSuccessMsg.classList.remove('show'), 5000);
+        }
 
-                    // CHAMA A FUNÇÃO
-                    entrarApp(nome);
+        function setLoginLoading(loading) {
+            loginBtn.disabled = loading;
+            loginBtnText.textContent = loading ? 'A processar…' : 'Entrar';
+        }
+
+        function setRegisterLoading(loading) {
+            registerBtn.disabled = loading;
+            registerBtnText.textContent = loading ? 'A criar conta…' : 'Criar Conta';
+        }
+
+        // ============================================
+        // ENTRAR NA APP
+        // ============================================
+        function enterApp(username) {
+            console.log('🚀 A entrar como:', username);
+
+            userName.textContent = username;
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+
+            loginScreen.classList.add('hidden');
+            app.classList.add('visible');
+
+            // Redimensiona canvases
+            setTimeout(() => {
+                if (deckA) deckA.resize();
+                if (deckB) deckB.resize();
+            }, 300);
+
+            console.log('✅ App visível!');
+        }
+
+        // ============================================
+        // LOGIN
+        // ============================================
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+
+            if (!username || !password) {
+                showLoginError('Preencha todos os campos.');
+                return;
+            }
+
+            setLoginLoading(true);
+
+            try {
+                const email = username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
+
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
                 });
-            } else {
-                console.log('❌ Botão convidado NÃO encontrado!');
+
+                if (error) throw error;
+
+                if (data.user) {
+                    currentUser = data.user;
+                    const displayName = data.user.user_metadata?.nome || username;
+                    showLoginSuccess('✅ Login bem-sucedido!');
+                    setTimeout(() => enterApp(displayName), 500);
+                }
+            } catch (err) {
+                console.error('Erro de login:', err);
+                if (err.message.includes('Invalid login credentials')) {
+                    showLoginError('❌ Utilizador ou palavra-passe incorretos.');
+                } else {
+                    showLoginError('❌ Erro: ' + err.message);
+                }
+            }
+
+            setLoginLoading(false);
+        });
+
+        // ============================================
+        // REGISTO - COM TODOS OS CAMPOS
+        // ============================================
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nome = regNome.value.trim();
+            const username = regUsername.value.trim();
+            const idade = regIdade.value.trim();
+            const gmail = regGmail.value.trim();
+            const password = regPassword.value.trim();
+            const confirmPassword = regConfirmPassword.value.trim();
+
+            // Validações
+            if (!nome || !username || !idade || !gmail || !password || !confirmPassword) {
+                showRegisterError('⚠️ Preencha todos os campos.');
+                return;
+            }
+
+            if (password.length < 6) {
+                showRegisterError('⚠️ A palavra-passe deve ter pelo menos 6 caracteres.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showRegisterError('⚠️ As palavras-passe não coincidem.');
+                return;
+            }
+
+            if (parseInt(idade) < 12 || parseInt(idade) > 120) {
+                showRegisterError('⚠️ Idade inválida. Deve ser entre 12 e 120 anos.');
+                return;
+            }
+
+            if (!gmail.includes('@')) {
+                showRegisterError('⚠️ Email inválido.');
+                return;
+            }
+
+            setRegisterLoading(true);
+
+            try {
+                // Cria o email a partir do username
+                const email = username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
+
+                console.log('📝 A criar conta para:', { nome, username, idade, gmail, email });
+
+                // 1. Cria o utilizador na autenticação do Supabase
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            nome: nome,
+                            username: username,
+                            idade: parseInt(idade),
+                            gmail: gmail
+                        }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                if (authData.user) {
+                    console.log('✅ Utilizador criado na autenticação:', authData.user.id);
+
+                    // 2. Guarda os dados adicionais na tabela 'users' (se existir)
+                    try {
+                        const { error: insertError } = await supabase
+                            .from('users')
+                            .insert([{
+                                id: authData.user.id,
+                                nome: nome,
+                                username: username,
+                                idade: parseInt(idade),
+                                gmail: gmail,
+                                created_at: new Date().toISOString()
+                            }]);
+
+                        if (insertError) {
+                            console.warn('⚠️ Erro ao inserir na tabela users:', insertError);
+                            // Não falha o registo, apenas avisa
+                        } else {
+                            console.log('✅ Dados guardados na tabela users');
+                        }
+                    } catch (dbError) {
+                        console.warn('⚠️ Tabela users pode não existir:', dbError);
+                        // A tabela pode não existir, mas o registo já foi feito
+                    }
+
+                    showRegisterSuccess('✅ Conta criada com sucesso! Faça login.');
+                    registerForm.reset();
+
+                    // Volta para o login após 2 segundos
+                    setTimeout(() => {
+                        showLoginForm();
+                        // Preenche o username no login
+                        loginUsername.value = username;
+                        showLoginSuccess('✅ Conta criada! Faça login com as suas credenciais.');
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('❌ Erro no registo:', err);
+                if (err.message.includes('User already registered')) {
+                    showRegisterError('❌ Este nome de utilizador já está registado.');
+                } else if (err.message.includes('Password should be at least 6 characters')) {
+                    showRegisterError('❌ A palavra-passe deve ter pelo menos 6 caracteres.');
+                } else {
+                    showRegisterError('❌ Erro: ' + err.message);
+                }
+            }
+
+            setRegisterLoading(false);
+        });
+
+        // ============================================
+        // ALTERNAR ENTRE LOGIN E REGISTO
+        // ============================================
+        showRegisterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showRegisterForm();
+        });
+
+        showLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showLoginForm();
+        });
+
+        // ============================================
+        // BOTÃO CONVIDADO
+        // ============================================
+        guestBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const nome = 'Convidado_' + Math.floor(Math.random() * 10000);
+            enterApp(nome);
+        });
+
+        // ============================================
+        // LOGOUT
+        // ============================================
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                if (currentUser && !currentUser.id.startsWith('guest_')) {
+                    await supabase.auth.signOut();
+                }
+                currentUser = null;
+                app.classList.remove('visible');
+                setTimeout(() => {
+                    loginScreen.classList.remove('hidden');
+                    loginUsername.value = '';
+                    loginPassword.value = '';
+                    showLoginForm();
+                }, 300);
+            } catch (err) {
+                console.error('Erro ao sair:', err);
             }
         });
 
         // ============================================
-        // TESTE RÁPIDO - Botão de emergência
+        // VERIFICAR SESSÃO
         // ============================================
-        // Se o botão normal não funcionar, este atalho no console vai funcionar
-        console.log('💡 Se o botão não funcionar, escreve no console: entrarApp("Teste")');
-        console.log('💡 Ou clica com o botão direito no botão e escolhe "Inspecionar" para veres o ID');
+        async function checkSession() {
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (error) throw error;
+
+                if (data.session) {
+                    currentUser = data.session.user;
+                    const nome = currentUser.user_metadata?.nome || currentUser.user_metadata?.username || 'DJ_Lucio';
+                    enterApp(nome);
+                }
+            } catch (err) {
+                console.error('Erro ao verificar sessão:', err);
+            }
+        }
 
         // ============================================
-        // AUDIO DECK (SIMPLIFICADO)
+        // AUDIO DECK
         // ============================================
         class AudioDeck {
             constructor(canvas, playhead, playBtn, stopBtn, volumeSlider, speedSlider, timeDisplay, trackNameEl,
@@ -933,40 +1315,26 @@
         // INICIAR DECKS
         // ============================================
         const deckA = new AudioDeck(
-            document.getElementById('canvasA'),
-            document.getElementById('playheadA'),
-            document.getElementById('playA'),
-            document.getElementById('stopA'),
-            document.getElementById('volumeA'),
-            document.getElementById('speedA'),
-            document.getElementById('timeA'),
-            document.getElementById('trackNameA'),
-            document.getElementById('trackDurationA'),
-            document.getElementById('statusA')
+            $('canvasA'), $('playheadA'), $('playA'), $('stopA'),
+            $('volumeA'), $('speedA'), $('timeA'),
+            $('trackNameA'), $('trackDurationA'), $('statusA')
         );
 
         const deckB = new AudioDeck(
-            document.getElementById('canvasB'),
-            document.getElementById('playheadB'),
-            document.getElementById('playB'),
-            document.getElementById('stopB'),
-            document.getElementById('volumeB'),
-            document.getElementById('speedB'),
-            document.getElementById('timeB'),
-            document.getElementById('trackNameB'),
-            document.getElementById('trackDurationB'),
-            document.getElementById('statusB')
+            $('canvasB'), $('playheadB'), $('playB'), $('stopB'),
+            $('volumeB'), $('speedB'), $('timeB'),
+            $('trackNameB'), $('trackDurationB'), $('statusB')
         );
 
         const decks = [deckA, deckB];
         let deckIndex = 0;
 
         // ============================================
-        // IMPORTAR
+        // IMPORTAR MÚSICA
         // ============================================
-        document.getElementById('importBtn').onclick = () => document.getElementById('fileInput').click();
+        $('importBtn').onclick = () => $('fileInput').click();
 
-        document.getElementById('fileInput').onchange = async (e) => {
+        $('fileInput').onchange = async (e) => {
             const files = e.target.files;
             for (const file of files) {
                 const deck = decks[deckIndex];
@@ -993,7 +1361,7 @@
         // ============================================
         // CROSSFADER
         // ============================================
-        document.getElementById('crossfader').oninput = (e) => {
+        $('crossfader').oninput = (e) => {
             const val = e.target.value / 100;
             if (deckA.gain) {
                 deckA.gain.gain.value = (val < 0.5) ? deckA.volume : deckA.volume * (1 - val * 2);
@@ -1006,7 +1374,7 @@
         // ============================================
         // SYNC
         // ============================================
-        document.getElementById('syncBtn').onclick = function() {
+        $('syncBtn').onclick = function() {
             if (deckA.isPlaying && deckB.isPlaying) {
                 const current = deckA.audioCtx.currentTime - deckA.startTime;
                 deckB.pause();
@@ -1020,24 +1388,16 @@
         // EFFECTS
         // ============================================
         let effects = false;
-        document.getElementById('effectBtn').onclick = function() {
+        $('effectBtn').onclick = function() {
             effects = !effects;
             this.classList.toggle('active');
-            document.getElementById('masterVolume').textContent = effects ? '+3dB' : '-6dB';
+            $('masterVolume').textContent = effects ? '+3dB' : '-6dB';
             if (deckA.source) {
                 deckA.source.playbackRate.value = effects ? deckA.speed * 1.05 : deckA.speed;
             }
             if (deckB.source) {
                 deckB.source.playbackRate.value = effects ? deckB.speed * 1.05 : deckB.speed;
             }
-        };
-
-        // ============================================
-        // LOGOUT
-        // ============================================
-        document.getElementById('logoutBtn').onclick = function() {
-            document.getElementById('app').classList.remove('visible');
-            document.getElementById('loginScreen').classList.remove('hidden');
         };
 
         // ============================================
@@ -1048,12 +1408,21 @@
             deckB.resize();
         });
 
+        // ============================================
+        // INICIAR
+        // ============================================
+        showLoginForm();
+        checkSession();
+
         console.log('🎵 Lúcio.fm — DJ Studio');
-        console.log('👤 Clique em "Entrar como convidado" para testar');
-        console.log('📁 Arraste músicas ou clique em "Importar"');
+        console.log('📝 Para criar conta:');
+        console.log('   1. Clica em "Não tens conta? Criar conta"');
+        console.log('   2. Preenche: Nome, Utilizador, Idade, Email, Palavra-passe');
+        console.log('   3. Clica em "Criar Conta"');
+        console.log('   4. Depois faz login com as tuas credenciais');
         console.log('');
-        console.log('🔧 Se o botão não funcionar, escreve no console:');
-        console.log('   entrarApp("Teste")');
+        console.log('👤 Ou clica em "Entrar como convidado" para testar');
+        console.log('📁 Arraste músicas ou clique em "Importar"');
     </script>
 
 </body>
