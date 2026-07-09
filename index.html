@@ -262,7 +262,7 @@
                    APP LAYOUT
                    ============================================ */
         .app {
-            display: none;
+            display: none !important;
             height: 100vh;
             flex-direction: column;
             opacity: 0;
@@ -271,7 +271,7 @@
         }
 
         .app.visible {
-            display: flex;
+            display: flex !important;
             opacity: 1;
         }
 
@@ -741,29 +741,6 @@
                 flex-wrap: wrap;
             }
         }
-
-        /* ============================================
-                   ANIMATION FOR LOADING
-                   ============================================ */
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s infinite;
-        }
-
-        @keyframes dots {
-            0% {
-                content: '';
-            }
-            33% {
-                content: '.';
-            }
-            66% {
-                content: '..';
-            }
-            100% {
-                content: '...';
-            }
-        }
     </style>
 </head>
 <body>
@@ -1062,32 +1039,26 @@
 
             async loadFile(file) {
                 try {
-                    // Reset
                     this.stop();
                     this.audioBuffer = null;
                     this.waveformData = [];
 
-                    // Criar AudioContext se não existir
                     if (!this.audioContext) {
                         this.audioContext = new(window.AudioContext || window.webkitAudioContext)();
                     }
 
-                    // Ler ficheiro
                     const arrayBuffer = await file.arrayBuffer();
                     this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
                     this.duration = this.audioBuffer.duration;
 
-                    // Gerar waveform
                     this.generateWaveform();
 
-                    // Atualizar UI
                     this.trackNameEl.textContent = file.name;
                     this.trackNameEl.className = 'track-name';
                     this.trackDurationEl.textContent = this.formatTime(this.duration);
                     this.statusEl.textContent = '⏸ Carregado';
                     this.updateTimeDisplay(0);
 
-                    // Desenhar waveform
                     this.drawWaveform();
 
                     return true;
@@ -1137,7 +1108,6 @@
                     const height = Math.max(2, val * h * 0.8);
                     const x = i * (barWidth + 2);
 
-                    // Gradiente verde
                     const grad = ctx.createLinearGradient(0, centerY - height / 2, 0, centerY + height / 2);
                     grad.addColorStop(0, 'rgba(29, 185, 84, 0.4)');
                     grad.addColorStop(0.5, 'rgba(29, 185, 84, 0.9)');
@@ -1147,7 +1117,6 @@
                     ctx.fillRect(x, centerY - height / 2, barWidth, height);
                 }
 
-                // Linha central
                 ctx.strokeStyle = 'rgba(255,255,255,0.05)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
@@ -1172,25 +1141,20 @@
             play() {
                 if (!this.audioBuffer || !this.audioContext) return;
 
-                // Criar source
                 this.source = this.audioContext.createBufferSource();
                 this.source.buffer = this.audioBuffer;
                 this.source.playbackRate.value = this.currentSpeed;
 
-                // Criar gain node
                 this.gainNode = this.audioContext.createGain();
                 this.gainNode.gain.value = this.currentVolume;
 
-                // Conectar
                 this.source.connect(this.gainNode);
                 this.gainNode.connect(this.audioContext.destination);
 
-                // Analyser para visualização
                 this.analyser = this.audioContext.createAnalyser();
                 this.analyser.fftSize = 256;
                 this.source.connect(this.analyser);
 
-                // Iniciar
                 const offset = this.pausedAt || 0;
                 this.source.start(0, offset);
                 this.startTime = this.audioContext.currentTime - offset;
@@ -1201,7 +1165,6 @@
                 this.playBtn.classList.add('active');
                 this.statusEl.textContent = '▶ A tocar';
 
-                // Atualizar progresso
                 this.updateProgress();
             }
 
@@ -1336,9 +1299,6 @@
         // ============================================
         crossfader.addEventListener('input', (e) => {
             const val = e.target.value / 100;
-            // Controla o volume dos decks baseado no crossfader
-            const volA = Math.max(0, 1 - val * 2);
-            const volB = Math.max(0, val * 2 - 0);
             if (deckA.gainNode) deckA.gainNode.gain.value = (val < 0.5) ? deckA.currentVolume : deckA.currentVolume * (1 -
                 val * 2);
             if (deckB.gainNode) deckB.gainNode.gain.value = (val > 0.5) ? deckB.currentVolume : deckB.currentVolume * (val *
@@ -1350,7 +1310,6 @@
         // ============================================
         syncBtn.addEventListener('click', () => {
             if (deckA.isPlaying && deckB.isPlaying) {
-                // Sincroniza o tempo
                 const currentTime = deckA.audioContext.currentTime - deckA.startTime;
                 deckB.pause();
                 deckB.pausedAt = currentTime;
@@ -1360,20 +1319,16 @@
         });
 
         // ============================================
-        // EFFECTS (simples)
+        // EFFECTS
         // ============================================
         let effectsActive = false;
         effectBtn.addEventListener('click', () => {
             effectsActive = !effectsActive;
             effectBtn.classList.toggle('active');
             if (effectsActive) {
-                // Aplica efeito de filtro (simulação)
                 masterVolume.textContent = '+3dB';
-                if (deckA.audioContext) {
-                    // Simplesmente muda o tom
-                    if (deckA.source) deckA.source.playbackRate.value = deckA.currentSpeed * 1.05;
-                    if (deckB.source) deckB.source.playbackRate.value = deckB.currentSpeed * 1.05;
-                }
+                if (deckA.source) deckA.source.playbackRate.value = deckA.currentSpeed * 1.05;
+                if (deckB.source) deckB.source.playbackRate.value = deckB.currentSpeed * 1.05;
             } else {
                 masterVolume.textContent = '-6dB';
                 if (deckA.source) deckA.source.playbackRate.value = deckA.currentSpeed;
@@ -1431,17 +1386,31 @@
             successMsg.classList.remove('show');
         }
 
+        // ============================================
+        // ENTRAR NA APP - FUNÇÃO PRINCIPAL
+        // ============================================
         function enterApp(username) {
+            console.log('🚀 A entrar na app como:', username);
+
+            // Atualiza a UI
             userName.textContent = username;
             userAvatar.textContent = username.charAt(0).toUpperCase();
 
+            // Esconde o login e mostra a app
             loginScreen.classList.add('hidden');
-            app.style.display = 'flex';
+
+            // Força a app a aparecer
+            app.style.display = 'flex !important';
+            app.style.opacity = '1';
+
+            // Pequeno delay para a transição
             setTimeout(() => {
                 app.classList.add('visible');
-                // Redimensiona canvases após entrar
-                setTimeout(() => decks.forEach(d => d.resizeCanvas()), 100);
+                // Redimensiona os canvases
+                setTimeout(() => decks.forEach(d => d.resizeCanvas()), 200);
             }, 50);
+
+            console.log('✅ App visível, login escondido');
         }
 
         // ============================================
@@ -1538,6 +1507,7 @@
                 app.classList.remove('visible');
                 setTimeout(() => {
                     app.style.display = 'none';
+                    app.style.opacity = '0';
                     loginScreen.classList.remove('hidden');
                     usernameInput.value = '';
                     passwordInput.value = '';
@@ -1568,19 +1538,27 @@
         }
 
         // ============================================
-        // EVENT LISTENERS
+        // EVENT LISTENERS - BOTÃO CONVIDADO CORRIGIDO
         // ============================================
         loginForm.addEventListener('submit', handleLogin);
         toggleMode.addEventListener('click', (e) => { e.preventDefault();
             toggleModeFn(); });
 
+        // BOTÃO CONVIDADO - CORRIGIDO
         guestBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('👤 Botão "Entrar como convidado" clicado!');
+
             const guestName = 'Convidado_' + Math.floor(Math.random() * 10000);
+            console.log('👤 Nome de convidado gerado:', guestName);
+
+            // Define o utilizador convidado
             currentUser = {
                 user_metadata: { username: guestName },
                 id: 'guest_' + Date.now()
             };
+
+            // Entra na app
             enterApp(guestName);
         });
 
@@ -1619,6 +1597,7 @@
         console.log('🎚️ Use os controles de cada deck para tocar, parar e ajustar volume/speed');
         console.log('🎛️ O crossfader faz a transição entre os decks');
         console.log('🔄 Sync sincroniza o tempo entre as duas músicas');
+        console.log('👤 Clique em "Entrar como convidado" para testar sem registo');
     </script>
 
 </body>
