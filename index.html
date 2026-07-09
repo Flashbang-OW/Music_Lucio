@@ -233,6 +233,7 @@
             text-decoration: none;
             font-size: 14px;
             transition: color 0.3s;
+            cursor: pointer;
         }
 
         .login-options a:hover { color: var(--lucio-green); }
@@ -333,6 +334,7 @@
             opacity: 0;
             transform: scale(0.95);
             transition: all 0.5s ease;
+            flex-direction: column;
         }
 
         .app-container.visible {
@@ -341,116 +343,62 @@
             transform: scale(1);
         }
 
-        /* ============ SIDEBAR ============ */
-        .sidebar {
-            width: 240px;
-            background: rgba(9, 20, 40, 0.95);
-            border-right: 1px solid rgba(164, 214, 21, 0.2);
-            padding: 20px;
+        /* ============ HEADER ============ */
+        .app-header {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background: rgba(9, 20, 40, 0.95);
+            border-bottom: 1px solid rgba(164, 214, 21, 0.2);
             flex-shrink: 0;
         }
 
-        .sidebar-logo {
+        .app-header .logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .lucio-symbol {
+        .app-header .logo svg {
             width: 40px;
             height: 40px;
         }
 
-        .logo-text {
+        .app-header .logo-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 22px;
             font-weight: 900;
             color: var(--text-white);
         }
 
-        .logo-accent { color: var(--lucio-green); }
+        .app-header .logo-accent { color: var(--lucio-green); }
 
-        .nav-menu { list-style: none; }
-
-        .nav-item {
+        .app-header .user-area {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--text-gray);
+            gap: 15px;
         }
 
-        .nav-item:hover {
-            background: rgba(164, 214, 21, 0.1);
-            color: var(--text-white);
-        }
-
-        .nav-item.active {
-            background: rgba(164, 214, 21, 0.15);
+        .app-header .user-name {
             color: var(--lucio-green);
+            font-weight: 600;
+            font-size: 16px;
         }
 
-        .nav-icon { font-size: 20px; }
-
-        .playlists-section {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 15px;
-        }
-
-        .playlists-section h4 {
-            color: var(--text-gray);
-            font-size: 12px;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        .playlists-section ul { list-style: none; }
-
-        .playlists-section li {
-            padding: 8px 0;
-            color: var(--text-gray);
-            cursor: pointer;
-            transition: color 0.3s;
-            font-size: 14px;
-        }
-
-        .playlists-section li:hover { color: var(--lucio-green); }
-
-        .user-info {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar { font-size: 25px; }
-        .user-name { color: var(--lucio-green); font-weight: 600; font-size: 14px; }
-
-        .logout-btn {
+        .app-header .logout-btn {
             background: none;
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: var(--text-gray);
-            padding: 5px 12px;
-            border-radius: 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 12px;
+            font-size: 14px;
             transition: all 0.3s;
-            margin-left: auto;
         }
 
-        .logout-btn:hover {
+        .app-header .logout-btn:hover {
             border-color: #ff6b6b;
             color: #ff6b6b;
         }
@@ -459,553 +407,100 @@
         .main-content {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 30px 80px 30px;
+            padding: 40px;
             background: linear-gradient(to bottom, rgba(15, 35, 67, 0.5), var(--darker-blue));
-        }
-
-        .hero {
-            position: relative;
-            padding: 40px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(164, 214, 21, 0.2), rgba(15, 35, 67, 0.8));
-            border: 1px solid rgba(164, 214, 21, 0.3);
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 70% 50%, rgba(164, 214, 21, 0.3), transparent 70%);
-            z-index: 0;
-        }
-
-        .hero-content { position: relative; z-index: 1; }
-
-        .hero-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--text-white);
-            margin-bottom: 10px;
-            text-shadow: 0 0 30px rgba(164, 214, 21, 0.5);
-        }
-
-        .hero-subtitle {
-            color: var(--lucio-yellow);
-            font-size: 18px;
-            margin-bottom: 25px;
-        }
-
-        .cta-button {
-            background: var(--gradient-lucio);
-            border: none;
-            padding: 14px 30px;
-            border-radius: 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--darker-blue);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(164, 214, 21, 0.4);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
-        }
-
-        .section { margin-bottom: 35px; }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: var(--text-white);
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: rgba(15, 35, 67, 0.6);
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .card:hover {
-            background: rgba(15, 35, 67, 0.9);
-            transform: translateY(-3px);
-            border-color: rgba(164, 214, 21, 0.3);
-        }
-
-        .card-image {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(164, 214, 21, 0.1);
-        }
-
-        .card-emoji { font-size: 50px; }
-        .card h3 { font-size: 16px; color: var(--text-white); margin-bottom: 4px; }
-        .card p { font-size: 13px; color: var(--text-gray); }
-
-        .loading-spinner {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            color: var(--lucio-green);
-            font-size: 18px;
-            gap: 10px;
-        }
-
-        .spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid rgba(164, 214, 21, 0.3);
-            border-top: 3px solid var(--lucio-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ============ BOTTOM BAR ============ */
-        .bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(9, 20, 40, 0.95);
-            border-top: 1px solid rgba(164, 214, 21, 0.3);
-            padding: 12px 20px;
-            z-index: 100;
-        }
-
-        .mini-player {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .mini-album { width: 45px; height: 45px; flex-shrink: 0; }
-
-        .mini-disc {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--lucio-green), var(--darker-blue));
-            border-radius: 50%;
-            border: 2px solid var(--lucio-green);
-        }
-
-        .mini-info { flex: 1; min-width: 0; }
-
-        .mini-title {
-            color: var(--text-white);
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .mini-artist {
-            color: var(--text-gray);
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .mini-controls {
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .mini-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            color: var(--text-white);
-        }
-
-        .mini-btn:hover { transform: scale(1.2); }
-
-        /* ============ PLAYER OVERLAY ============ */
-        .player-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .player-overlay.active { display: flex; }
-
-        .player-modal {
-            background: var(--darker-blue);
-            border: 2px solid rgba(164, 214, 21, 0.4);
-            border-radius: 25px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(164, 214, 21, 0.2);
-        }
-
-        .close-player {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: var(--text-white);
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1;
-            transition: color 0.3s;
-        }
-
-        .close-player:hover { color: var(--lucio-green); }
-
-        /* ============ PLAYER INTERNO ============ */
-        .player-full {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .album-art {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            margin: 0 auto 25px;
-            display: flex;
             justify-content: center;
-            align-items: center;
         }
 
-        .album-glow {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(164, 214, 21, 0.3), transparent 70%);
-            border-radius: 50%;
-            animation: glowPulse 2s infinite;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        #albumCover {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--lucio-green);
-            box-shadow: 0 0 40px rgba(164, 214, 21, 0.4);
-            z-index: 1;
-            animation: rotateDisc 8s linear infinite;
-            animation-play-state: paused;
-            transition: all 0.3s;
-        }
-
-        #albumCover.playing { animation-play-state: running; }
-
-        @keyframes rotateDisc {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .vinyl-disc {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, #1a1a2e 30%, #0a0a1a 70%);
-            border-radius: 50%;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            z-index: 0;
-        }
-
-        .equalizer {
-            position: absolute;
-            bottom: -30px;
-            display: flex;
-            gap: 3px;
-            justify-content: center;
-            z-index: 2;
-        }
-
-        .equalizer .bar {
-            width: 4px;
-            background: var(--lucio-green);
-            border-radius: 2px;
-            animation: equalize 0.8s infinite;
-        }
-
-        .bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
-        .bar:nth-child(2) { height: 20px; animation-delay: 0.3s; }
-        .bar:nth-child(3) { height: 15px; animation-delay: 0.5s; }
-        .bar:nth-child(4) { height: 25px; animation-delay: 0.2s; }
-        .bar:nth-child(5) { height: 12px; animation-delay: 0.4s; }
-
-        @keyframes equalize {
-            0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
-            50% { transform: scaleY(1.5); opacity: 1; }
-        }
-
-        .track-info {
+        .welcome-box {
             text-align: center;
-            margin: 25px 0 20px;
-            width: 100%;
+            max-width: 600px;
         }
 
-        #trackTitle {
+        .welcome-box h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--lucio-green);
-            text-shadow: 0 0 10px rgba(164, 214, 21, 0.5);
-            margin-bottom: 5px;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--text-white);
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(164, 214, 21, 0.5);
         }
 
-        #trackArtist {
+        .welcome-box p {
+            color: var(--text-gray);
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-box .highlight {
+            color: var(--lucio-green);
+        }
+
+        .status-card {
+            background: rgba(15, 35, 67, 0.6);
+            border: 1px solid rgba(164, 214, 21, 0.2);
+            border-radius: 16px;
+            padding: 30px 40px;
+            display: inline-block;
+        }
+
+        .status-card .label {
             color: var(--text-gray);
             font-size: 14px;
-            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .progress-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            color: var(--text-gray);
-            font-size: 12px;
-            font-weight: 600;
-            width: 100%;
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            cursor: pointer;
-            position: relative;
-            overflow: visible;
-        }
-
-        .progress {
-            height: 100%;
-            background: var(--gradient-lucio);
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.1s linear;
-            position: relative;
-        }
-
-        .progress-dot {
-            position: absolute;
-            right: -6px;
-            top: -4px;
-            width: 16px;
-            height: 16px;
-            background: var(--lucio-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(164, 214, 21, 0.8);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .progress-bar:hover .progress-dot { opacity: 1; }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            width: 100%;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--text-gray);
-            padding: 5px;
-        }
-
-        .control-btn:hover {
-            transform: scale(1.2);
+        .status-card .value {
             color: var(--lucio-green);
-        }
-
-        .play-btn {
-            background: var(--gradient-lucio);
-            border: none;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
             font-size: 24px;
-            cursor: pointer;
-            color: var(--darker-blue);
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 5px;
+        }
+
+        .status-card .connected {
+            color: #00FF00;
+            font-size: 14px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(164, 214, 21, 0.6);
-            transition: all 0.3s;
-            position: relative;
+            gap: 8px;
         }
 
-        .play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 50px rgba(164, 214, 21, 0.9);
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 25px;
-            width: 100%;
-        }
-
-        .volume-slider {
-            flex: 1;
-            height: 4px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            outline: none;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: var(--lucio-green);
+        .status-card .connected::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00FF00;
             border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(164, 214, 21, 0.8);
+            animation: pulse 1.5s infinite;
         }
 
-        .playlist-section {
-            border-top: 1px solid rgba(164, 214, 21, 0.3);
-            padding-top: 20px;
-            width: 100%;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
         }
-
-        .playlist-section h3 {
-            color: var(--lucio-yellow);
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .playlist {
-            list-style: none;
-            max-height: 280px;
-            overflow-y: auto;
-        }
-
-        .playlist::-webkit-scrollbar { width: 4px; }
-        .playlist::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 2px; }
-        .playlist::-webkit-scrollbar-thumb { background: var(--lucio-green); border-radius: 2px; }
-
-        .playlist li {
-            padding: 12px 15px;
-            margin-bottom: 5px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 3px solid transparent;
-        }
-
-        .playlist li:hover {
-            background: rgba(164, 214, 21, 0.1);
-            border-left-color: var(--lucio-yellow);
-        }
-
-        .playlist li.active {
-            background: rgba(164, 214, 21, 0.15);
-            border-left: 3px solid var(--lucio-green);
-        }
-
-        .song-number {
-            color: var(--lucio-green);
-            font-weight: 700;
-            margin-right: 10px;
-            min-width: 25px;
-        }
-
-        .song-info { flex: 1; }
-        .song-title { font-weight: 600; font-size: 15px; }
-        .song-artist { color: var(--text-gray); font-size: 12px; }
-        .song-duration { color: var(--lucio-yellow); font-size: 12px; font-weight: 600; }
 
         /* ============ RESPONSIVO ============ */
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-content { padding: 15px 15px 80px 15px; }
-            .hero-title { font-size: 28px; }
-            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+            .main-content { padding: 20px; }
+            .welcome-box h1 { font-size: 32px; }
             .login-title { font-size: 36px; }
-            .player-modal { padding: 20px; }
-            .album-art { width: 160px; height: 160px; }
-            .vinyl-disc { width: 190px; height: 190px; }
-            .album-glow { width: 190px; height: 190px; }
+            .app-header { padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
+            .app-header .user-area { flex-wrap: wrap; }
         }
 
         @media (max-width: 480px) {
-            .cards-grid { grid-template-columns: 1fr; }
             .login-title { font-size: 28px; }
-            .hero-title { font-size: 22px; }
-            .hero { padding: 20px; }
-            .controls { gap: 10px; }
-            .play-btn { width: 55px; height: 55px; font-size: 20px; }
+            .welcome-box h1 { font-size: 24px; }
+            .status-card { padding: 20px; }
+            .app-header .logo-text { font-size: 18px; }
         }
     </style>
 </head>
@@ -1049,7 +544,7 @@
                     <label for="password">Código de Acesso</label>
                     <div class="input-wrapper">
                         <span class="input-icon">🔐</span>
-                        <input type="password" id="password" placeholder="••••••••" required>
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6">
                     </div>
                 </div>
                 <button type="submit" class="login-button" id="loginButton">
@@ -1057,9 +552,7 @@
                     <span class="button-icon">🎧</span>
                 </button>
                 <div class="login-options">
-                    <a href="#" id="showRegister">Criar conta</a>
-                    <span class="divider">|</span>
-                    <a href="#" id="showLogin" style="display:none;">Fazer login</a>
+                    <a id="toggleAuthMode">Criar conta</a>
                 </div>
             </form>
 
@@ -1068,11 +561,11 @@
             </div>
 
             <div class="error-message" id="errorMessage">
-                <span>⚠️</span> <span id="errorText">Código incorreto! Tenta novamente.</span>
+                <span>⚠️</span> <span id="errorText">Erro!</span>
             </div>
 
             <div class="success-message" id="successMessage">
-                <span>✅</span> <span id="successText">Conta criada com sucesso!</span>
+                <span>✅</span> <span id="successText">Sucesso!</span>
             </div>
 
             <button class="skip-login" id="skipLoginBtn">Entrar como convidado 🐸</button>
@@ -1081,140 +574,37 @@
 
     <!-- ============ APP PRINCIPAL ============ -->
     <div class="app-container" id="appContainer">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <div class="sidebar-logo">
-                <div class="lucio-symbol">
-                    <svg viewBox="0 0 100 100" width="40" height="40">
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
-                        <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
-                        <circle cx="42" cy="40" r="4" fill="#0F2343"/>
-                        <circle cx="58" cy="40" r="4" fill="#0F2343"/>
-                        <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
-                    </svg>
-                </div>
+        <header class="app-header">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" width="40" height="40">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
+                    <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
+                    <circle cx="42" cy="40" r="4" fill="#0F2343"/>
+                    <circle cx="58" cy="40" r="4" fill="#0F2343"/>
+                    <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
+                </svg>
                 <span class="logo-text">LÚCIO<span class="logo-accent">.fm</span></span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item active"><span class="nav-icon">🏠</span><span>Início</span></li>
-                <li class="nav-item"><span class="nav-icon">🔍</span><span>Explorar</span></li>
-                <li class="nav-item"><span class="nav-icon">🎵</span><span>Biblioteca</span></li>
-                <li class="nav-item"><span class="nav-icon">❤️</span><span>Favoritos</span></li>
-            </ul>
-            <div class="playlists-section">
-                <h4>SUAS PLAYLISTS</h4>
-                <ul id="userPlaylists">
-                    <li>🎧 Bangers do Lucio</li>
-                    <li>🌀 Batidas de Numbani</li>
-                    <li>⚡ Speed Boost Mix</li>
-                </ul>
-            </div>
-            <div class="user-info">
-                <span class="user-avatar">🐸</span>
-                <span class="user-name" id="displayName">DJ_Lucio_OW</span>
+            <div class="user-area">
+                <span class="user-name" id="displayName">Carregando...</span>
                 <button class="logout-btn" id="logoutBtn">Sair</button>
             </div>
-        </nav>
+        </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <section class="hero">
-                <div class="hero-bg"></div>
-                <div class="hero-content">
-                    <h1 class="hero-title">🎶 VAMOS AUMENTAR O SOM!</h1>
-                    <p class="hero-subtitle">As melhores batidas para te dar aquele boost de velocidade e cura.</p>
-                    <button class="cta-button" id="openPlayerBtn">▶ TOCAR AGORA</button>
+            <div class="welcome-box">
+                <h1>🎶 VAMOS AUMENTAR O SOM!</h1>
+                <p>
+                    Bem-vindo(a) ao <span class="highlight">Lúcio.fm</span>!<br>
+                    A tua conta está ligada à Supabase 🔗
+                </p>
+                <div class="status-card">
+                    <div class="label">Status da Conexão</div>
+                    <div class="value">✅ Conectado</div>
+                    <div class="connected">Supabase ativa</div>
                 </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">🔥 Mais Tocados</h2>
-                <div class="cards-grid" id="topTracksGrid">
-                    <div class="loading-spinner">
-                        <div class="spinner"></div>
-                        <span>Carregando músicas...</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2 class="section-title">🎶 Playlists em Destaque</h2>
-                <div class="cards-grid" id="playlistsGrid">
-                    <div class="loading-spinner">
-                        <div class="spinner"></div>
-                        <span>Carregando playlists...</span>
-                    </div>
-                </div>
-            </section>
+            </div>
         </main>
-
-        <!-- Bottom Bar (Mini Player) -->
-        <div class="bottom-bar">
-            <div class="mini-player" id="miniPlayer">
-                <div class="mini-album">
-                    <div class="mini-disc"></div>
-                </div>
-                <div class="mini-info">
-                    <div class="mini-title" id="miniTitle">Nenhuma música</div>
-                    <div class="mini-artist" id="miniArtist">—</div>
-                </div>
-                <div class="mini-controls">
-                    <button class="mini-btn" id="miniPlayBtn">▶</button>
-                    <button class="mini-btn" id="miniNextBtn">⏭</button>
-                    <button class="mini-btn" id="miniExpandBtn">⏏</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ PLAYER OVERLAY ============ -->
-    <div class="player-overlay" id="playerOverlay">
-        <div class="player-modal">
-            <button class="close-player" id="closePlayerBtn">✕</button>
-            <div class="player-full">
-                <div class="album-art">
-                    <div class="album-glow"></div>
-                    <div class="vinyl-disc"></div>
-                    <img id="albumCover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Crect width='220' height='220' fill='%230F2343'/%3E%3Ccircle cx='110' cy='110' r='60' fill='%23A4D615' opacity='0.8'/%3E%3Ccircle cx='110' cy='110' r='20' fill='%230F2343'/%3E%3C/svg%3E" alt="Capa do álbum">
-                    <div class="equalizer">
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                    </div>
-                </div>
-                <div class="track-info">
-                    <h2 id="trackTitle">Nenhuma música</h2>
-                    <p id="trackArtist">—</p>
-                </div>
-                <div class="progress-container">
-                    <span id="currentTime">0:00</span>
-                    <div class="progress-bar" id="progressBar">
-                        <div class="progress" id="progress"></div>
-                        <div class="progress-dot"></div>
-                    </div>
-                    <span id="totalTime">0:00</span>
-                </div>
-                <div class="controls">
-                    <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
-                    <button class="control-btn" id="prevBtn" title="Anterior">⏮</button>
-                    <button class="play-btn" id="playerPlayBtn">▶</button>
-                    <button class="control-btn" id="nextBtn" title="Próxima">⏭</button>
-                    <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
-                </div>
-                <div class="volume-container">
-                    <span>🔊</span>
-                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
-                </div>
-                <div class="playlist-section">
-                    <h3>🎵 Lista de Reprodução</h3>
-                    <ul class="playlist" id="playlistContainer">
-                        <!-- Playlist será gerada via JS -->
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -1227,78 +617,29 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // =====================================================
-        // DADOS DO PLAYER (músicas)
-        // =====================================================
-        const defaultPlaylistData = [
-            { title: "Rejuvenescência", artist: "Lúcio", duration: "3:24", emoji: "🎵" },
-            { title: "Batida de Numbani", artist: "Lúcio", duration: "4:01", emoji: "🥁" },
-            { title: "Velocidade Máxima", artist: "Lúcio", duration: "3:12", emoji: "⚡" },
-            { title: "Cura Sonora", artist: "Lúcio", duration: "3:45", emoji: "💚" },
-            { title: "Frequência de Ouro", artist: "Lúcio", duration: "4:20", emoji: "✨" },
-            { title: "Sinta o Ritmo", artist: "Lúcio", duration: "3:55", emoji: "🎧" },
-            { title: "Aumenta o Som", artist: "Lúcio", duration: "3:08", emoji: "🔊" },
-            { title: "Boom do Lucio", artist: "Lúcio", duration: "3:33", emoji: "💥" }
-        ];
-
-        let playlistData = [...defaultPlaylistData];
-        let currentTrackIndex = 0;
-        let isPlaying = false;
-        let currentTime = 0;
-        let trackDuration = 0;
-        let progressInterval = null;
-        let volume = 0.8;
-        let currentUser = null;
-        let isRegistering = false;
-
-        // =====================================================
         // ELEMENTOS DOM
         // =====================================================
         const loginScreen = document.getElementById('loginScreen');
         const appContainer = document.getElementById('appContainer');
         const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('errorMessage');
         const errorText = document.getElementById('errorText');
         const successMessage = document.getElementById('successMessage');
         const successText = document.getElementById('successText');
+        const toggleAuthMode = document.getElementById('toggleAuthMode');
         const skipLoginBtn = document.getElementById('skipLoginBtn');
         const displayName = document.getElementById('displayName');
-        const loginVoiceline = document.getElementById('loginVoiceline');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginButton = document.getElementById('loginButton');
-        const showRegister = document.getElementById('showRegister');
-        const showLogin = document.getElementById('showLogin');
         const logoutBtn = document.getElementById('logoutBtn');
+        const loginVoiceline = document.getElementById('loginVoiceline');
 
-        // Player
-        const playerOverlay = document.getElementById('playerOverlay');
-        const openPlayerBtn = document.getElementById('openPlayerBtn');
-        const closePlayerBtn = document.getElementById('closePlayerBtn');
-        const playerPlayBtn = document.getElementById('playerPlayBtn');
-        const miniPlayBtn = document.getElementById('miniPlayBtn');
-        const miniNextBtn = document.getElementById('miniNextBtn');
-        const miniExpandBtn = document.getElementById('miniExpandBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const shuffleBtn = document.getElementById('shuffleBtn');
-        const repeatBtn = document.getElementById('repeatBtn');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const progressBar = document.getElementById('progressBar');
-        const progress = document.getElementById('progress');
-        const currentTimeEl = document.getElementById('currentTime');
-        const totalTimeEl = document.getElementById('totalTime');
-        const trackTitle = document.getElementById('trackTitle');
-        const trackArtist = document.getElementById('trackArtist');
-        const miniTitle = document.getElementById('miniTitle');
-        const miniArtist = document.getElementById('miniArtist');
-        const playlistContainer = document.getElementById('playlistContainer');
-        const topTracksGrid = document.getElementById('topTracksGrid');
-        const playlistsGrid = document.getElementById('playlistsGrid');
-        const albumCover = document.getElementById('albumCover');
-        const userPlaylists = document.getElementById('userPlaylists');
+        let isRegistering = false;
+        let currentUser = null;
 
         // =====================================================
-        // PARTÍCULAS DO LOGIN
+        // PARTÍCULAS
         // =====================================================
         function createParticles() {
             const container = document.getElementById('particles');
@@ -1338,7 +679,7 @@
         }, 5000);
 
         // =====================================================
-        // FUNÇÕES DE AUTENTICAÇÃO
+        // FUNÇÕES DE UI
         // =====================================================
         function showError(message) {
             errorText.textContent = message;
@@ -1352,6 +693,20 @@
             setTimeout(() => successMessage.classList.remove('show'), 4000);
         }
 
+        function setLoading(loading) {
+            if (loading) {
+                loginButton.disabled = true;
+                loginButton.innerHTML = '<span>⏳</span><span>A CARREGAR...</span>';
+            } else {
+                loginButton.disabled = false;
+                const label = isRegistering ? 'CRIAR CONTA' : 'ENTRAR NO JOGO';
+                loginButton.innerHTML = `<span>${label}</span><span class="button-icon">🎧</span>`;
+            }
+        }
+
+        // =====================================================
+        // AUTENTICAÇÃO
+        // =====================================================
         async function handleLogin(e) {
             e.preventDefault();
             const username = usernameInput.value.trim();
@@ -1362,14 +717,20 @@
                 return;
             }
 
-            loginButton.disabled = true;
-            loginButton.innerHTML = '<span>⏳</span><span>A CARREGAR...</span>';
+            if (password.length < 6) {
+                showError('A senha deve ter pelo menos 6 caracteres!');
+                return;
+            }
+
+            setLoading(true);
 
             try {
+                const email = username.toLowerCase().replace(/\s/g, '') + '@lucio.fm';
+
                 if (isRegistering) {
                     // REGISTO
                     const { data, error } = await supabase.auth.signUp({
-                        email: username + '@lucio.fm',
+                        email: email,
                         password: password,
                         options: {
                             data: { username: username }
@@ -1379,20 +740,19 @@
                     if (error) throw error;
 
                     if (data.user) {
-                        showSuccess('Conta criada! Faz login para continuar.');
+                        showSuccess('Conta criada com sucesso! Faz login para continuar.');
+                        // Volta para modo login
                         isRegistering = false;
-                        showRegister.style.display = 'inline';
-                        showLogin.style.display = 'none';
+                        toggleAuthMode.textContent = 'Criar conta';
                         loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
-                        loginButton.disabled = false;
-                        // Limpa a senha
                         passwordInput.value = '';
+                        setLoading(false);
                         return;
                     }
                 } else {
                     // LOGIN
                     const { data, error } = await supabase.auth.signInWithPassword({
-                        email: username + '@lucio.fm',
+                        email: email,
                         password: password
                     });
 
@@ -1406,7 +766,7 @@
                     }
                 }
             } catch (error) {
-                console.error('Erro de autenticação:', error);
+                console.error('Erro:', error);
                 if (error.message.includes('Invalid login credentials')) {
                     showError('Credenciais inválidas! Verifica o código de acesso.');
                 } else if (error.message.includes('User already registered')) {
@@ -1418,33 +778,20 @@
                 }
             }
 
-            loginButton.disabled = false;
-            loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+            setLoading(false);
         }
 
         // Alternar entre login e registo
-        showRegister.addEventListener('click', (e) => {
+        toggleAuthMode.addEventListener('click', (e) => {
             e.preventDefault();
-            isRegistering = true;
-            showRegister.style.display = 'none';
-            showLogin.style.display = 'inline';
-            loginButton.innerHTML = '<span>CRIAR CONTA</span><span class="button-icon">🎧</span>';
-            loginButton.querySelector('span:first-child').textContent = 'CRIAR CONTA';
+            isRegistering = !isRegistering;
+            toggleAuthMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
+            loginButton.innerHTML = isRegistering 
+                ? '<span>CRIAR CONTA</span><span class="button-icon">🎧</span>'
+                : '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+            passwordInput.placeholder = isRegistering ? 'Mínimo 6 caracteres' : '••••••••';
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
-            // Atualiza placeholder da senha
-            passwordInput.placeholder = 'Mínimo 6 caracteres';
-        });
-
-        showLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            isRegistering = false;
-            showRegister.style.display = 'inline';
-            showLogin.style.display = 'none';
-            loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
-            passwordInput.placeholder = '••••••••';
         });
 
         // Login como convidado
@@ -1474,450 +821,20 @@
         });
 
         // =====================================================
-        // FUNÇÕES DA BASE DE DADOS (Supabase)
+        // ENTRAR NA APP
         // =====================================================
-        async function loadSongsFromDB() {
-            try {
-                const { data, error } = await supabase
-                    .from('songs')
-                    .select('*')
-                    .order('play_count', { ascending: false });
-
-                if (error) throw error;
-
-                if (data && data.length > 0) {
-                    playlistData = data.map(song => ({
-                        id: song.id,
-                        title: song.title,
-                        artist: song.artist || 'Lúcio',
-                        duration: song.duration || '3:30',
-                        emoji: song.emoji || '🎵',
-                        play_count: song.play_count || 0
-                    }));
-                } else {
-                    // Se não houver músicas, insere as padrão
-                    await seedSongs();
-                }
-                return playlistData;
-            } catch (error) {
-                console.error('Erro ao carregar músicas:', error);
-                return defaultPlaylistData;
-            }
-        }
-
-        async function seedSongs() {
-            try {
-                const songsToInsert = defaultPlaylistData.map(song => ({
-                    title: song.title,
-                    artist: song.artist,
-                    duration: song.duration,
-                    emoji: song.emoji,
-                    play_count: 0
-                }));
-
-                const { error } = await supabase
-                    .from('songs')
-                    .insert(songsToInsert);
-
-                if (error) throw error;
-                console.log('Músicas inseridas com sucesso!');
-            } catch (error) {
-                console.error('Erro ao inserir músicas:', error);
-            }
-        }
-
-        async function incrementPlayCount(songId) {
-            try {
-                if (!songId || !currentUser) return;
-
-                // Primeiro busca a música atual
-                const { data, error } = await supabase
-                    .from('songs')
-                    .select('play_count')
-                    .eq('id', songId)
-                    .single();
-
-                if (error) throw error;
-
-                const currentCount = (data?.play_count || 0) + 1;
-
-                // Atualiza o contador
-                const { error: updateError } = await supabase
-                    .from('songs')
-                    .update({ play_count: currentCount })
-                    .eq('id', songId);
-
-                if (updateError) throw updateError;
-
-                // Regista a reprodução do utilizador
-                if (currentUser && !currentUser.id.startsWith('guest_')) {
-                    const { error: historyError } = await supabase
-                        .from('user_history')
-                        .insert({
-                            user_id: currentUser.id,
-                            song_id: songId,
-                            played_at: new Date().toISOString()
-                        });
-
-                    if (historyError) console.error('Erro ao registar histórico:', historyError);
-                }
-
-                // Atualiza o contador local
-                const songIndex = playlistData.findIndex(s => s.id === songId);
-                if (songIndex !== -1) {
-                    playlistData[songIndex].play_count = currentCount;
-                }
-
-                return currentCount;
-            } catch (error) {
-                console.error('Erro ao incrementar play count:', error);
-            }
-        }
-
-        async function loadPlaylistsFromDB() {
-            try {
-                if (!currentUser || currentUser.id.startsWith('guest_')) {
-                    // Utilizador convidado - mostra playlists padrão
-                    return;
-                }
-
-                const { data, error } = await supabase
-                    .from('playlists')
-                    .select('*')
-                    .eq('user_id', currentUser.id);
-
-                if (error) throw error;
-
-                if (data && data.length > 0) {
-                    userPlaylists.innerHTML = '';
-                    data.forEach(pl => {
-                        const li = document.createElement('li');
-                        li.textContent = pl.emoji + ' ' + pl.name;
-                        li.addEventListener('click', () => {
-                            // Carrega músicas da playlist
-                            loadSongsFromPlaylist(pl.id);
-                        });
-                        userPlaylists.appendChild(li);
-                    });
-                }
-            } catch (error) {
-                console.error('Erro ao carregar playlists:', error);
-            }
-        }
-
-        async function loadSongsFromPlaylist(playlistId) {
-            try {
-                const { data, error } = await supabase
-                    .from('playlist_songs')
-                    .select('songs(*)')
-                    .eq('playlist_id', playlistId);
-
-                if (error) throw error;
-
-                if (data && data.length > 0) {
-                    const songs = data.map(item => item.songs);
-                    playlistData = songs;
-                    renderPlaylist();
-                    loadTrack(0);
-                    renderCards();
-                }
-            } catch (error) {
-                console.error('Erro ao carregar músicas da playlist:', error);
-            }
-        }
-
-        // =====================================================
-        // FUNÇÕES DO PLAYER
-        // =====================================================
-        function formatTime(seconds) {
-            const m = Math.floor(seconds / 60);
-            const s = Math.floor(seconds % 60);
-            return m + ':' + (s < 10 ? '0' : '') + s;
-        }
-
-        function loadTrack(index) {
-            if (playlistData.length === 0) {
-                playlistData = defaultPlaylistData;
-                renderPlaylist();
-            }
-
-            if (index < 0) index = playlistData.length - 1;
-            if (index >= playlistData.length) index = 0;
-            currentTrackIndex = index;
-            const track = playlistData[currentTrackIndex];
-
-            // Se a música tem ID, incrementa o contador
-            if (track.id && currentUser) {
-                incrementPlayCount(track.id);
-            }
-
-            trackTitle.textContent = track.title;
-            trackArtist.textContent = track.artist;
-            miniTitle.textContent = track.title;
-            miniArtist.textContent = track.artist;
-
-            // Simula duração
-            const minDuration = 180;
-            const maxDuration = 270;
-            trackDuration = minDuration + Math.floor(Math.random() * (maxDuration - minDuration));
-            totalTimeEl.textContent = formatTime(trackDuration);
-            currentTime = 0;
-            progress.style.width = '0%';
-            currentTimeEl.textContent = '0:00';
-
-            const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
-            albumCover.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Crect width='220' height='220' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='110' y='125' font-size='60' text-anchor='middle' fill='white'%3E${track.emoji || '🎵'}%3C/text%3E%3C/svg%3E`;
-
-            if (isPlaying) {
-                isPlaying = false;
-                playerPlayBtn.textContent = '▶';
-                miniPlayBtn.textContent = '▶';
-                albumCover.classList.remove('playing');
-                clearInterval(progressInterval);
-                progressInterval = null;
-            }
-
-            document.querySelectorAll('#playlistContainer li').forEach((li, i) => {
-                li.classList.toggle('active', i === currentTrackIndex);
-            });
-        }
-
-        function togglePlay() {
-            if (playlistData.length === 0) return;
-            isPlaying = !isPlaying;
-            playerPlayBtn.textContent = isPlaying ? '⏸' : '▶';
-            miniPlayBtn.textContent = isPlaying ? '⏸' : '▶';
-            albumCover.classList.toggle('playing', isPlaying);
-
-            if (isPlaying) {
-                if (progressInterval) clearInterval(progressInterval);
-                progressInterval = setInterval(() => {
-                    currentTime += 0.5;
-                    if (currentTime >= trackDuration) {
-                        nextTrack();
-                    } else {
-                        const pct = (currentTime / trackDuration) * 100;
-                        progress.style.width = pct + '%';
-                        currentTimeEl.textContent = formatTime(currentTime);
-                    }
-                }, 500);
-            } else {
-                clearInterval(progressInterval);
-                progressInterval = null;
-            }
-        }
-
-        function nextTrack() {
-            if (playlistData.length === 0) return;
-            let nextIndex = currentTrackIndex + 1;
-            if (nextIndex >= playlistData.length) nextIndex = 0;
-            loadTrack(nextIndex);
-            if (isPlaying) {
-                clearInterval(progressInterval);
-                progressInterval = setInterval(() => {
-                    currentTime += 0.5;
-                    if (currentTime >= trackDuration) {
-                        nextTrack();
-                    } else {
-                        const pct = (currentTime / trackDuration) * 100;
-                        progress.style.width = pct + '%';
-                        currentTimeEl.textContent = formatTime(currentTime);
-                    }
-                }, 500);
-            }
-        }
-
-        function prevTrack() {
-            if (playlistData.length === 0) return;
-            let prevIndex = currentTrackIndex - 1;
-            if (prevIndex < 0) prevIndex = playlistData.length - 1;
-            loadTrack(prevIndex);
-            if (isPlaying) {
-                clearInterval(progressInterval);
-                progressInterval = setInterval(() => {
-                    currentTime += 0.5;
-                    if (currentTime >= trackDuration) {
-                        nextTrack();
-                    } else {
-                        const pct = (currentTime / trackDuration) * 100;
-                        progress.style.width = pct + '%';
-                        currentTimeEl.textContent = formatTime(currentTime);
-                    }
-                }, 500);
-            }
-        }
-
-        function renderPlaylist() {
-            playlistContainer.innerHTML = '';
-            playlistData.forEach((track, i) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span class="song-number">${String(i + 1).padStart(2, '0')}</span>
-                    <span class="song-info">
-                        <div class="song-title">${track.title}</div>
-                        <div class="song-artist">${track.artist}</div>
-                    </span>
-                    <span class="song-duration">${track.duration}</span>
-                `;
-                li.addEventListener('click', () => {
-                    loadTrack(i);
-                    if (!isPlaying) togglePlay();
-                });
-                playlistContainer.appendChild(li);
-            });
-        }
-
-        function renderCards() {
-            // Top tracks (ordenadas por play_count)
-            const sortedTracks = [...playlistData].sort((a, b) => (b.play_count || 0) - (a.play_count || 0));
-            const topTracks = sortedTracks.slice(0, 4);
-
-            topTracksGrid.innerHTML = '';
-            topTracks.forEach(track => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-image"><span class="card-emoji">${track.emoji || '🎵'}</span></div>
-                    <h3>${track.title}</h3>
-                    <p>${track.artist} ${track.play_count ? '🎧 ' + track.play_count : ''}</p>
-                `;
-                card.addEventListener('click', () => {
-                    const idx = playlistData.indexOf(track);
-                    loadTrack(idx);
-                    if (!isPlaying) togglePlay();
-                    openPlayerOverlay();
-                });
-                topTracksGrid.appendChild(card);
-            });
-
-            // Playlists destaque
-            const playlists = [
-                { name: 'Batidas de Numbani', emoji: '🌍', desc: 'Som eletrônico' },
-                { name: 'Speed Boost Mix', emoji: '⚡', desc: 'Música para acelerar' },
-                { name: 'Cura Sonora', emoji: '💚', desc: 'Relaxa e curte' },
-                { name: 'Frequência de Ouro', emoji: '✨', desc: 'Os maiores hits' }
-            ];
-
-            playlistsGrid.innerHTML = '';
-            playlists.forEach(pl => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-image"><span class="card-emoji">${pl.emoji}</span></div>
-                    <h3>${pl.name}</h3>
-                    <p>${pl.desc}</p>
-                `;
-                card.addEventListener('click', () => {
-                    const randomIdx = Math.floor(Math.random() * playlistData.length);
-                    loadTrack(randomIdx);
-                    if (!isPlaying) togglePlay();
-                    openPlayerOverlay();
-                });
-                playlistsGrid.appendChild(card);
-            });
-        }
-
-        // =====================================================
-        // FUNÇÕES DA APP
-        // =====================================================
-        async function enterApp(username) {
+        function enterApp(username) {
             displayName.textContent = username;
             loginScreen.classList.add('hidden');
-            appContainer.classList.add('visible');
-
-            // Carrega músicas da base de dados
-            const songs = await loadSongsFromDB();
-            if (songs && songs.length > 0) {
-                playlistData = songs;
-            }
-
-            // Carrega playlists do utilizador
-            await loadPlaylistsFromDB();
-
-            // Inicializa o player
-            renderPlaylist();
-            loadTrack(0);
-            renderCards();
+            appContainer.style.display = 'flex';
+            setTimeout(() => {
+                appContainer.classList.add('visible');
+            }, 50);
         }
 
         // =====================================================
-        // CONTROLES DO PLAYER OVERLAY
+        // VERIFICAR SESSÃO
         // =====================================================
-        function openPlayerOverlay() {
-            playerOverlay.classList.add('active');
-        }
-
-        function closePlayerOverlay() {
-            playerOverlay.classList.remove('active');
-        }
-
-        openPlayerBtn.addEventListener('click', openPlayerOverlay);
-        closePlayerBtn.addEventListener('click', closePlayerOverlay);
-        miniExpandBtn.addEventListener('click', openPlayerOverlay);
-
-        playerOverlay.addEventListener('click', (e) => {
-            if (e.target === playerOverlay) closePlayerOverlay();
-        });
-
-        // Botões de controle
-        playerPlayBtn.addEventListener('click', togglePlay);
-        miniPlayBtn.addEventListener('click', togglePlay);
-        nextBtn.addEventListener('click', nextTrack);
-        miniNextBtn.addEventListener('click', nextTrack);
-        prevBtn.addEventListener('click', prevTrack);
-
-        progressBar.addEventListener('click', (e) => {
-            if (trackDuration === 0) return;
-            const rect = progressBar.getBoundingClientRect();
-            const pct = (e.clientX - rect.left) / rect.width;
-            currentTime = pct * trackDuration;
-            if (currentTime > trackDuration) currentTime = trackDuration;
-            progress.style.width = (pct * 100) + '%';
-            currentTimeEl.textContent = formatTime(currentTime);
-        });
-
-        volumeSlider.addEventListener('input', (e) => {
-            volume = parseFloat(e.target.value);
-        });
-
-        shuffleBtn.addEventListener('click', () => {
-            const randomIdx = Math.floor(Math.random() * playlistData.length);
-            loadTrack(randomIdx);
-            if (!isPlaying) togglePlay();
-        });
-
-        repeatBtn.addEventListener('click', () => {
-            loadTrack(currentTrackIndex);
-            if (!isPlaying) togglePlay();
-        });
-
-        // =====================================================
-        // TECLADO
-        // =====================================================
-        document.addEventListener('keydown', (e) => {
-            if (e.key === ' ' && playerOverlay.classList.contains('active')) {
-                e.preventDefault();
-                togglePlay();
-            }
-            if (e.key === 'Escape' && playerOverlay.classList.contains('active')) {
-                closePlayerOverlay();
-            }
-        });
-
-        // =====================================================
-        // EVENT LISTENERS DO LOGIN
-        // =====================================================
-        loginForm.addEventListener('submit', handleLogin);
-
-        // =====================================================
-        // INICIALIZAÇÃO
-        // =====================================================
-        // Carrega a primeira música
-        renderPlaylist();
-        loadTrack(0);
-        renderCards();
-
-        // Verifica se o utilizador já está logado
         async function checkSession() {
             try {
                 const { data, error } = await supabase.auth.getSession();
@@ -1933,79 +850,21 @@
             }
         }
 
-        // Verifica sessão ao carregar
+        // =====================================================
+        // EVENT LISTENERS
+        // =====================================================
+        loginForm.addEventListener('submit', handleLogin);
+
+        // =====================================================
+        // INICIALIZAÇÃO
+        // =====================================================
         checkSession();
 
-        // =====================================================
-        // SCRIPT PARA CRIAR AS TABELAS NO SUPABASE
-        // =====================================================
-        console.log('=== INSTRUÇÕES PARA O SUPABASE ===');
-        console.log('Cria as seguintes tabelas no SQL Editor do Supabase:');
-        console.log(`
-        -- Tabela de músicas
-        CREATE TABLE IF NOT EXISTS songs (
-            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-            title TEXT NOT NULL,
-            artist TEXT DEFAULT 'Lúcio',
-            duration TEXT DEFAULT '3:30',
-            emoji TEXT DEFAULT '🎵',
-            play_count INTEGER DEFAULT 0,
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        -- Tabela de playlists
-        CREATE TABLE IF NOT EXISTS playlists (
-            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-            user_id UUID NOT NULL,
-            name TEXT NOT NULL,
-            emoji TEXT DEFAULT '🎵',
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        -- Tabela de relação playlist-música
-        CREATE TABLE IF NOT EXISTS playlist_songs (
-            playlist_id UUID REFERENCES playlists(id) ON DELETE CASCADE,
-            song_id UUID REFERENCES songs(id) ON DELETE CASCADE,
-            position INTEGER DEFAULT 0,
-            PRIMARY KEY (playlist_id, song_id)
-        );
-
-        -- Tabela de histórico do utilizador
-        CREATE TABLE IF NOT EXISTS user_history (
-            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-            user_id UUID NOT NULL,
-            song_id UUID REFERENCES songs(id) ON DELETE CASCADE,
-            played_at TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        -- Políticas de segurança (RLS)
-        ALTER TABLE songs ENABLE ROW LEVEL SECURITY;
-        ALTER TABLE playlists ENABLE ROW LEVEL SECURITY;
-        ALTER TABLE playlist_songs ENABLE ROW LEVEL SECURITY;
-        ALTER TABLE user_history ENABLE ROW LEVEL SECURITY;
-
-        -- Políticas para songs (público pode ler)
-        CREATE POLICY "Songs are viewable by everyone" ON songs
-            FOR SELECT USING (true);
-
-        -- Políticas para playlists (apenas o dono)
-        CREATE POLICY "Users can manage their own playlists" ON playlists
-            FOR ALL USING (auth.uid() = user_id);
-
-        -- Políticas para playlist_songs
-        CREATE POLICY "Users can manage their playlist songs" ON playlist_songs
-            FOR ALL USING (
-                EXISTS (
-                    SELECT 1 FROM playlists
-                    WHERE playlists.id = playlist_songs.playlist_id
-                    AND playlists.user_id = auth.uid()
-                )
-            );
-
-        -- Políticas para user_history
-        CREATE POLICY "Users can manage their own history" ON user_history
-            FOR ALL USING (auth.uid() = user_id);
-        `);
+        // Mostra a senha como "lucio123" para teste rápido
+        console.log('🔑 Para teste rápido, podes usar:');
+        console.log('   Utilizador: lucio');
+        console.log('   Senha: lucio123');
+        console.log('   Ou cria uma conta nova!');
     </script>
 </body>
 </html>
