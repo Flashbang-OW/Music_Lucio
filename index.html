@@ -8,222 +8,308 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Sidebar estilo Spotify/Overwatch -->
-    <nav class="sidebar">
-        <div class="sidebar-logo">
-            <div class="lucio-symbol">
-                <svg viewBox="0 0 100 100" class="frog-svg">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
-                    <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
-                    <circle cx="42" cy="40" r="4" fill="#0F2343"/>
-                    <circle cx="58" cy="40" r="4" fill="#0F2343"/>
-                    <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
-                </svg>
-            </div>
-            <span class="logo-text">LÚCIO<span class="logo-accent">.fm</span></span>
+    <!-- ============ ECRÃ DE LOGIN ============ -->
+    <div class="login-screen" id="loginScreen">
+        <!-- Ondas sonoras de fundo -->
+        <div class="sound-waves">
+            <div class="wave wave1"></div>
+            <div class="wave wave2"></div>
+            <div class="wave wave3"></div>
+            <div class="wave wave4"></div>
         </div>
-        
-        <ul class="nav-menu">
-            <li class="nav-item active">
-                <span class="nav-icon">🏠</span>
-                <span>Início</span>
-            </li>
-            <li class="nav-item">
-                <span class="nav-icon">🔍</span>
-                <span>Explorar</span>
-            </li>
-            <li class="nav-item">
-                <span class="nav-icon">📚</span>
-                <span>Biblioteca</span>
-            </li>
-            <li class="nav-item" id="openPlayerBtn">
-                <span class="nav-icon">🎵</span>
-                <span>Player</span>
-            </li>
-        </ul>
-        
-        <div class="playlists-section">
-            <h4>PLAYLISTS</h4>
-            <ul>
-                <li>❤️ Favela Classics</li>
-                <li>⚡ Speed Boost Mix</li>
-                <li>💚 Healing Beats</li>
-                <li>🎤 Ultimate Drops</li>
-            </ul>
-        </div>
-    </nav>
 
-    <!-- Conteúdo Principal -->
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-bg"></div>
-            <div class="hero-content">
-                <h1 class="hero-title">VAMOS AUMENTAR O SOM</h1>
-                <p class="hero-subtitle">A tua playlist inspirada no DJ mais rápido do mundo</p>
-                <button class="cta-button" id="heroCTA">
-                    <span>🎧</span> ABRIR PLAYER
+        <!-- Partículas flutuantes -->
+        <div class="particles" id="particles"></div>
+
+        <div class="login-container">
+            <!-- Símbolo do Lúcio -->
+            <div class="login-logo">
+                <div class="lucio-symbol-large">
+                    <svg viewBox="0 0 100 100" class="frog-svg-large">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3">
+                            <animate attributeName="r" values="45;48;45" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
+                        <circle cx="42" cy="40" r="4" fill="#0F2343"/>
+                        <circle cx="58" cy="40" r="4" fill="#0F2343"/>
+                        <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <h1 class="login-title">LÚCIO<span class="accent">.fm</span></h1>
+                <p class="login-subtitle">Vamos aumentar o som!</p>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label for="username">Nome de Herói</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🦸</span>
+                        <input type="text" id="username" placeholder="Ex: DJ_Lucio_OW" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Código de Acesso</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔐</span>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">
+                    <span class="button-text">ENTRAR NO JOGO</span>
+                    <span class="button-icon">🎧</span>
                 </button>
-            </div>
-        </section>
 
-        <!-- Seção: Para Ti -->
-        <section class="section">
-            <h2 class="section-title">🎯 Para Ti</h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #0F2343);">
-                        <span class="card-emoji">🐸</span>
-                    </div>
-                    <h3>Daily Mix Lúcio</h3>
-                    <p>As tuas favoritas</p>
+                <div class="login-options">
+                    <a href="#" class="forgot-password">Esqueceu o código?</a>
+                    <span class="divider">|</span>
+                    <a href="#" class="create-account">Criar conta</a>
                 </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #A4D615);">
-                        <span class="card-emoji">⚡</span>
-                    </div>
-                    <h3>Speed Training</h3>
-                    <p>Para treinos intensos</p>
-                </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #218FFE, #A4D615);">
-                        <span class="card-emoji">💚</span>
-                    </div>
-                    <h3>Healing Vibes</h3>
-                    <p>Relaxa e recupera</p>
-                </div>
-            </div>
-        </section>
+            </form>
 
-        <!-- Seção: Em Alta -->
-        <section class="section">
-            <h2 class="section-title">🔥 Em Alta</h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #000000);">
-                        <span class="card-emoji">🎤</span>
-                    </div>
-                    <h3>Synaesthesia Auditiva</h3>
-                    <p>Lúcio • 3:45</p>
-                </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #218FFE);">
-                        <span class="card-emoji">🛹</span>
-                    </div>
-                    <h3>Favela Nights</h3>
-                    <p>Lúcio • 5:12</p>
-                </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #F9ED32);">
-                        <span class="card-emoji">🔊</span>
-                    </div>
-                    <h3>Barrier Sound</h3>
-                    <p>Lúcio • 4:18</p>
-                </div>
+            <!-- Voiceline aleatória -->
+            <div class="login-voiceline">
+                <p id="loginVoiceline">"Isso é Lúcio-oh-oh!"</p>
             </div>
-        </section>
 
-        <!-- Seção: Personagens -->
-        <section class="section">
-            <h2 class="section-title">🎮 Colaborações Overwatch</h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #FF69B4, #FF1493);">
-                        <span class="card-emoji">🐰</span>
-                    </div>
-                    <h3>D.Va Gaming Beats</h3>
-                    <p>Mix para jogar</p>
-                </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #00CED1, #008B8B);">
-                        <span class="card-emoji">🔷</span>
-                    </div>
-                    <h3>Symmetra Order</h3>
-                    <p>Música ordeira</p>
-                </div>
-                <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
-                        <span class="card-emoji">⛑️</span>
-                    </div>
-                    <h3>Mercy Healing</h3>
-                    <p>Música relaxante</p>
-                </div>
+            <!-- Mensagem de erro (escondida) -->
+            <div class="error-message" id="errorMessage">
+                <span>⚠️</span> Código incorreto! Tenta novamente.
             </div>
-        </section>
-    </main>
 
-    <!-- Barra Inferior (Mini Player) -->
-    <div class="bottom-bar" id="bottomBar">
-        <div class="mini-player">
-            <div class="mini-album">
-                <div class="mini-disc"></div>
-            </div>
-            <div class="mini-info">
-                <p class="mini-title" id="miniTitle">Escolhe uma música</p>
-                <p class="mini-artist" id="miniArtist">Para começares</p>
-            </div>
-            <div class="mini-controls">
-                <button class="mini-btn" id="miniPlayBtn">▶️</button>
-                <button class="mini-btn">⏭️</button>
-            </div>
+            <!-- Botão para saltar login (demo) -->
+            <button class="skip-login" id="skipLoginBtn">
+                Entrar como convidado 🐸
+            </button>
         </div>
     </div>
 
-    <!-- Player Overlay (Modal) -->
-    <div class="player-overlay" id="playerOverlay">
-        <div class="player-modal">
-            <button class="close-player" id="closePlayerBtn">✕</button>
+    <!-- ============ LANDING PAGE (ESCONDIDA INICIALMENTE) ============ -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Sidebar estilo Spotify/Overwatch -->
+        <nav class="sidebar">
+            <div class="sidebar-logo">
+                <div class="lucio-symbol">
+                    <svg viewBox="0 0 100 100" class="frog-svg">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
+                        <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
+                        <circle cx="42" cy="40" r="4" fill="#0F2343"/>
+                        <circle cx="58" cy="40" r="4" fill="#0F2343"/>
+                        <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <span class="logo-text">LÚCIO<span class="logo-accent">.fm</span></span>
+            </div>
             
-            <!-- Aqui vai o player que já tinhas antes -->
-            <div class="player-full">
-                <div class="album-art">
-                    <div class="vinyl-disc" id="vinylDisc"></div>
-                    <div class="album-glow"></div>
-                    <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
-                         alt="Álbum do Lúcio" 
-                         id="albumCover">
-                    <div class="equalizer" id="equalizer">
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <span class="nav-icon">🏠</span>
+                    <span>Início</span>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-icon">🔍</span>
+                    <span>Explorar</span>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-icon">📚</span>
+                    <span>Biblioteca</span>
+                </li>
+                <li class="nav-item" id="openPlayerBtn">
+                    <span class="nav-icon">🎵</span>
+                    <span>Player</span>
+                </li>
+            </ul>
+            
+            <div class="playlists-section">
+                <h4>PLAYLISTS</h4>
+                <ul>
+                    <li>❤️ Favela Classics</li>
+                    <li>⚡ Speed Boost Mix</li>
+                    <li>💚 Healing Beats</li>
+                    <li>🎤 Ultimate Drops</li>
+                </ul>
+            </div>
+
+            <!-- Utilizador logado -->
+            <div class="user-info">
+                <span class="user-avatar">🐸</span>
+                <span class="user-name" id="displayUsername">DJ_Lucio_OW</span>
+            </div>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-bg"></div>
+                <div class="hero-content">
+                    <h1 class="hero-title">VAMOS AUMENTAR O SOM</h1>
+                    <p class="hero-subtitle">A tua playlist inspirada no DJ mais rápido do mundo</p>
+                    <button class="cta-button" id="heroCTA">
+                        <span>🎧</span> ABRIR PLAYER
+                    </button>
+                </div>
+            </section>
+
+            <!-- Seção: Para Ti -->
+            <section class="section">
+                <h2 class="section-title">🎯 Para Ti</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #0F2343);">
+                            <span class="card-emoji">🐸</span>
+                        </div>
+                        <h3>Daily Mix Lúcio</h3>
+                        <p>As tuas favoritas</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #A4D615);">
+                            <span class="card-emoji">⚡</span>
+                        </div>
+                        <h3>Speed Training</h3>
+                        <p>Para treinos intensos</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #218FFE, #A4D615);">
+                            <span class="card-emoji">💚</span>
+                        </div>
+                        <h3>Healing Vibes</h3>
+                        <p>Relaxa e recupera</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="track-info">
-                    <h2 id="trackTitle">Escolhe uma faixa</h2>
-                    <p id="trackArtist">Lúcio Correia dos Santos</p>
+            <!-- Seção: Em Alta -->
+            <section class="section">
+                <h2 class="section-title">🔥 Em Alta</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #000000);">
+                            <span class="card-emoji">🎤</span>
+                        </div>
+                        <h3>Synaesthesia Auditiva</h3>
+                        <p>Lúcio • 3:45</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #218FFE);">
+                            <span class="card-emoji">🛹</span>
+                        </div>
+                        <h3>Favela Nights</h3>
+                        <p>Lúcio • 5:12</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #F9ED32);">
+                            <span class="card-emoji">🔊</span>
+                        </div>
+                        <h3>Barrier Sound</h3>
+                        <p>Lúcio • 4:18</p>
+                    </div>
                 </div>
+            </section>
 
-                <div class="progress-container">
-                    <span id="currentTime">0:00</span>
-                    <div class="progress-bar" id="progressBar">
-                        <div class="progress" id="progress">
-                            <div class="progress-dot"></div>
+            <!-- Seção: Colaborações -->
+            <section class="section">
+                <h2 class="section-title">🎮 Colaborações Overwatch</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #FF69B4, #FF1493);">
+                            <span class="card-emoji">🐰</span>
+                        </div>
+                        <h3>D.Va Gaming Beats</h3>
+                        <p>Mix para jogar</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #00CED1, #008B8B);">
+                            <span class="card-emoji">🔷</span>
+                        </div>
+                        <h3>Symmetra Order</h3>
+                        <p>Música ordeira</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-image" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                            <span class="card-emoji">⛑️</span>
+                        </div>
+                        <h3>Mercy Healing</h3>
+                        <p>Música relaxante</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Barra Inferior (Mini Player) -->
+        <div class="bottom-bar" id="bottomBar">
+            <div class="mini-player">
+                <div class="mini-album">
+                    <div class="mini-disc"></div>
+                </div>
+                <div class="mini-info">
+                    <p class="mini-title" id="miniTitle">Escolhe uma música</p>
+                    <p class="mini-artist" id="miniArtist">Para começares</p>
+                </div>
+                <div class="mini-controls">
+                    <button class="mini-btn" id="miniPlayBtn">▶️</button>
+                    <button class="mini-btn" id="miniNextBtn">⏭️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Overlay (Modal) -->
+        <div class="player-overlay" id="playerOverlay">
+            <div class="player-modal">
+                <button class="close-player" id="closePlayerBtn">✕</button>
+                
+                <div class="player-full">
+                    <div class="album-art">
+                        <div class="vinyl-disc" id="vinylDisc"></div>
+                        <div class="album-glow"></div>
+                        <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
+                             alt="Álbum do Lúcio" 
+                             id="albumCover">
+                        <div class="equalizer" id="equalizer">
+                            <span class="bar"></span>
+                            <span class="bar"></span>
+                            <span class="bar"></span>
+                            <span class="bar"></span>
+                            <span class="bar"></span>
                         </div>
                     </div>
-                    <span id="duration">0:00</span>
-                </div>
 
-                <div class="controls">
-                    <button class="control-btn ability-btn" id="speedBoost" title="Speed Boost">⚡</button>
-                    <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
-                    <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
-                    <button class="play-btn" id="playBtn" title="Play/Pause">▶️</button>
-                    <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
-                    <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
-                    <button class="control-btn ability-btn" id="healBoost" title="Healing Boost">💚</button>
-                </div>
+                    <div class="track-info">
+                        <h2 id="trackTitle">Escolhe uma faixa</h2>
+                        <p id="trackArtist">Lúcio Correia dos Santos</p>
+                    </div>
 
-                <div class="volume-container">
-                    <span>🔊</span>
-                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
-                </div>
+                    <div class="progress-container">
+                        <span id="currentTime">0:00</span>
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress" id="progress">
+                                <div class="progress-dot"></div>
+                            </div>
+                        </div>
+                        <span id="duration">0:00</span>
+                    </div>
 
-                <div class="playlist-section">
-                    <h3>🎵 Playlist</h3>
-                    <ul class="playlist" id="playlist"></ul>
+                    <div class="controls">
+                        <button class="control-btn ability-btn" id="speedBoost" title="Speed Boost">⚡</button>
+                        <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
+                        <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
+                        <button class="play-btn" id="playBtn" title="Play/Pause">▶️</button>
+                        <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
+                        <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
+                        <button class="control-btn ability-btn" id="healBoost" title="Healing Boost">💚</button>
+                    </div>
+
+                    <div class="volume-container">
+                        <span>🔊</span>
+                        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
+                    </div>
+
+                    <div class="playlist-section">
+                        <h3>🎵 Playlist</h3>
+                        <ul class="playlist" id="playlist"></ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,5 +318,6 @@
     <script src="js/playlist.js"></script>
     <script src="js/player.js"></script>
     <script src="js/landing.js"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>
