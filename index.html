@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lúcio.fm - Vamos Aumentar o Som!</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ============ VARIÁVEIS TEMÁTICAS ============ */
         :root {
@@ -97,7 +99,6 @@
             max-width: 420px;
         }
 
-        /* Símbolo do Lúcio Grande */
         .lucio-symbol-large {
             width: 120px;
             height: 120px;
@@ -111,14 +112,7 @@
             50% { transform: translateY(-15px); }
         }
 
-        .frog-svg-large {
-            width: 100%;
-            height: 100%;
-        }
-
-        .login-logo {
-            margin-bottom: 30px;
-        }
+        .login-logo { margin-bottom: 30px; }
 
         .login-title {
             font-family: 'Orbitron', sans-serif;
@@ -136,10 +130,7 @@
             font-style: italic;
         }
 
-        /* Formulário */
-        .login-form {
-            margin-bottom: 25px;
-        }
+        .login-form { margin-bottom: 25px; }
 
         .input-group {
             margin-bottom: 20px;
@@ -190,7 +181,6 @@
             color: rgba(255, 255, 255, 0.4);
         }
 
-        /* Botão de Login */
         .login-button {
             width: 100%;
             padding: 15px;
@@ -217,9 +207,8 @@
             box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
         }
 
-        .login-button:active {
-            transform: translateY(0);
-        }
+        .login-button:active { transform: translateY(0); }
+        .login-button:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .button-icon {
             font-size: 22px;
@@ -231,7 +220,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* Opções de login */
         .login-options {
             display: flex;
             justify-content: center;
@@ -247,15 +235,10 @@
             transition: color 0.3s;
         }
 
-        .login-options a:hover {
-            color: var(--lucio-green);
-        }
+        .login-options a:hover { color: var(--lucio-green); }
 
-        .divider {
-            color: rgba(255, 255, 255, 0.3);
-        }
+        .divider { color: rgba(255, 255, 255, 0.3); }
 
-        /* Voiceline do login */
         .login-voiceline {
             margin-bottom: 20px;
             min-height: 30px;
@@ -268,7 +251,6 @@
             transition: opacity 0.3s;
         }
 
-        /* Mensagem de erro */
         .error-message {
             display: none;
             align-items: center;
@@ -283,11 +265,24 @@
             font-size: 14px;
         }
 
-        .error-message.show {
-            display: flex;
+        .error-message.show { display: flex; }
+
+        .success-message {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(164, 214, 21, 0.2);
+            border: 1px solid rgba(164, 214, 21, 0.4);
+            color: var(--lucio-green);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
         }
 
-        /* Botão de saltar login */
+        .success-message.show { display: flex; }
+
         .skip-login {
             background: none;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -372,11 +367,6 @@
             height: 40px;
         }
 
-        .frog-svg {
-            width: 100%;
-            height: 100%;
-        }
-
         .logo-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 22px;
@@ -384,13 +374,9 @@
             color: var(--text-white);
         }
 
-        .logo-accent {
-            color: var(--lucio-green);
-        }
+        .logo-accent { color: var(--lucio-green); }
 
-        .nav-menu {
-            list-style: none;
-        }
+        .nav-menu { list-style: none; }
 
         .nav-item {
             display: flex;
@@ -413,9 +399,7 @@
             color: var(--lucio-green);
         }
 
-        .nav-icon {
-            font-size: 20px;
-        }
+        .nav-icon { font-size: 20px; }
 
         .playlists-section {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -429,9 +413,7 @@
             margin-bottom: 10px;
         }
 
-        .playlists-section ul {
-            list-style: none;
-        }
+        .playlists-section ul { list-style: none; }
 
         .playlists-section li {
             padding: 8px 0;
@@ -441,9 +423,7 @@
             font-size: 14px;
         }
 
-        .playlists-section li:hover {
-            color: var(--lucio-green);
-        }
+        .playlists-section li:hover { color: var(--lucio-green); }
 
         .user-info {
             margin-top: auto;
@@ -454,14 +434,25 @@
             gap: 10px;
         }
 
-        .user-avatar {
-            font-size: 25px;
+        .user-avatar { font-size: 25px; }
+        .user-name { color: var(--lucio-green); font-weight: 600; font-size: 14px; }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-gray);
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            transition: all 0.3s;
+            margin-left: auto;
         }
 
-        .user-name {
-            color: var(--lucio-green);
-            font-weight: 600;
-            font-size: 14px;
+        .logout-btn:hover {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
         }
 
         /* ============ MAIN CONTENT ============ */
@@ -472,7 +463,6 @@
             background: linear-gradient(to bottom, rgba(15, 35, 67, 0.5), var(--darker-blue));
         }
 
-        /* Hero Section */
         .hero {
             position: relative;
             padding: 40px;
@@ -493,10 +483,7 @@
             z-index: 0;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
+        .hero-content { position: relative; z-index: 1; }
 
         .hero-title {
             font-family: 'Orbitron', sans-serif;
@@ -535,10 +522,7 @@
             box-shadow: 0 8px 30px rgba(164, 214, 21, 0.7);
         }
 
-        /* Seções */
-        .section {
-            margin-bottom: 35px;
-        }
+        .section { margin-bottom: 35px; }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
@@ -579,19 +563,32 @@
             background: rgba(164, 214, 21, 0.1);
         }
 
-        .card-emoji {
-            font-size: 50px;
+        .card-emoji { font-size: 50px; }
+        .card h3 { font-size: 16px; color: var(--text-white); margin-bottom: 4px; }
+        .card p { font-size: 13px; color: var(--text-gray); }
+
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: var(--lucio-green);
+            font-size: 18px;
+            gap: 10px;
         }
 
-        .card h3 {
-            font-size: 16px;
-            color: var(--text-white);
-            margin-bottom: 4px;
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(164, 214, 21, 0.3);
+            border-top: 3px solid var(--lucio-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .card p {
-            font-size: 13px;
-            color: var(--text-gray);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* ============ BOTTOM BAR ============ */
@@ -614,11 +611,7 @@
             margin: 0 auto;
         }
 
-        .mini-album {
-            width: 45px;
-            height: 45px;
-            flex-shrink: 0;
-        }
+        .mini-album { width: 45px; height: 45px; flex-shrink: 0; }
 
         .mini-disc {
             width: 100%;
@@ -628,10 +621,7 @@
             border: 2px solid var(--lucio-green);
         }
 
-        .mini-info {
-            flex: 1;
-            min-width: 0;
-        }
+        .mini-info { flex: 1; min-width: 0; }
 
         .mini-title {
             color: var(--text-white);
@@ -665,9 +655,7 @@
             color: var(--text-white);
         }
 
-        .mini-btn:hover {
-            transform: scale(1.2);
-        }
+        .mini-btn:hover { transform: scale(1.2); }
 
         /* ============ PLAYER OVERLAY ============ */
         .player-overlay {
@@ -683,9 +671,7 @@
             align-items: center;
         }
 
-        .player-overlay.active {
-            display: flex;
-        }
+        .player-overlay.active { display: flex; }
 
         .player-modal {
             background: var(--darker-blue);
@@ -713,9 +699,7 @@
             transition: color 0.3s;
         }
 
-        .close-player:hover {
-            color: var(--lucio-green);
-        }
+        .close-player:hover { color: var(--lucio-green); }
 
         /* ============ PLAYER INTERNO ============ */
         .player-full {
@@ -761,9 +745,7 @@
             transition: all 0.3s;
         }
 
-        #albumCover.playing {
-            animation-play-state: running;
-        }
+        #albumCover.playing { animation-play-state: running; }
 
         @keyframes rotateDisc {
             from { transform: rotate(0deg); }
@@ -871,9 +853,7 @@
             transition: opacity 0.3s;
         }
 
-        .progress-bar:hover .progress-dot {
-            opacity: 1;
-        }
+        .progress-bar:hover .progress-dot { opacity: 1; }
 
         .controls {
             display: flex;
@@ -968,17 +948,9 @@
             overflow-y: auto;
         }
 
-        .playlist::-webkit-scrollbar {
-            width: 4px;
-        }
-        .playlist::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 2px;
-        }
-        .playlist::-webkit-scrollbar-thumb {
-            background: var(--lucio-green);
-            border-radius: 2px;
-        }
+        .playlist::-webkit-scrollbar { width: 4px; }
+        .playlist::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 2px; }
+        .playlist::-webkit-scrollbar-thumb { background: var(--lucio-green); border-radius: 2px; }
 
         .playlist li {
             padding: 12px 15px;
@@ -1009,79 +981,31 @@
             min-width: 25px;
         }
 
-        .song-info {
-            flex: 1;
-        }
-
-        .song-title {
-            font-weight: 600;
-            font-size: 15px;
-        }
-        .song-artist {
-            color: var(--text-gray);
-            font-size: 12px;
-        }
-        .song-duration {
-            color: var(--lucio-yellow);
-            font-size: 12px;
-            font-weight: 600;
-        }
+        .song-info { flex: 1; }
+        .song-title { font-weight: 600; font-size: 15px; }
+        .song-artist { color: var(--text-gray); font-size: 12px; }
+        .song-duration { color: var(--lucio-yellow); font-size: 12px; font-weight: 600; }
 
         /* ============ RESPONSIVO ============ */
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                padding: 15px 15px 80px 15px;
-            }
-            .hero-title {
-                font-size: 28px;
-            }
-            .cards-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .login-title {
-                font-size: 36px;
-            }
-            .player-modal {
-                padding: 20px;
-            }
-            .album-art {
-                width: 160px;
-                height: 160px;
-            }
-            .vinyl-disc {
-                width: 190px;
-                height: 190px;
-            }
-            .album-glow {
-                width: 190px;
-                height: 190px;
-            }
+            .sidebar { display: none; }
+            .main-content { padding: 15px 15px 80px 15px; }
+            .hero-title { font-size: 28px; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+            .login-title { font-size: 36px; }
+            .player-modal { padding: 20px; }
+            .album-art { width: 160px; height: 160px; }
+            .vinyl-disc { width: 190px; height: 190px; }
+            .album-glow { width: 190px; height: 190px; }
         }
 
         @media (max-width: 480px) {
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-            .login-title {
-                font-size: 28px;
-            }
-            .hero-title {
-                font-size: 22px;
-            }
-            .hero {
-                padding: 20px;
-            }
-            .controls {
-                gap: 10px;
-            }
-            .play-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 20px;
-            }
+            .cards-grid { grid-template-columns: 1fr; }
+            .login-title { font-size: 28px; }
+            .hero-title { font-size: 22px; }
+            .hero { padding: 20px; }
+            .controls { gap: 10px; }
+            .play-btn { width: 55px; height: 55px; font-size: 20px; }
         }
     </style>
 </head>
@@ -1128,14 +1052,14 @@
                         <input type="password" id="password" placeholder="••••••••" required>
                     </div>
                 </div>
-                <button type="submit" class="login-button">
+                <button type="submit" class="login-button" id="loginButton">
                     <span>ENTRAR NO JOGO</span>
                     <span class="button-icon">🎧</span>
                 </button>
                 <div class="login-options">
-                    <a href="#">Esqueceu o código?</a>
+                    <a href="#" id="showRegister">Criar conta</a>
                     <span class="divider">|</span>
-                    <a href="#">Criar conta</a>
+                    <a href="#" id="showLogin" style="display:none;">Fazer login</a>
                 </div>
             </form>
 
@@ -1144,7 +1068,11 @@
             </div>
 
             <div class="error-message" id="errorMessage">
-                <span>⚠️</span> Código incorreto! Tenta novamente.
+                <span>⚠️</span> <span id="errorText">Código incorreto! Tenta novamente.</span>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <span>✅</span> <span id="successText">Conta criada com sucesso!</span>
             </div>
 
             <button class="skip-login" id="skipLoginBtn">Entrar como convidado 🐸</button>
@@ -1175,7 +1103,7 @@
             </ul>
             <div class="playlists-section">
                 <h4>SUAS PLAYLISTS</h4>
-                <ul>
+                <ul id="userPlaylists">
                     <li>🎧 Bangers do Lucio</li>
                     <li>🌀 Batidas de Numbani</li>
                     <li>⚡ Speed Boost Mix</li>
@@ -1184,6 +1112,7 @@
             <div class="user-info">
                 <span class="user-avatar">🐸</span>
                 <span class="user-name" id="displayName">DJ_Lucio_OW</span>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
             </div>
         </nav>
 
@@ -1201,14 +1130,20 @@
             <section class="section">
                 <h2 class="section-title">🔥 Mais Tocados</h2>
                 <div class="cards-grid" id="topTracksGrid">
-                    <!-- Cards serão inseridos via JS -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <span>Carregando músicas...</span>
+                    </div>
                 </div>
             </section>
 
             <section class="section">
                 <h2 class="section-title">🎶 Playlists em Destaque</h2>
                 <div class="cards-grid" id="playlistsGrid">
-                    <!-- Cards serão inseridos via JS -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <span>Carregando playlists...</span>
+                    </div>
                 </div>
             </section>
         </main>
@@ -1284,9 +1219,17 @@
 
     <script>
         // =====================================================
+        // CONFIGURAÇÃO SUPABASE
+        // =====================================================
+        const SUPABASE_URL = 'https://hijrhoujydouxkvwupgw.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_FrehZQeVQthZW9uQSpAyqg_acRKGIQo';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // =====================================================
         // DADOS DO PLAYER (músicas)
         // =====================================================
-        const playlistData = [
+        const defaultPlaylistData = [
             { title: "Rejuvenescência", artist: "Lúcio", duration: "3:24", emoji: "🎵" },
             { title: "Batida de Numbani", artist: "Lúcio", duration: "4:01", emoji: "🥁" },
             { title: "Velocidade Máxima", artist: "Lúcio", duration: "3:12", emoji: "⚡" },
@@ -1297,25 +1240,35 @@
             { title: "Boom do Lucio", artist: "Lúcio", duration: "3:33", emoji: "💥" }
         ];
 
-        // =====================================================
-        // VARIÁVEIS GLOBAIS
-        // =====================================================
+        let playlistData = [...defaultPlaylistData];
         let currentTrackIndex = 0;
         let isPlaying = false;
-        let currentTime = 0; // em segundos
-        let trackDuration = 0; // em segundos
+        let currentTime = 0;
+        let trackDuration = 0;
         let progressInterval = null;
         let volume = 0.8;
+        let currentUser = null;
+        let isRegistering = false;
 
-        // Elementos DOM
+        // =====================================================
+        // ELEMENTOS DOM
+        // =====================================================
         const loginScreen = document.getElementById('loginScreen');
         const appContainer = document.getElementById('appContainer');
         const loginForm = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const successMessage = document.getElementById('successMessage');
+        const successText = document.getElementById('successText');
         const skipLoginBtn = document.getElementById('skipLoginBtn');
         const displayName = document.getElementById('displayName');
         const loginVoiceline = document.getElementById('loginVoiceline');
         const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         // Player
         const playerOverlay = document.getElementById('playerOverlay');
@@ -1342,6 +1295,7 @@
         const topTracksGrid = document.getElementById('topTracksGrid');
         const playlistsGrid = document.getElementById('playlistsGrid');
         const albumCover = document.getElementById('albumCover');
+        const userPlaylists = document.getElementById('userPlaylists');
 
         // =====================================================
         // PARTÍCULAS DO LOGIN
@@ -1363,7 +1317,7 @@
         createParticles();
 
         // =====================================================
-        // LOGIN
+        // VOICELINES
         // =====================================================
         const voicelines = [
             '"Isso é Lúcio-oh-oh!"',
@@ -1377,44 +1331,299 @@
             return voicelines[Math.floor(Math.random() * voicelines.length)];
         }
 
-        // Troca a voiceline a cada 5 segundos
         setInterval(() => {
             if (!loginScreen.classList.contains('hidden')) {
                 loginVoiceline.textContent = randomVoiceline();
             }
         }, 5000);
 
-        // Login com validação
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
+        // =====================================================
+        // FUNÇÕES DE AUTENTICAÇÃO
+        // =====================================================
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.add('show');
+            setTimeout(() => errorMessage.classList.remove('show'), 4000);
+        }
 
-            // Código fixo para demonstração: "lucio123"
-            if (pass === 'lucio123' && user.length > 0) {
-                enterApp(user);
-            } else {
-                errorMessage.classList.add('show');
-                setTimeout(() => { errorMessage.classList.remove('show'); }, 3000);
+        function showSuccess(message) {
+            successText.textContent = message;
+            successMessage.classList.add('show');
+            setTimeout(() => successMessage.classList.remove('show'), 4000);
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!username || !password) {
+                showError('Preenche todos os campos!');
+                return;
             }
+
+            loginButton.disabled = true;
+            loginButton.innerHTML = '<span>⏳</span><span>A CARREGAR...</span>';
+
+            try {
+                if (isRegistering) {
+                    // REGISTO
+                    const { data, error } = await supabase.auth.signUp({
+                        email: username + '@lucio.fm',
+                        password: password,
+                        options: {
+                            data: { username: username }
+                        }
+                    });
+
+                    if (error) throw error;
+
+                    if (data.user) {
+                        showSuccess('Conta criada! Faz login para continuar.');
+                        isRegistering = false;
+                        showRegister.style.display = 'inline';
+                        showLogin.style.display = 'none';
+                        loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+                        loginButton.disabled = false;
+                        // Limpa a senha
+                        passwordInput.value = '';
+                        return;
+                    }
+                } else {
+                    // LOGIN
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email: username + '@lucio.fm',
+                        password: password
+                    });
+
+                    if (error) throw error;
+
+                    if (data.user) {
+                        currentUser = data.user;
+                        const displayName_ = data.user.user_metadata?.username || username;
+                        enterApp(displayName_);
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro de autenticação:', error);
+                if (error.message.includes('Invalid login credentials')) {
+                    showError('Credenciais inválidas! Verifica o código de acesso.');
+                } else if (error.message.includes('User already registered')) {
+                    showError('Este nome já está registado! Faz login.');
+                } else if (error.message.includes('Password should be at least 6 characters')) {
+                    showError('A senha deve ter pelo menos 6 caracteres.');
+                } else {
+                    showError('Erro: ' + error.message);
+                }
+            }
+
+            loginButton.disabled = false;
+            loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+        }
+
+        // Alternar entre login e registo
+        showRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            isRegistering = true;
+            showRegister.style.display = 'none';
+            showLogin.style.display = 'inline';
+            loginButton.innerHTML = '<span>CRIAR CONTA</span><span class="button-icon">🎧</span>';
+            loginButton.querySelector('span:first-child').textContent = 'CRIAR CONTA';
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            // Atualiza placeholder da senha
+            passwordInput.placeholder = 'Mínimo 6 caracteres';
+        });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            isRegistering = false;
+            showRegister.style.display = 'inline';
+            showLogin.style.display = 'none';
+            loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            passwordInput.placeholder = '••••••••';
         });
 
         // Login como convidado
         skipLoginBtn.addEventListener('click', () => {
             const guestName = 'Convidado_' + Math.floor(Math.random() * 1000);
+            currentUser = { user_metadata: { username: guestName }, id: 'guest_' + Date.now() };
             enterApp(guestName);
         });
 
-        function enterApp(username) {
-            displayName.textContent = username;
-            // Esconde login e mostra app
-            loginScreen.classList.add('hidden');
-            appContainer.classList.add('visible');
+        // Logout
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                if (currentUser && !currentUser.id.startsWith('guest_')) {
+                    await supabase.auth.signOut();
+                }
+                currentUser = null;
+                appContainer.classList.remove('visible');
+                setTimeout(() => {
+                    appContainer.style.display = 'none';
+                    loginScreen.classList.remove('hidden');
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                }, 300);
+            } catch (error) {
+                console.error('Erro ao sair:', error);
+            }
+        });
 
-            // Inicializa o player com a primeira música
-            loadTrack(0);
-            renderPlaylist();
-            renderCards();
+        // =====================================================
+        // FUNÇÕES DA BASE DE DADOS (Supabase)
+        // =====================================================
+        async function loadSongsFromDB() {
+            try {
+                const { data, error } = await supabase
+                    .from('songs')
+                    .select('*')
+                    .order('play_count', { ascending: false });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    playlistData = data.map(song => ({
+                        id: song.id,
+                        title: song.title,
+                        artist: song.artist || 'Lúcio',
+                        duration: song.duration || '3:30',
+                        emoji: song.emoji || '🎵',
+                        play_count: song.play_count || 0
+                    }));
+                } else {
+                    // Se não houver músicas, insere as padrão
+                    await seedSongs();
+                }
+                return playlistData;
+            } catch (error) {
+                console.error('Erro ao carregar músicas:', error);
+                return defaultPlaylistData;
+            }
+        }
+
+        async function seedSongs() {
+            try {
+                const songsToInsert = defaultPlaylistData.map(song => ({
+                    title: song.title,
+                    artist: song.artist,
+                    duration: song.duration,
+                    emoji: song.emoji,
+                    play_count: 0
+                }));
+
+                const { error } = await supabase
+                    .from('songs')
+                    .insert(songsToInsert);
+
+                if (error) throw error;
+                console.log('Músicas inseridas com sucesso!');
+            } catch (error) {
+                console.error('Erro ao inserir músicas:', error);
+            }
+        }
+
+        async function incrementPlayCount(songId) {
+            try {
+                if (!songId || !currentUser) return;
+
+                // Primeiro busca a música atual
+                const { data, error } = await supabase
+                    .from('songs')
+                    .select('play_count')
+                    .eq('id', songId)
+                    .single();
+
+                if (error) throw error;
+
+                const currentCount = (data?.play_count || 0) + 1;
+
+                // Atualiza o contador
+                const { error: updateError } = await supabase
+                    .from('songs')
+                    .update({ play_count: currentCount })
+                    .eq('id', songId);
+
+                if (updateError) throw updateError;
+
+                // Regista a reprodução do utilizador
+                if (currentUser && !currentUser.id.startsWith('guest_')) {
+                    const { error: historyError } = await supabase
+                        .from('user_history')
+                        .insert({
+                            user_id: currentUser.id,
+                            song_id: songId,
+                            played_at: new Date().toISOString()
+                        });
+
+                    if (historyError) console.error('Erro ao registar histórico:', historyError);
+                }
+
+                // Atualiza o contador local
+                const songIndex = playlistData.findIndex(s => s.id === songId);
+                if (songIndex !== -1) {
+                    playlistData[songIndex].play_count = currentCount;
+                }
+
+                return currentCount;
+            } catch (error) {
+                console.error('Erro ao incrementar play count:', error);
+            }
+        }
+
+        async function loadPlaylistsFromDB() {
+            try {
+                if (!currentUser || currentUser.id.startsWith('guest_')) {
+                    // Utilizador convidado - mostra playlists padrão
+                    return;
+                }
+
+                const { data, error } = await supabase
+                    .from('playlists')
+                    .select('*')
+                    .eq('user_id', currentUser.id);
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    userPlaylists.innerHTML = '';
+                    data.forEach(pl => {
+                        const li = document.createElement('li');
+                        li.textContent = pl.emoji + ' ' + pl.name;
+                        li.addEventListener('click', () => {
+                            // Carrega músicas da playlist
+                            loadSongsFromPlaylist(pl.id);
+                        });
+                        userPlaylists.appendChild(li);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar playlists:', error);
+            }
+        }
+
+        async function loadSongsFromPlaylist(playlistId) {
+            try {
+                const { data, error } = await supabase
+                    .from('playlist_songs')
+                    .select('songs(*)')
+                    .eq('playlist_id', playlistId);
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    const songs = data.map(item => item.songs);
+                    playlistData = songs;
+                    renderPlaylist();
+                    loadTrack(0);
+                    renderCards();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar músicas da playlist:', error);
+            }
         }
 
         // =====================================================
@@ -1427,16 +1636,27 @@
         }
 
         function loadTrack(index) {
+            if (playlistData.length === 0) {
+                playlistData = defaultPlaylistData;
+                renderPlaylist();
+            }
+
             if (index < 0) index = playlistData.length - 1;
             if (index >= playlistData.length) index = 0;
             currentTrackIndex = index;
             const track = playlistData[currentTrackIndex];
+
+            // Se a música tem ID, incrementa o contador
+            if (track.id && currentUser) {
+                incrementPlayCount(track.id);
+            }
+
             trackTitle.textContent = track.title;
             trackArtist.textContent = track.artist;
             miniTitle.textContent = track.title;
             miniArtist.textContent = track.artist;
 
-            // Simula duração (entre 3 e 4.5 minutos)
+            // Simula duração
             const minDuration = 180;
             const maxDuration = 270;
             trackDuration = minDuration + Math.floor(Math.random() * (maxDuration - minDuration));
@@ -1445,11 +1665,9 @@
             progress.style.width = '0%';
             currentTimeEl.textContent = '0:00';
 
-            // Atualiza capa com emoji
             const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
-            albumCover.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Crect width='220' height='220' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='110' y='125' font-size='60' text-anchor='middle' fill='white'%3E${track.emoji}%3C/text%3E%3C/svg%3E`;
+            albumCover.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Crect width='220' height='220' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='110' y='125' font-size='60' text-anchor='middle' fill='white'%3E${track.emoji || '🎵'}%3C/text%3E%3C/svg%3E`;
 
-            // Reseta estado de play
             if (isPlaying) {
                 isPlaying = false;
                 playerPlayBtn.textContent = '▶';
@@ -1459,7 +1677,6 @@
                 progressInterval = null;
             }
 
-            // Atualiza playlist destacando a atual
             document.querySelectorAll('#playlistContainer li').forEach((li, i) => {
                 li.classList.toggle('active', i === currentTrackIndex);
             });
@@ -1473,7 +1690,6 @@
             albumCover.classList.toggle('playing', isPlaying);
 
             if (isPlaying) {
-                // Inicia progresso
                 if (progressInterval) clearInterval(progressInterval);
                 progressInterval = setInterval(() => {
                     currentTime += 0.5;
@@ -1552,16 +1768,18 @@
         }
 
         function renderCards() {
-            // Top tracks
+            // Top tracks (ordenadas por play_count)
+            const sortedTracks = [...playlistData].sort((a, b) => (b.play_count || 0) - (a.play_count || 0));
+            const topTracks = sortedTracks.slice(0, 4);
+
             topTracksGrid.innerHTML = '';
-            const topTracks = playlistData.slice(0, 4);
             topTracks.forEach(track => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <div class="card-image"><span class="card-emoji">${track.emoji}</span></div>
+                    <div class="card-image"><span class="card-emoji">${track.emoji || '🎵'}</span></div>
                     <h3>${track.title}</h3>
-                    <p>${track.artist}</p>
+                    <p>${track.artist} ${track.play_count ? '🎧 ' + track.play_count : ''}</p>
                 `;
                 card.addEventListener('click', () => {
                     const idx = playlistData.indexOf(track);
@@ -1573,13 +1791,14 @@
             });
 
             // Playlists destaque
-            playlistsGrid.innerHTML = '';
             const playlists = [
                 { name: 'Batidas de Numbani', emoji: '🌍', desc: 'Som eletrônico' },
                 { name: 'Speed Boost Mix', emoji: '⚡', desc: 'Música para acelerar' },
                 { name: 'Cura Sonora', emoji: '💚', desc: 'Relaxa e curte' },
                 { name: 'Frequência de Ouro', emoji: '✨', desc: 'Os maiores hits' }
             ];
+
+            playlistsGrid.innerHTML = '';
             playlists.forEach(pl => {
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -1599,6 +1818,29 @@
         }
 
         // =====================================================
+        // FUNÇÕES DA APP
+        // =====================================================
+        async function enterApp(username) {
+            displayName.textContent = username;
+            loginScreen.classList.add('hidden');
+            appContainer.classList.add('visible');
+
+            // Carrega músicas da base de dados
+            const songs = await loadSongsFromDB();
+            if (songs && songs.length > 0) {
+                playlistData = songs;
+            }
+
+            // Carrega playlists do utilizador
+            await loadPlaylistsFromDB();
+
+            // Inicializa o player
+            renderPlaylist();
+            loadTrack(0);
+            renderCards();
+        }
+
+        // =====================================================
         // CONTROLES DO PLAYER OVERLAY
         // =====================================================
         function openPlayerOverlay() {
@@ -1613,7 +1855,6 @@
         closePlayerBtn.addEventListener('click', closePlayerOverlay);
         miniExpandBtn.addEventListener('click', openPlayerOverlay);
 
-        // Fechar ao clicar fora do modal
         playerOverlay.addEventListener('click', (e) => {
             if (e.target === playerOverlay) closePlayerOverlay();
         });
@@ -1621,12 +1862,10 @@
         // Botões de controle
         playerPlayBtn.addEventListener('click', togglePlay);
         miniPlayBtn.addEventListener('click', togglePlay);
-
         nextBtn.addEventListener('click', nextTrack);
         miniNextBtn.addEventListener('click', nextTrack);
         prevBtn.addEventListener('click', prevTrack);
 
-        // Progresso - clique na barra
         progressBar.addEventListener('click', (e) => {
             if (trackDuration === 0) return;
             const rect = progressBar.getBoundingClientRect();
@@ -1637,12 +1876,10 @@
             currentTimeEl.textContent = formatTime(currentTime);
         });
 
-        // Volume
         volumeSlider.addEventListener('input', (e) => {
             volume = parseFloat(e.target.value);
         });
 
-        // Shuffle e Repeat (simples)
         shuffleBtn.addEventListener('click', () => {
             const randomIdx = Math.floor(Math.random() * playlistData.length);
             loadTrack(randomIdx);
@@ -1655,7 +1892,7 @@
         });
 
         // =====================================================
-        // TECLADO: Espaço para play/pause
+        // TECLADO
         // =====================================================
         document.addEventListener('keydown', (e) => {
             if (e.key === ' ' && playerOverlay.classList.contains('active')) {
@@ -1668,12 +1905,107 @@
         });
 
         // =====================================================
+        // EVENT LISTENERS DO LOGIN
+        // =====================================================
+        loginForm.addEventListener('submit', handleLogin);
+
+        // =====================================================
         // INICIALIZAÇÃO
         // =====================================================
         // Carrega a primeira música
-        loadTrack(0);
         renderPlaylist();
+        loadTrack(0);
         renderCards();
+
+        // Verifica se o utilizador já está logado
+        async function checkSession() {
+            try {
+                const { data, error } = await supabase.auth.getSession();
+                if (error) throw error;
+
+                if (data.session) {
+                    currentUser = data.session.user;
+                    const username = currentUser.user_metadata?.username || 'DJ_Lucio_OW';
+                    enterApp(username);
+                }
+            } catch (error) {
+                console.error('Erro ao verificar sessão:', error);
+            }
+        }
+
+        // Verifica sessão ao carregar
+        checkSession();
+
+        // =====================================================
+        // SCRIPT PARA CRIAR AS TABELAS NO SUPABASE
+        // =====================================================
+        console.log('=== INSTRUÇÕES PARA O SUPABASE ===');
+        console.log('Cria as seguintes tabelas no SQL Editor do Supabase:');
+        console.log(`
+        -- Tabela de músicas
+        CREATE TABLE IF NOT EXISTS songs (
+            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+            title TEXT NOT NULL,
+            artist TEXT DEFAULT 'Lúcio',
+            duration TEXT DEFAULT '3:30',
+            emoji TEXT DEFAULT '🎵',
+            play_count INTEGER DEFAULT 0,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        -- Tabela de playlists
+        CREATE TABLE IF NOT EXISTS playlists (
+            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+            user_id UUID NOT NULL,
+            name TEXT NOT NULL,
+            emoji TEXT DEFAULT '🎵',
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        -- Tabela de relação playlist-música
+        CREATE TABLE IF NOT EXISTS playlist_songs (
+            playlist_id UUID REFERENCES playlists(id) ON DELETE CASCADE,
+            song_id UUID REFERENCES songs(id) ON DELETE CASCADE,
+            position INTEGER DEFAULT 0,
+            PRIMARY KEY (playlist_id, song_id)
+        );
+
+        -- Tabela de histórico do utilizador
+        CREATE TABLE IF NOT EXISTS user_history (
+            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+            user_id UUID NOT NULL,
+            song_id UUID REFERENCES songs(id) ON DELETE CASCADE,
+            played_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        -- Políticas de segurança (RLS)
+        ALTER TABLE songs ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE playlists ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE playlist_songs ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE user_history ENABLE ROW LEVEL SECURITY;
+
+        -- Políticas para songs (público pode ler)
+        CREATE POLICY "Songs are viewable by everyone" ON songs
+            FOR SELECT USING (true);
+
+        -- Políticas para playlists (apenas o dono)
+        CREATE POLICY "Users can manage their own playlists" ON playlists
+            FOR ALL USING (auth.uid() = user_id);
+
+        -- Políticas para playlist_songs
+        CREATE POLICY "Users can manage their playlist songs" ON playlist_songs
+            FOR ALL USING (
+                EXISTS (
+                    SELECT 1 FROM playlists
+                    WHERE playlists.id = playlist_songs.playlist_id
+                    AND playlists.user_id = auth.uid()
+                )
+            );
+
+        -- Políticas para user_history
+        CREATE POLICY "Users can manage their own history" ON user_history
+            FOR ALL USING (auth.uid() = user_id);
+        `);
     </script>
 </body>
 </html>
