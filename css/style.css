@@ -599,4 +599,59 @@
 
 .player-modal {
     background: var(--darker-blue);
-    border: 2px solid rgba(
+    border: 2px solid rgba(164, 214, 21, 0.4);
+    border-radius: 25px;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(164, 214, 21, 0.2);
+}
+
+.close-player {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-white);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1;
+    transition: color 0.3s;
+}
+
+.close-player:hover {
+    color: var(--lucio-green);
+}
+
+/* ============ RESPONSIVO ============ */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        padding: 15px;
+    }
+    
+    .hero-title {
+        font-size: 28px;
+    }
+    
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .login-title {
+        font-size: 36px;
+    }
+}
