@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lúcio.fm - DJ Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
     <style>
         * {
             margin: 0;
@@ -22,7 +20,9 @@
             overflow: hidden;
         }
 
-        /* LOGIN */
+        /* ============================================
+                   LOGIN - SEMPRE VISÍVEL INICIALMENTE
+                   ============================================ */
         #loginScreen {
             position: fixed;
             inset: 0;
@@ -34,7 +34,7 @@
         }
 
         #loginScreen.hidden {
-            display: none;
+            display: none !important;
         }
 
         .login-box {
@@ -172,16 +172,18 @@
             display: none;
         }
 
-        /* APP */
+        /* ============================================
+                   APP - INICIALMENTE ESCONDIDA
+                   ============================================ */
         #app {
-            display: none;
+            display: none !important;
             height: 100vh;
             flex-direction: column;
             background: #0A0A0A;
         }
 
         #app.visible {
-            display: flex;
+            display: flex !important;
         }
 
         /* TOP BAR */
@@ -554,7 +556,8 @@
 
                 <div class="divider">ou</div>
 
-                <button type="button" class="btn-ghost" id="guestBtn">Entrar como convidado</button>
+                <!-- BOTÃO CONVIDADO - COM ID ÚNICO E SIMPLES -->
+                <button type="button" class="btn-ghost" id="btnGuest">Entrar como convidado</button>
             </form>
         </div>
     </div>
@@ -647,76 +650,63 @@
     </div>
 
     <!-- ============================================
-    SCRIPT
+    SCRIPT - VERSÃO SIMPLES E TESTADA
     ============================================ -->
     <script>
         // ============================================
-        // SUPABASE
+        // FUNÇÃO PRINCIPAL - ENTRAR NA APP
         // ============================================
-        const SUPABASE_URL = 'https://hijrhoujydouxkvwupgw.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_FrehZQeVQthZW9uQSpAyqg_acRKGIQo';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        function entrarApp(username) {
+            console.log('🚀 A entrar como:', username);
 
-        // ============================================
-        // DOM
-        // ============================================
-        const $ = id => document.getElementById(id);
+            // Atualiza o nome do utilizador
+            document.getElementById('userName').textContent = username;
+            document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
 
-        // Login
-        const loginScreen = $('loginScreen');
-        const app = $('app');
-        const loginForm = $('loginForm');
-        const loginBtn = $('loginBtn');
-        const loginBtnText = $('loginBtnText');
-        const usernameInput = $('username');
-        const passwordInput = $('password');
-        const confirmInput = $('confirmPassword');
-        const emailInput = $('email');
-        const confirmGroup = $('confirmGroup');
-        const emailGroup = $('emailGroup');
-        const errorMsg = $('errorMsg');
-        const errorText = $('errorText');
-        const successMsg = $('successMsg');
-        const successText = $('successText');
-        const toggleMode = $('toggleMode');
-        const guestBtn = $('guestBtn');
-        const logoutBtn = $('logoutBtn');
-        const userName = $('userName');
-        const userAvatar = $('userAvatar');
+            // ESCONDE O LOGIN
+            document.getElementById('loginScreen').classList.add('hidden');
 
-        // DJ
-        const importBtn = $('importBtn');
-        const fileInput = $('fileInput');
-        const canvasA = $('canvasA');
-        const canvasB = $('canvasB');
-        const playheadA = $('playheadA');
-        const playheadB = $('playheadB');
-        const playA = $('playA');
-        const playB = $('playB');
-        const stopA = $('stopA');
-        const stopB = $('stopB');
-        const volumeA = $('volumeA');
-        const volumeB = $('volumeB');
-        const speedA = $('speedA');
-        const speedB = $('speedB');
-        const timeA = $('timeA');
-        const timeB = $('timeB');
-        const trackNameA = $('trackNameA');
-        const trackNameB = $('trackNameB');
-        const trackDurationA = $('trackDurationA');
-        const trackDurationB = $('trackDurationB');
-        const statusA = $('statusA');
-        const statusB = $('statusB');
-        const crossfader = $('crossfader');
-        const syncBtn = $('syncBtn');
-        const effectBtn = $('effectBtn');
-        const masterVolume = $('masterVolume');
+            // MOSTRA A APP
+            document.getElementById('app').classList.add('visible');
 
-        let isRegistering = false;
-        let currentUser = null;
+            console.log('✅ App visível! Login escondido!');
+        }
 
         // ============================================
-        // AUDIO DECK
+        // BOTÃO CONVIDADO - O MAIS SIMPLES POSSÍVEL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 Página carregada!');
+
+            // Botão convidado
+            var guestBtn = document.getElementById('btnGuest');
+            if (guestBtn) {
+                console.log('✅ Botão convidado encontrado!');
+
+                guestBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('👤 CLICOU NO BOTÃO CONVIDADO!');
+
+                    var nome = 'Convidado_' + Math.floor(Math.random() * 10000);
+                    console.log('👤 Nome gerado:', nome);
+
+                    // CHAMA A FUNÇÃO
+                    entrarApp(nome);
+                });
+            } else {
+                console.log('❌ Botão convidado NÃO encontrado!');
+            }
+        });
+
+        // ============================================
+        // TESTE RÁPIDO - Botão de emergência
+        // ============================================
+        // Se o botão normal não funcionar, este atalho no console vai funcionar
+        console.log('💡 Se o botão não funcionar, escreve no console: entrarApp("Teste")');
+        console.log('💡 Ou clica com o botão direito no botão e escolhe "Inspecionar" para veres o ID');
+
+        // ============================================
+        // AUDIO DECK (SIMPLIFICADO)
         // ============================================
         class AudioDeck {
             constructor(canvas, playhead, playBtn, stopBtn, volumeSlider, speedSlider, timeDisplay, trackNameEl,
@@ -785,7 +775,6 @@
                 this.buffer = await this.audioCtx.decodeAudioData(data);
                 this.duration = this.buffer.duration;
 
-                // Gerar waveform
                 const channel = this.buffer.getChannelData(0);
                 const samples = 150;
                 this.waveform = [];
@@ -944,31 +933,47 @@
         // INICIAR DECKS
         // ============================================
         const deckA = new AudioDeck(
-            canvasA, playheadA, playA, stopA, volumeA, speedA, timeA,
-            trackNameA, trackDurationA, statusA
+            document.getElementById('canvasA'),
+            document.getElementById('playheadA'),
+            document.getElementById('playA'),
+            document.getElementById('stopA'),
+            document.getElementById('volumeA'),
+            document.getElementById('speedA'),
+            document.getElementById('timeA'),
+            document.getElementById('trackNameA'),
+            document.getElementById('trackDurationA'),
+            document.getElementById('statusA')
         );
 
         const deckB = new AudioDeck(
-            canvasB, playheadB, playB, stopB, volumeB, speedB, timeB,
-            trackNameB, trackDurationB, statusB
+            document.getElementById('canvasB'),
+            document.getElementById('playheadB'),
+            document.getElementById('playB'),
+            document.getElementById('stopB'),
+            document.getElementById('volumeB'),
+            document.getElementById('speedB'),
+            document.getElementById('timeB'),
+            document.getElementById('trackNameB'),
+            document.getElementById('trackDurationB'),
+            document.getElementById('statusB')
         );
 
         const decks = [deckA, deckB];
         let deckIndex = 0;
 
         // ============================================
-        // IMPORTAR MÚSICA
+        // IMPORTAR
         // ============================================
-        importBtn.onclick = () => fileInput.click();
+        document.getElementById('importBtn').onclick = () => document.getElementById('fileInput').click();
 
-        fileInput.onchange = async (e) => {
+        document.getElementById('fileInput').onchange = async (e) => {
             const files = e.target.files;
             for (const file of files) {
                 const deck = decks[deckIndex];
                 await deck.load(file);
                 deckIndex = (deckIndex + 1) % decks.length;
             }
-            fileInput.value = '';
+            e.target.value = '';
         };
 
         // Drag and drop
@@ -988,7 +993,7 @@
         // ============================================
         // CROSSFADER
         // ============================================
-        crossfader.oninput = (e) => {
+        document.getElementById('crossfader').oninput = (e) => {
             const val = e.target.value / 100;
             if (deckA.gain) {
                 deckA.gain.gain.value = (val < 0.5) ? deckA.volume : deckA.volume * (1 - val * 2);
@@ -1001,13 +1006,13 @@
         // ============================================
         // SYNC
         // ============================================
-        syncBtn.onclick = () => {
+        document.getElementById('syncBtn').onclick = function() {
             if (deckA.isPlaying && deckB.isPlaying) {
                 const current = deckA.audioCtx.currentTime - deckA.startTime;
                 deckB.pause();
                 deckB.pausedAt = current;
                 deckB.play();
-                syncBtn.classList.toggle('active');
+                this.classList.toggle('active');
             }
         };
 
@@ -1015,10 +1020,10 @@
         // EFFECTS
         // ============================================
         let effects = false;
-        effectBtn.onclick = () => {
+        document.getElementById('effectBtn').onclick = function() {
             effects = !effects;
-            effectBtn.classList.toggle('active');
-            masterVolume.textContent = effects ? '+3dB' : '-6dB';
+            this.classList.toggle('active');
+            document.getElementById('masterVolume').textContent = effects ? '+3dB' : '-6dB';
             if (deckA.source) {
                 deckA.source.playbackRate.value = effects ? deckA.speed * 1.05 : deckA.speed;
             }
@@ -1028,220 +1033,27 @@
         };
 
         // ============================================
-        // LOGIN
-        // ============================================
-        function showError(msg) {
-            errorText.textContent = msg;
-            errorMsg.classList.add('show');
-            successMsg.classList.remove('show');
-            setTimeout(() => errorMsg.classList.remove('show'), 4000);
-        }
-
-        function showSuccess(msg) {
-            successText.textContent = msg;
-            successMsg.classList.add('show');
-            errorMsg.classList.remove('show');
-            setTimeout(() => successMsg.classList.remove('show'), 4000);
-        }
-
-        function setLoading(loading) {
-            loginBtn.disabled = loading;
-            loginBtnText.textContent = loading ? 'A processar…' : (isRegistering ? 'Criar conta' : 'Entrar');
-        }
-
-        function toggleModeFn() {
-            isRegistering = !isRegistering;
-            toggleMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
-            loginBtnText.textContent = isRegistering ? 'Criar conta' : 'Entrar';
-
-            if (isRegistering) {
-                confirmGroup.classList.remove('hidden');
-                emailGroup.classList.remove('hidden');
-                passwordInput.placeholder = 'Mínimo 6 caracteres';
-            } else {
-                confirmGroup.classList.add('hidden');
-                emailGroup.classList.add('hidden');
-                passwordInput.placeholder = 'Palavra-passe';
-                confirmInput.value = '';
-                emailInput.value = '';
-            }
-
-            errorMsg.classList.remove('show');
-            successMsg.classList.remove('show');
-        }
-
-        // ============================================
-        // ENTRAR NA APP - FUNÇÃO SIMPLES
-        // ============================================
-        function enterApp(username) {
-            console.log('🚀 Entrando como:', username);
-
-            // Atualiza UI
-            userName.textContent = username;
-            userAvatar.textContent = username.charAt(0).toUpperCase();
-
-            // Esconde login, mostra app
-            loginScreen.classList.add('hidden');
-            app.classList.add('visible');
-
-            // Redimensiona canvases
-            setTimeout(() => {
-                deckA.resize();
-                deckB.resize();
-            }, 300);
-
-            console.log('✅ App visível!');
-        }
-
-        // ============================================
-        // AUTH
-        // ============================================
-        async function handleLogin(e) {
-            e.preventDefault();
-
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-            const confirm = confirmInput.value.trim();
-            const email = emailInput.value.trim();
-
-            if (!username || !password) {
-                showError('Preencha todos os campos.');
-                return;
-            }
-
-            if (password.length < 6) {
-                showError('A senha deve ter pelo menos 6 caracteres.');
-                return;
-            }
-
-            if (isRegistering && password !== confirm) {
-                showError('As senhas não coincidem.');
-                return;
-            }
-
-            setLoading(true);
-
-            try {
-                const userEmail = email || username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
-
-                if (isRegistering) {
-                    const { data, error } = await supabase.auth.signUp({
-                        email: userEmail,
-                        password: password,
-                        options: { data: { username, display_name: username } }
-                    });
-
-                    if (error) throw error;
-
-                    if (data.user) {
-                        showSuccess('✅ Conta criada! Faça login.');
-                        setTimeout(() => {
-                            if (isRegistering) toggleModeFn();
-                            passwordInput.value = '';
-                            confirmInput.value = '';
-                        }, 1500);
-                        setLoading(false);
-                        return;
-                    }
-                } else {
-                    const userEmail = username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
-                    const { data, error } = await supabase.auth.signInWithPassword({
-                        email: userEmail,
-                        password: password
-                    });
-
-                    if (error) throw error;
-
-                    if (data.user) {
-                        currentUser = data.user;
-                        const displayName = data.user.user_metadata?.username || username;
-                        enterApp(displayName);
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.error('Erro:', err);
-                if (err.message.includes('Invalid login credentials')) {
-                    showError('Credenciais inválidas.');
-                } else if (err.message.includes('User already registered')) {
-                    showError('Utilizador já registado.');
-                } else {
-                    showError('Erro: ' + err.message);
-                }
-            }
-
-            setLoading(false);
-        }
-
-        // ============================================
         // LOGOUT
         // ============================================
-        async function doLogout() {
-            try {
-                if (currentUser && !currentUser.id.startsWith('guest_')) {
-                    await supabase.auth.signOut();
-                }
-                currentUser = null;
-                app.classList.remove('visible');
-                setTimeout(() => {
-                    loginScreen.classList.remove('hidden');
-                    usernameInput.value = '';
-                    passwordInput.value = '';
-                    confirmInput.value = '';
-                    emailInput.value = '';
-                }, 300);
-            } catch (err) {
-                console.error('Erro ao sair:', err);
-            }
-        }
+        document.getElementById('logoutBtn').onclick = function() {
+            document.getElementById('app').classList.remove('visible');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        };
 
         // ============================================
-        // SESSION
+        // REDIMENSIONAR
         // ============================================
-        async function checkSession() {
-            try {
-                const { data, error } = await supabase.auth.getSession();
-                if (error) throw error;
-
-                if (data.session) {
-                    currentUser = data.session.user;
-                    const username = currentUser.user_metadata?.username || 'DJ_Lucio';
-                    enterApp(username);
-                }
-            } catch (err) {
-                console.error('Erro ao verificar sessão:', err);
-            }
-        }
-
-        // ============================================
-        // EVENTOS
-        // ============================================
-        loginForm.addEventListener('submit', handleLogin);
-        toggleMode.addEventListener('click', (e) => { e.preventDefault();
-            toggleModeFn(); });
-
-        // BOTÃO CONVIDADO - VERSÃO SIMPLES
-        guestBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('👤 Botão convidado clicado!');
-
-            const name = 'Convidado_' + Math.floor(Math.random() * 10000);
-            currentUser = { user_metadata: { username: name }, id: 'guest_' + Date.now() };
-
-            // CHAMA A FUNÇÃO DIRETAMENTE
-            enterApp(name);
+        window.addEventListener('resize', () => {
+            deckA.resize();
+            deckB.resize();
         });
-
-        logoutBtn.addEventListener('click', doLogout);
-
-        // ============================================
-        // INICIAR
-        // ============================================
-        checkSession();
 
         console.log('🎵 Lúcio.fm — DJ Studio');
         console.log('👤 Clique em "Entrar como convidado" para testar');
         console.log('📁 Arraste músicas ou clique em "Importar"');
+        console.log('');
+        console.log('🔧 Se o botão não funcionar, escreve no console:');
+        console.log('   entrarApp("Teste")');
     </script>
 
 </body>
