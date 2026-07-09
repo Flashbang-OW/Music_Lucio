@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lúcio.fm - Plataforma Musical</title>
+    <title>Lúcio.fm - DJ Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
@@ -20,21 +20,23 @@
         }
 
         :root {
-            --bg-primary: #121212;
-            --bg-secondary: #1E1E1E;
-            --bg-card: #282828;
-            --bg-input: #2A2A2A;
-            --bg-hover: #333333;
+            --bg-primary: #0A0A0A;
+            --bg-secondary: #141414;
+            --bg-card: #1A1A1A;
+            --bg-input: #222222;
+            --bg-hover: #2A2A2A;
             --text-primary: #FFFFFF;
-            --text-secondary: #B3B3B3;
-            --text-muted: #7A7A7A;
+            --text-secondary: #B0B0B0;
+            --text-muted: #666666;
             --accent: #1DB954;
             --accent-hover: #1ED760;
             --border: #2A2A2A;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             --radius: 8px;
             --radius-lg: 12px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
             --transition: all 0.2s ease;
+            --deck-bg: #1A1A1A;
+            --deck-border: #333333;
         }
 
         html,
@@ -44,13 +46,14 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             -webkit-font-smoothing: antialiased;
+            overflow: hidden;
         }
 
         /* ============================================
                    SCROLLBAR
                    ============================================ */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
         ::-webkit-scrollbar-track {
             background: var(--bg-secondary);
@@ -58,9 +61,6 @@
         ::-webkit-scrollbar-thumb {
             background: var(--bg-hover);
             border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
         }
 
         /* ============================================
@@ -267,6 +267,7 @@
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.4s ease;
+            background: var(--bg-primary);
         }
 
         .app.visible {
@@ -281,17 +282,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 32px;
+            padding: 12px 24px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
             flex-shrink: 0;
+            z-index: 10;
         }
 
         .topbar .brand {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.3px;
         }
@@ -301,8 +303,8 @@
         }
 
         .topbar .brand svg {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
         }
 
         .topbar .user {
@@ -313,30 +315,30 @@
 
         .topbar .user .name {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
         }
 
         .topbar .user .avatar {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             color: #fff;
         }
 
         .topbar .user .logout {
-            padding: 6px 16px;
+            padding: 5px 14px;
             background: transparent;
             border: 1px solid var(--border);
             border-radius: 6px;
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: var(--transition);
@@ -347,215 +349,420 @@
             color: #EF4444;
         }
 
+        .topbar .import-btn {
+            padding: 6px 18px;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .topbar .import-btn:hover {
+            background: var(--accent-hover);
+        }
+
         /* ============================================
-                   MAIN CONTENT
+                   DJ DECK
                    ============================================ */
-        .main {
+        .dj-container {
             flex: 1;
-            overflow-y: auto;
-            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 16px 24px 24px 24px;
+            gap: 16px;
             background: var(--bg-primary);
         }
 
-        .main .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .main .header {
-            margin-bottom: 32px;
-        }
-
-        .main .header h1 {
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-
-        .main .header p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-top: 4px;
-        }
-
-        /* ============================================
-                   STATS ROW
-                   ============================================ */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        .dj-decks {
+            display: flex;
             gap: 16px;
-            margin-bottom: 32px;
+            flex: 1;
+            min-height: 0;
         }
 
-        .stats .card {
+        .deck {
+            flex: 1;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 18px 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-width: 0;
         }
 
-        .stats .card .label {
-            font-size: 13px;
+        .deck .deck-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .deck .deck-label .deck-status {
+            color: var(--accent);
+            font-size: 10px;
+        }
+
+        .deck .waveform-container {
+            flex: 1;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            min-height: 80px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .deck .waveform-container canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .deck .waveform-container .playhead {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent);
+            left: 0;
+            transition: left 0.1s linear;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+        }
+
+        .deck .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .deck .controls .btn-deck {
+            padding: 6px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .stats .card .value {
-            font-size: 22px;
-            font-weight: 700;
-            margin-top: 2px;
+        .deck .controls .btn-deck:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
         }
 
-        .stats .card .value.green {
+        .deck .controls .btn-deck.active {
+            border-color: var(--accent);
             color: var(--accent);
         }
 
+        .deck .controls .btn-deck.play {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .deck .controls .btn-deck.play:hover {
+            background: var(--accent-hover);
+        }
+
+        .deck .controls .time-display {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            min-width: 80px;
+            text-align: center;
+            font-family: 'Inter', monospace;
+        }
+
+        .deck .controls .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .deck .controls .slider-group label {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .deck .controls input[type="range"] {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+            min-width: 40px;
+        }
+
+        .deck .controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        .deck .controls input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+        }
+
+        .deck .track-info {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .deck .track-info .track-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .deck .track-info .track-name.empty {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .deck .track-info .track-duration {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-variant-numeric: tabular-nums;
+            font-family: 'Inter', monospace;
+            flex-shrink: 0;
+        }
+
         /* ============================================
-                   GRID
+                   BOTTOM MIXER
                    ============================================ */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
+        .mixer {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            flex-shrink: 0;
+        }
+
+        .mixer .crossfader {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .mixer .crossfader label {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mixer .crossfader input[type="range"] {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .mixer .crossfader input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        .mixer .crossfader input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+        }
+
+        .mixer .mixer-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mixer .mixer-controls .btn-mixer {
+            padding: 6px 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mixer .mixer-controls .btn-mixer:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .mixer .mixer-controls .btn-mixer.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .mixer .mixer-controls .volume-display {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            font-family: 'Inter', monospace;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* ============================================
+                   FILE INPUT HIDDEN
+                   ============================================ */
+        #fileInput {
+            display: none;
+        }
+
+        /* ============================================
+                   RESPONSIVE
+                   ============================================ */
+        @media (max-width: 1024px) {
+            .dj-decks {
+                flex-direction: column;
+            }
+            .deck {
+                min-height: 200px;
+            }
         }
 
         @media (max-width: 768px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
             .topbar {
-                padding: 12px 16px;
+                padding: 10px 16px;
                 flex-wrap: wrap;
                 gap: 8px;
             }
-            .main {
-                padding: 16px;
+            .topbar .brand {
+                font-size: 16px;
+            }
+            .dj-container {
+                padding: 12px 12px 16px 12px;
+            }
+            .deck {
+                padding: 14px;
+                min-height: 160px;
+            }
+            .deck .controls {
+                gap: 8px;
+            }
+            .deck .controls .btn-deck {
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+            .mixer {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+            .mixer .crossfader {
+                min-width: 100px;
             }
             .login-box {
                 padding: 24px 20px;
             }
         }
 
-        /* ============================================
-                   CARDS
-                   ============================================ */
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-        }
-
-        .card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .card .item {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-            cursor: default;
-        }
-
-        .card .item:last-child {
-            border-bottom: none;
-        }
-
-        .card .item .icon {
-            font-size: 18px;
-            margin-right: 14px;
-            flex-shrink: 0;
-        }
-
-        .card .item .info {
-            flex: 1;
-        }
-
-        .card .item .info .title {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .card .item .info .sub {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .card .item .badge {
-            background: var(--accent);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 10px;
-            border-radius: 20px;
+        @media (max-width: 480px) {
+            .deck .controls .slider-group {
+                min-width: 60px;
+            }
+            .deck .controls .time-display {
+                font-size: 12px;
+                min-width: 60px;
+            }
+            .mixer .mixer-controls {
+                gap: 8px;
+                flex-wrap: wrap;
+            }
         }
 
         /* ============================================
-                   STATUS INDICATOR
+                   ANIMATION FOR LOADING
                    ============================================ */
-        .status-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-secondary);
-            font-size: 14px;
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%,
+        @keyframes dots {
+            0% {
+                content: '';
+            }
+            33% {
+                content: '.';
+            }
+            66% {
+                content: '..';
+            }
             100% {
-                opacity: 1;
+                content: '...';
             }
-            50% {
-                opacity: 0.35;
-            }
-        }
-
-        .status-row .green {
-            color: var(--accent);
-        }
-
-        .code-block {
-            margin-top: 16px;
-            padding: 12px 14px;
-            background: var(--bg-primary);
-            border-radius: var(--radius);
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-family: 'Inter', monospace;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* ============================================
-                   EMPTY / GUEST STATE
-                   ============================================ */
-        .empty {
-            text-align: center;
-            padding: 32px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty .emoji {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-
-        .empty p {
-            font-size: 15px;
         }
     </style>
 </head>
@@ -577,54 +784,38 @@
                     </svg>
                     Lúcio<span>.fm</span>
                 </div>
-                <div class="sub">Plataforma musical</div>
+                <div class="sub">DJ Studio</div>
             </div>
 
             <div class="login-box">
                 <form id="loginForm">
-                    <!-- Username -->
                     <div class="field">
                         <label for="username">Utilizador</label>
                         <input type="text" id="username" placeholder="Ex: DJ_Lucio" required />
                     </div>
-
-                    <!-- Password -->
                     <div class="field">
                         <label for="password" id="passwordLabel">Palavra-passe</label>
                         <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6" />
                     </div>
-
-                    <!-- Confirm Password (registo) -->
                     <div class="field hidden" id="confirmGroup">
                         <label for="confirmPassword">Confirmar palavra-passe</label>
                         <input type="password" id="confirmPassword" placeholder="Confirme a palavra-passe" />
                     </div>
-
-                    <!-- Email (opcional, registo) -->
                     <div class="field hidden" id="emailGroup">
                         <label for="email">Email (opcional)</label>
                         <input type="email" id="email" placeholder="exemplo@email.com" />
                     </div>
-
-                    <!-- Messages -->
                     <div class="msg error" id="errorMsg">
                         <span>⚠️</span> <span id="errorText">Erro</span>
                     </div>
                     <div class="msg success" id="successMsg">
                         <span>✅</span> <span id="successText">Sucesso</span>
                     </div>
-
-                    <!-- Submit -->
                     <button type="submit" class="btn-primary" id="loginBtn">
                         <span id="loginBtnText">Entrar</span>
                     </button>
-
-                    <!-- Toggle mode -->
                     <span class="toggle-link" id="toggleMode">Criar conta</span>
-
                     <div class="divider">ou</div>
-
-                    <!-- Guest -->
                     <button type="button" class="btn-ghost" id="guestBtn">Entrar como convidado</button>
                 </form>
             </div>
@@ -632,14 +823,14 @@
     </div>
 
     <!-- ============================================================
-    APP
+    APP - DJ STUDIO
     ============================================================ -->
     <div class="app" id="app">
 
         <!-- Top Bar -->
         <header class="topbar">
             <div class="brand">
-                <svg width="28" height="28" viewBox="0 0 100 100">
+                <svg width="24" height="24" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="#1DB954" stroke-width="3" />
                     <circle cx="50" cy="45" r="15" fill="#1DB954" opacity="0.8" />
                     <circle cx="42" cy="40" r="4" fill="#121212" />
@@ -648,96 +839,95 @@
                 </svg>
                 Lúcio<span>.fm</span>
             </div>
-            <div class="user">
-                <span class="name" id="userName">Utilizador</span>
-                <div class="avatar" id="userAvatar">U</div>
-                <button class="logout" id="logoutBtn">Sair</button>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="import-btn" id="importBtn">📁 Importar Música</button>
+                <div class="user">
+                    <span class="name" id="userName">Utilizador</span>
+                    <div class="avatar" id="userAvatar">U</div>
+                    <button class="logout" id="logoutBtn">Sair</button>
+                </div>
             </div>
         </header>
 
-        <!-- Main -->
-        <main class="main">
-            <div class="container">
-
-                <!-- Header -->
-                <div class="header">
-                    <h1>Dashboard</h1>
-                    <p>Bem-vindo, <strong id="welcomeName">utilizador</strong></p>
+        <!-- DJ Deck -->
+        <div class="dj-container">
+            <div class="dj-decks">
+                <!-- Deck A (Esquerda) -->
+                <div class="deck" id="deckA">
+                    <div class="deck-label">
+                        <span>🎧 Deck A</span>
+                        <span class="deck-status" id="deckAStatus">⏸ Parado</span>
+                    </div>
+                    <div class="waveform-container" id="waveformA">
+                        <canvas id="canvasA"></canvas>
+                        <div class="playhead" id="playheadA" style="left:0%;"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn-deck play" id="playA">▶ Play</button>
+                        <button class="btn-deck" id="stopA">⏹ Stop</button>
+                        <div class="slider-group">
+                            <label>🔊</label>
+                            <input type="range" id="volumeA" min="0" max="100" value="80" />
+                        </div>
+                        <div class="slider-group">
+                            <label>⚡</label>
+                            <input type="range" id="speedA" min="50" max="150" value="100" />
+                        </div>
+                        <span class="time-display" id="timeA">00:00 / 00:00</span>
+                    </div>
+                    <div class="track-info">
+                        <span class="track-name empty" id="trackNameA">Nenhuma música carregada</span>
+                        <span class="track-duration" id="trackDurationA">--:--</span>
+                    </div>
                 </div>
 
-                <!-- Stats -->
-                <div class="stats">
-                    <div class="card">
-                        <div class="label">Status</div>
-                        <div class="value green">● Online</div>
+                <!-- Deck B (Direita) -->
+                <div class="deck" id="deckB">
+                    <div class="deck-label">
+                        <span>🎧 Deck B</span>
+                        <span class="deck-status" id="deckBStatus">⏸ Parado</span>
                     </div>
-                    <div class="card">
-                        <div class="label">Conexão</div>
-                        <div class="value green">Supabase</div>
+                    <div class="waveform-container" id="waveformB">
+                        <canvas id="canvasB"></canvas>
+                        <div class="playhead" id="playheadB" style="left:0%;"></div>
                     </div>
-                    <div class="card">
-                        <div class="label">Conta</div>
-                        <div class="value" id="accountStatus">Ativa</div>
+                    <div class="controls">
+                        <button class="btn-deck play" id="playB">▶ Play</button>
+                        <button class="btn-deck" id="stopB">⏹ Stop</button>
+                        <div class="slider-group">
+                            <label>🔊</label>
+                            <input type="range" id="volumeB" min="0" max="100" value="80" />
+                        </div>
+                        <div class="slider-group">
+                            <label>⚡</label>
+                            <input type="range" id="speedB" min="50" max="150" value="100" />
+                        </div>
+                        <span class="time-display" id="timeB">00:00 / 00:00</span>
                     </div>
-                </div>
-
-                <!-- Grid -->
-                <div class="grid-2">
-
-                    <!-- Actividade -->
-                    <div class="card">
-                        <h3>📋 Atividade recente</h3>
-                        <div class="item">
-                            <span class="icon">🎵</span>
-                            <div class="info">
-                                <div class="title">Playlist carregada</div>
-                                <div class="sub">Hoje, 14:32</div>
-                            </div>
-                            <span class="badge">Nova</span>
-                        </div>
-                        <div class="item">
-                            <span class="icon">👤</span>
-                            <div class="info">
-                                <div class="title">Login realizado</div>
-                                <div class="sub">Hoje, 14:30</div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <span class="icon">🔗</span>
-                            <div class="info">
-                                <div class="title">Supabase conectada</div>
-                                <div class="sub">Hoje, 14:28</div>
-                            </div>
-                            <span class="badge">OK</span>
-                        </div>
+                    <div class="track-info">
+                        <span class="track-name empty" id="trackNameB">Nenhuma música carregada</span>
+                        <span class="track-duration" id="trackDurationB">--:--</span>
                     </div>
-
-                    <!-- Status API -->
-                    <div class="card">
-                        <h3>🔗 Estado da API</h3>
-                        <div class="status-row">
-                            <span class="status-dot"></span>
-                            <span>Supabase</span>
-                            <span style="margin-left:auto;color:var(--accent);">● Ativa</span>
-                        </div>
-                        <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
-                            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:var(--text-secondary);">
-                                <span>Autenticação</span>
-                                <span style="color:var(--accent);">● OK</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:var(--text-secondary);">
-                                <span>Base de Dados</span>
-                                <span style="color:var(--accent);">● Disponível</span>
-                            </div>
-                        </div>
-                        <div class="code-block">
-                            URL: hijrhoujydouxkvwupgw.supabase.co
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </main>
+
+            <!-- Mixer -->
+            <div class="mixer">
+                <div class="crossfader">
+                    <label>A</label>
+                    <input type="range" id="crossfader" min="0" max="100" value="50" />
+                    <label>B</label>
+                </div>
+                <div class="mixer-controls">
+                    <button class="btn-mixer" id="syncBtn">🔄 Sync</button>
+                    <button class="btn-mixer" id="effectBtn">🎛 Efeitos</button>
+                    <span class="volume-display" id="masterVolume">-6dB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Input -->
+        <input type="file" id="fileInput" accept="audio/*" multiple />
     </div>
 
     <!-- ============================================================
@@ -757,6 +947,7 @@
         // ============================================
         const $ = (id) => document.getElementById(id);
 
+        // Login
         const loginScreen = $('loginScreen');
         const app = $('app');
         const loginForm = $('loginForm');
@@ -774,17 +965,431 @@
         const successText = $('successText');
         const toggleMode = $('toggleMode');
         const guestBtn = $('guestBtn');
-        const userName = $('userName');
-        const welcomeName = $('welcomeName');
-        const userAvatar = $('userAvatar');
         const logoutBtn = $('logoutBtn');
-        const accountStatus = $('accountStatus');
+        const userName = $('userName');
+        const userAvatar = $('userAvatar');
+
+        // DJ
+        const importBtn = $('importBtn');
+        const fileInput = $('fileInput');
+        const canvasA = $('canvasA');
+        const canvasB = $('canvasB');
+        const playheadA = $('playheadA');
+        const playheadB = $('playheadB');
+        const playA = $('playA');
+        const playB = $('playB');
+        const stopA = $('stopA');
+        const stopB = $('stopB');
+        const volumeA = $('volumeA');
+        const volumeB = $('volumeB');
+        const speedA = $('speedA');
+        const speedB = $('speedB');
+        const timeA = $('timeA');
+        const timeB = $('timeB');
+        const trackNameA = $('trackNameA');
+        const trackNameB = $('trackNameB');
+        const trackDurationA = $('trackDurationA');
+        const trackDurationB = $('trackDurationB');
+        const deckAStatus = $('deckAStatus');
+        const deckBStatus = $('deckBStatus');
+        const crossfader = $('crossfader');
+        const syncBtn = $('syncBtn');
+        const effectBtn = $('effectBtn');
+        const masterVolume = $('masterVolume');
 
         let isRegistering = false;
         let currentUser = null;
 
         // ============================================
-        // UI HELPERS
+        // AUDIO ENGINE
+        // ============================================
+        class Deck {
+            constructor(id, canvas, playhead, playBtn, stopBtn, volumeSlider, speedSlider, timeDisplay, trackNameEl,
+                trackDurationEl, statusEl) {
+                this.id = id;
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.playhead = playhead;
+                this.playBtn = playBtn;
+                this.stopBtn = stopBtn;
+                this.volumeSlider = volumeSlider;
+                this.speedSlider = speedSlider;
+                this.timeDisplay = timeDisplay;
+                this.trackNameEl = trackNameEl;
+                this.trackDurationEl = trackDurationEl;
+                this.statusEl = statusEl;
+
+                this.audioContext = null;
+                this.audioBuffer = null;
+                this.source = null;
+                this.gainNode = null;
+                this.isPlaying = false;
+                this.startTime = 0;
+                this.pausedAt = 0;
+                this.duration = 0;
+                this.analyser = null;
+                this.animationId = null;
+                this.waveformData = [];
+                this.currentSpeed = 1;
+                this.currentVolume = 0.8;
+
+                this.setupCanvas();
+                this.setupEventListeners();
+            }
+
+            setupCanvas() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width - 4 || 400;
+                this.canvas.height = rect.height - 4 || 80;
+            }
+
+            setupEventListeners() {
+                this.playBtn.addEventListener('click', () => this.togglePlay());
+                this.stopBtn.addEventListener('click', () => this.stop());
+                this.volumeSlider.addEventListener('input', (e) => {
+                    this.currentVolume = e.target.value / 100;
+                    if (this.gainNode) {
+                        this.gainNode.gain.value = this.currentVolume;
+                    }
+                });
+                this.speedSlider.addEventListener('input', (e) => {
+                    this.currentSpeed = e.target.value / 100;
+                    if (this.isPlaying && this.source) {
+                        this.source.playbackRate.value = this.currentSpeed;
+                    }
+                });
+            }
+
+            async loadFile(file) {
+                try {
+                    // Reset
+                    this.stop();
+                    this.audioBuffer = null;
+                    this.waveformData = [];
+
+                    // Criar AudioContext se não existir
+                    if (!this.audioContext) {
+                        this.audioContext = new(window.AudioContext || window.webkitAudioContext)();
+                    }
+
+                    // Ler ficheiro
+                    const arrayBuffer = await file.arrayBuffer();
+                    this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+                    this.duration = this.audioBuffer.duration;
+
+                    // Gerar waveform
+                    this.generateWaveform();
+
+                    // Atualizar UI
+                    this.trackNameEl.textContent = file.name;
+                    this.trackNameEl.className = 'track-name';
+                    this.trackDurationEl.textContent = this.formatTime(this.duration);
+                    this.statusEl.textContent = '⏸ Carregado';
+                    this.updateTimeDisplay(0);
+
+                    // Desenhar waveform
+                    this.drawWaveform();
+
+                    return true;
+                } catch (error) {
+                    console.error('Erro ao carregar ficheiro:', error);
+                    this.trackNameEl.textContent = '❌ Erro ao carregar';
+                    this.trackNameEl.className = 'track-name';
+                    return false;
+                }
+            }
+
+            generateWaveform() {
+                if (!this.audioBuffer) return;
+                const data = this.audioBuffer.getChannelData(0);
+                const samples = 200;
+                this.waveformData = [];
+                const step = Math.floor(data.length / samples);
+                for (let i = 0; i < samples; i++) {
+                    let sum = 0;
+                    for (let j = 0; j < step; j++) {
+                        sum += Math.abs(data[i * step + j] || 0);
+                    }
+                    this.waveformData.push(sum / step);
+                }
+            }
+
+            drawWaveform() {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+
+                ctx.clearRect(0, 0, w, h);
+
+                if (this.waveformData.length === 0) {
+                    ctx.fillStyle = '#333';
+                    ctx.font = '14px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Carregue uma música', w / 2, h / 2 + 5);
+                    return;
+                }
+
+                const barWidth = Math.max(2, w / this.waveformData.length - 2);
+                const centerY = h / 2;
+
+                for (let i = 0; i < this.waveformData.length; i++) {
+                    const val = this.waveformData[i];
+                    const height = Math.max(2, val * h * 0.8);
+                    const x = i * (barWidth + 2);
+
+                    // Gradiente verde
+                    const grad = ctx.createLinearGradient(0, centerY - height / 2, 0, centerY + height / 2);
+                    grad.addColorStop(0, 'rgba(29, 185, 84, 0.4)');
+                    grad.addColorStop(0.5, 'rgba(29, 185, 84, 0.9)');
+                    grad.addColorStop(1, 'rgba(29, 185, 84, 0.4)');
+
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(x, centerY - height / 2, barWidth, height);
+                }
+
+                // Linha central
+                ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, centerY);
+                ctx.lineTo(w, centerY);
+                ctx.stroke();
+            }
+
+            togglePlay() {
+                if (!this.audioBuffer) {
+                    this.statusEl.textContent = '⚠️ Sem música';
+                    return;
+                }
+
+                if (this.isPlaying) {
+                    this.pause();
+                } else {
+                    this.play();
+                }
+            }
+
+            play() {
+                if (!this.audioBuffer || !this.audioContext) return;
+
+                // Criar source
+                this.source = this.audioContext.createBufferSource();
+                this.source.buffer = this.audioBuffer;
+                this.source.playbackRate.value = this.currentSpeed;
+
+                // Criar gain node
+                this.gainNode = this.audioContext.createGain();
+                this.gainNode.gain.value = this.currentVolume;
+
+                // Conectar
+                this.source.connect(this.gainNode);
+                this.gainNode.connect(this.audioContext.destination);
+
+                // Analyser para visualização
+                this.analyser = this.audioContext.createAnalyser();
+                this.analyser.fftSize = 256;
+                this.source.connect(this.analyser);
+
+                // Iniciar
+                const offset = this.pausedAt || 0;
+                this.source.start(0, offset);
+                this.startTime = this.audioContext.currentTime - offset;
+                this.isPlaying = true;
+                this.pausedAt = 0;
+
+                this.playBtn.textContent = '⏸ Pausa';
+                this.playBtn.classList.add('active');
+                this.statusEl.textContent = '▶ A tocar';
+
+                // Atualizar progresso
+                this.updateProgress();
+            }
+
+            pause() {
+                if (!this.isPlaying) return;
+                this.pausedAt = this.audioContext.currentTime - this.startTime;
+                this.source.stop();
+                this.source = null;
+                this.isPlaying = false;
+                this.playBtn.textContent = '▶ Play';
+                this.playBtn.classList.remove('active');
+                this.statusEl.textContent = '⏸ Em pausa';
+
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            }
+
+            stop() {
+                if (this.isPlaying) {
+                    this.source.stop();
+                    this.source = null;
+                    this.isPlaying = false;
+                    this.pausedAt = 0;
+                }
+                this.playBtn.textContent = '▶ Play';
+                this.playBtn.classList.remove('active');
+                this.statusEl.textContent = '⏹ Parado';
+                this.updateTimeDisplay(0);
+                this.playhead.style.left = '0%';
+
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            }
+
+            updateProgress() {
+                if (!this.isPlaying) return;
+
+                const currentTime = this.audioContext.currentTime - this.startTime;
+                const progress = Math.min(currentTime / this.duration, 1);
+
+                this.updateTimeDisplay(currentTime);
+                this.playhead.style.left = (progress * 100) + '%';
+
+                if (progress >= 1) {
+                    this.stop();
+                    return;
+                }
+
+                this.animationId = requestAnimationFrame(() => this.updateProgress());
+            }
+
+            updateTimeDisplay(currentTime) {
+                const formatted = this.formatTime(currentTime) + ' / ' + this.formatTime(this.duration);
+                this.timeDisplay.textContent = formatted;
+            }
+
+            formatTime(seconds) {
+                if (!seconds || isNaN(seconds)) return '00:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+            }
+
+            resizeCanvas() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width - 4 || 400;
+                this.canvas.height = rect.height - 4 || 80;
+                this.drawWaveform();
+            }
+        }
+
+        // ============================================
+        // INICIALIZAR DECKS
+        // ============================================
+        const deckA = new Deck(
+            'A',
+            canvasA,
+            playheadA,
+            playA,
+            stopA,
+            volumeA,
+            speedA,
+            timeA,
+            trackNameA,
+            trackDurationA,
+            deckAStatus
+        );
+
+        const deckB = new Deck(
+            'B',
+            canvasB,
+            playheadB,
+            playB,
+            stopB,
+            volumeB,
+            speedB,
+            timeB,
+            trackNameB,
+            trackDurationB,
+            deckBStatus
+        );
+
+        const decks = [deckA, deckB];
+        let currentDeckIndex = 0;
+
+        // ============================================
+        // FILE IMPORT
+        // ============================================
+        importBtn.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if (files.length === 0) return;
+
+            for (const file of files) {
+                const deck = decks[currentDeckIndex];
+                const success = await deck.loadFile(file);
+                if (success) {
+                    currentDeckIndex = (currentDeckIndex + 1) % decks.length;
+                }
+            }
+
+            fileInput.value = '';
+        });
+
+        // ============================================
+        // CROSSFADER
+        // ============================================
+        crossfader.addEventListener('input', (e) => {
+            const val = e.target.value / 100;
+            // Controla o volume dos decks baseado no crossfader
+            const volA = Math.max(0, 1 - val * 2);
+            const volB = Math.max(0, val * 2 - 0);
+            if (deckA.gainNode) deckA.gainNode.gain.value = (val < 0.5) ? deckA.currentVolume : deckA.currentVolume * (1 -
+                val * 2);
+            if (deckB.gainNode) deckB.gainNode.gain.value = (val > 0.5) ? deckB.currentVolume : deckB.currentVolume * (val *
+                2);
+        });
+
+        // ============================================
+        // SYNC
+        // ============================================
+        syncBtn.addEventListener('click', () => {
+            if (deckA.isPlaying && deckB.isPlaying) {
+                // Sincroniza o tempo
+                const currentTime = deckA.audioContext.currentTime - deckA.startTime;
+                deckB.pause();
+                deckB.pausedAt = currentTime;
+                deckB.play();
+                syncBtn.classList.toggle('active');
+            }
+        });
+
+        // ============================================
+        // EFFECTS (simples)
+        // ============================================
+        let effectsActive = false;
+        effectBtn.addEventListener('click', () => {
+            effectsActive = !effectsActive;
+            effectBtn.classList.toggle('active');
+            if (effectsActive) {
+                // Aplica efeito de filtro (simulação)
+                masterVolume.textContent = '+3dB';
+                if (deckA.audioContext) {
+                    // Simplesmente muda o tom
+                    if (deckA.source) deckA.source.playbackRate.value = deckA.currentSpeed * 1.05;
+                    if (deckB.source) deckB.source.playbackRate.value = deckB.currentSpeed * 1.05;
+                }
+            } else {
+                masterVolume.textContent = '-6dB';
+                if (deckA.source) deckA.source.playbackRate.value = deckA.currentSpeed;
+                if (deckB.source) deckB.source.playbackRate.value = deckB.currentSpeed;
+            }
+        });
+
+        // ============================================
+        // RESIZE
+        // ============================================
+        window.addEventListener('resize', () => {
+            decks.forEach(d => d.resizeCanvas());
+        });
+
+        // ============================================
+        // LOGIN FUNCTIONS
         // ============================================
         function showError(msg) {
             errorText.textContent = msg;
@@ -826,27 +1431,17 @@
             successMsg.classList.remove('show');
         }
 
-        // ============================================
-        // ENTRAR NA APP (FUNÇÃO PRINCIPAL)
-        // ============================================
         function enterApp(username) {
-            console.log('🚀 A entrar na app como:', username);
-
-            // Atualiza a UI
             userName.textContent = username;
-            welcomeName.textContent = username;
             userAvatar.textContent = username.charAt(0).toUpperCase();
-            accountStatus.textContent = 'Ativa';
 
-            // Mostra a app e esconde o login
             loginScreen.classList.add('hidden');
             app.style.display = 'flex';
-            // Força um pequeno delay para a transição
             setTimeout(() => {
                 app.classList.add('visible');
+                // Redimensiona canvases após entrar
+                setTimeout(() => decks.forEach(d => d.resizeCanvas()), 100);
             }, 50);
-
-            console.log('✅ App visível, login escondido');
         }
 
         // ============================================
@@ -979,37 +1574,51 @@
         toggleMode.addEventListener('click', (e) => { e.preventDefault();
             toggleModeFn(); });
 
-        // ============================================
-        // BOTÃO CONVIDADO - CORRIGIDO
-        // ============================================
         guestBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('👤 Botão "Entrar como convidado" clicado!');
-
             const guestName = 'Convidado_' + Math.floor(Math.random() * 10000);
-            console.log('👤 Nome de convidado gerado:', guestName);
-
-            // Define o utilizador convidado
             currentUser = {
                 user_metadata: { username: guestName },
                 id: 'guest_' + Date.now()
             };
-
-            // Entra na app
             enterApp(guestName);
         });
 
         logoutBtn.addEventListener('click', doLogout);
 
         // ============================================
+        // DRAG AND DROP
+        // ============================================
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        document.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length === 0) return;
+
+            for (const file of files) {
+                if (file.type.startsWith('audio/')) {
+                    const deck = decks[currentDeckIndex];
+                    const success = await deck.loadFile(file);
+                    if (success) {
+                        currentDeckIndex = (currentDeckIndex + 1) % decks.length;
+                    }
+                }
+            }
+        });
+
+        // ============================================
         // INIT
         // ============================================
         checkSession();
 
-        console.log('🎵 Lúcio.fm — Autenticação com Supabase');
-        console.log('📝 Para criar conta, clique em "Criar conta"');
-        console.log('👤 Ou clique em "Entrar como convidado"');
-        console.log('✅ O botão de convidado está a funcionar!');
+        console.log('🎵 Lúcio.fm — DJ Studio');
+        console.log('📁 Importe músicas para começar a mixar!');
+        console.log('🎚️ Use os controles de cada deck para tocar, parar e ajustar volume/speed');
+        console.log('🎛️ O crossfader faz a transição entre os decks');
+        console.log('🔄 Sync sincroniza o tempo entre as duas músicas');
     </script>
 
 </body>
