@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lúcio Music Player - Vamos Aumentar o Som!</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <header class="header">
+            <div class="logo">
+                <span class="frog-icon">🐸</span>
+                <h1>LÚCIO<span class="accent">.FM</span></h1>
+            </div>
+            <p class="tagline">Vamos aumentar o som!</p>
+        </header>
+
+        <!-- Player Principal -->
+        <main class="player-container">
+            <!-- Capa do Álbum -->
+            <div class="album-art">
+                <div class="vinyl-disc" id="vinylDisc"></div>
+                <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
+                     alt="Capa do Álbum" 
+                     id="albumCover">
+            </div>
+
+            <!-- Informações da Música -->
+            <div class="track-info">
+                <h2 id="trackTitle">Synaesthesia Auditiva</h2>
+                <p id="trackArtist">Lúcio Correia dos Santos</p>
+            </div>
+
+            <!-- Barra de Progresso -->
+            <div class="progress-container">
+                <span id="currentTime">0:00</span>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+
+            <!-- Controlos -->
+            <div class="controls">
+                <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
+                <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
+                <button class="play-btn" id="playBtn" title="Play/Pause">▶️</button>
+                <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
+                <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
+            </div>
+
+            <!-- Volume -->
+            <div class="volume-container">
+                <span>🔊</span>
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
+            </div>
+
+            <!-- Playlist -->
+            <div class="playlist-section">
+                <h3>🎵 Playlist</h3>
+                <ul class="playlist" id="playlist">
+                    <!-- As músicas serão inseridas aqui via JavaScript -->
+                </ul>
+            </div>
+        </main>
+
+        <!-- Footer com referências -->
+        <footer class="footer">
+            <p>Inspirado em Overwatch • Feito para os fãs do Lúcio</p>
+            <p class="hashtag">#VamosAumentarOSom</p>
+        </footer>
+    </div>
+
+    <script src="js/playlist.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/supabase.js"></script>
+</body>
+</html>
