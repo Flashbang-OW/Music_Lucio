@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lúcio.fm - Plataforma Musical</title>
-    <!-- Fontes modernas -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <style>
@@ -829,6 +827,29 @@
         }
 
         // ============================================
+        // ENTRAR NA APP (FUNÇÃO PRINCIPAL)
+        // ============================================
+        function enterApp(username) {
+            console.log('🚀 A entrar na app como:', username);
+
+            // Atualiza a UI
+            userName.textContent = username;
+            welcomeName.textContent = username;
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            accountStatus.textContent = 'Ativa';
+
+            // Mostra a app e esconde o login
+            loginScreen.classList.add('hidden');
+            app.style.display = 'flex';
+            // Força um pequeno delay para a transição
+            setTimeout(() => {
+                app.classList.add('visible');
+            }, 50);
+
+            console.log('✅ App visível, login escondido');
+        }
+
+        // ============================================
         // AUTH
         // ============================================
         async function handleLogin(e) {
@@ -910,16 +931,6 @@
             setLoading(false);
         }
 
-        function enterApp(username) {
-            userName.textContent = username;
-            welcomeName.textContent = username;
-            userAvatar.textContent = username.charAt(0).toUpperCase();
-            accountStatus.textContent = 'Ativa';
-
-            loginScreen.classList.add('hidden');
-            app.classList.add('visible');
-        }
-
         // ============================================
         // LOGOUT
         // ============================================
@@ -968,10 +979,24 @@
         toggleMode.addEventListener('click', (e) => { e.preventDefault();
             toggleModeFn(); });
 
-        guestBtn.addEventListener('click', () => {
-            const guest = 'Convidado_' + Math.floor(Math.random() * 1000);
-            currentUser = { user_metadata: { username: guest }, id: 'guest_' + Date.now() };
-            enterApp(guest);
+        // ============================================
+        // BOTÃO CONVIDADO - CORRIGIDO
+        // ============================================
+        guestBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('👤 Botão "Entrar como convidado" clicado!');
+
+            const guestName = 'Convidado_' + Math.floor(Math.random() * 10000);
+            console.log('👤 Nome de convidado gerado:', guestName);
+
+            // Define o utilizador convidado
+            currentUser = {
+                user_metadata: { username: guestName },
+                id: 'guest_' + Date.now()
+            };
+
+            // Entra na app
+            enterApp(guestName);
         });
 
         logoutBtn.addEventListener('click', doLogout);
@@ -983,7 +1008,8 @@
 
         console.log('🎵 Lúcio.fm — Autenticação com Supabase');
         console.log('📝 Para criar conta, clique em "Criar conta"');
-        console.log('👤 Ou entre como convidado');
+        console.log('👤 Ou clique em "Entrar como convidado"');
+        console.log('✅ O botão de convidado está a funcionar!');
     </script>
 
 </body>
