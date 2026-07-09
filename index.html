@@ -3,124 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lúcio Music Player - Oh, vamos aumentar o som!</title>
+    <title>Lúcio.fm - Vamos Aumentar o Som!</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Partículas de fundo (efeito sonoro) -->
-    <div class="sound-waves">
-        <div class="wave wave1"></div>
-        <div class="wave wave2"></div>
-        <div class="wave wave3"></div>
-        <div class="wave wave4"></div>
+    <!-- Sidebar estilo Spotify/Overwatch -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <div class="lucio-symbol">
+                <svg viewBox="0 0 100 100" class="frog-svg">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
+                    <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
+                    <circle cx="42" cy="40" r="4" fill="#0F2343"/>
+                    <circle cx="58" cy="40" r="4" fill="#0F2343"/>
+                    <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+            <span class="logo-text">LÚCIO<span class="logo-accent">.fm</span></span>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span>Início</span>
+            </li>
+            <li class="nav-item">
+                <span class="nav-icon">🔍</span>
+                <span>Explorar</span>
+            </li>
+            <li class="nav-item">
+                <span class="nav-icon">📚</span>
+                <span>Biblioteca</span>
+            </li>
+            <li class="nav-item" id="openPlayerBtn">
+                <span class="nav-icon">🎵</span>
+                <span>Player</span>
+            </li>
+        </ul>
+        
+        <div class="playlists-section">
+            <h4>PLAYLISTS</h4>
+            <ul>
+                <li>❤️ Favela Classics</li>
+                <li>⚡ Speed Boost Mix</li>
+                <li>💚 Healing Beats</li>
+                <li>🎤 Ultimate Drops</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">VAMOS AUMENTAR O SOM</h1>
+                <p class="hero-subtitle">A tua playlist inspirada no DJ mais rápido do mundo</p>
+                <button class="cta-button" id="heroCTA">
+                    <span>🎧</span> ABRIR PLAYER
+                </button>
+            </div>
+        </section>
+
+        <!-- Seção: Para Ti -->
+        <section class="section">
+            <h2 class="section-title">🎯 Para Ti</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #0F2343);">
+                        <span class="card-emoji">🐸</span>
+                    </div>
+                    <h3>Daily Mix Lúcio</h3>
+                    <p>As tuas favoritas</p>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #A4D615);">
+                        <span class="card-emoji">⚡</span>
+                    </div>
+                    <h3>Speed Training</h3>
+                    <p>Para treinos intensos</p>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #218FFE, #A4D615);">
+                        <span class="card-emoji">💚</span>
+                    </div>
+                    <h3>Healing Vibes</h3>
+                    <p>Relaxa e recupera</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Em Alta -->
+        <section class="section">
+            <h2 class="section-title">🔥 Em Alta</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #000000);">
+                        <span class="card-emoji">🎤</span>
+                    </div>
+                    <h3>Synaesthesia Auditiva</h3>
+                    <p>Lúcio • 3:45</p>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #F9ED32, #218FFE);">
+                        <span class="card-emoji">🛹</span>
+                    </div>
+                    <h3>Favela Nights</h3>
+                    <p>Lúcio • 5:12</p>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #A4D615, #F9ED32);">
+                        <span class="card-emoji">🔊</span>
+                    </div>
+                    <h3>Barrier Sound</h3>
+                    <p>Lúcio • 4:18</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Personagens -->
+        <section class="section">
+            <h2 class="section-title">🎮 Colaborações Overwatch</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #FF69B4, #FF1493);">
+                        <span class="card-emoji">🐰</span>
+                    </div>
+                    <h3>D.Va Gaming Beats</h3>
+                    <p>Mix para jogar</p>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #00CED1, #008B8B);">
+                        <span class="card-emoji">🔷</span>
+                    </div>
+                    <h3>Symmetra Order</h3>
+                    <p>Música ordeira</p>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                        <span class="card-emoji">⛑️</span>
+                    </div>
+                    <h3>Mercy Healing</h3>
+                    <p>Música relaxante</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Barra Inferior (Mini Player) -->
+    <div class="bottom-bar" id="bottomBar">
+        <div class="mini-player">
+            <div class="mini-album">
+                <div class="mini-disc"></div>
+            </div>
+            <div class="mini-info">
+                <p class="mini-title" id="miniTitle">Escolhe uma música</p>
+                <p class="mini-artist" id="miniArtist">Para começares</p>
+            </div>
+            <div class="mini-controls">
+                <button class="mini-btn" id="miniPlayBtn">▶️</button>
+                <button class="mini-btn">⏭️</button>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <!-- Cabeçalho estilo Overwatch -->
-        <header class="header">
-            <div class="ultimate-badge">
-                <span class="ultimate-text">ULTIMATE READY</span>
-            </div>
-            <div class="hero-logo">
-                <span class="frog-icon">🐸</span>
-                <div class="logo-text">
-                    <h1 class="hero-name">LÚCIO</h1>
-                    <p class="hero-title">DJ DA LIBERDADE</p>
-                </div>
-            </div>
-            <div class="level-badge">LVL 20</div>
-        </header>
-
-        <!-- Player Principal -->
-        <main class="player-container">
-            <!-- Capa do Álbum com efeito de hover -->
-            <div class="album-art">
-                <div class="vinyl-disc" id="vinylDisc"></div>
-                <div class="album-glow"></div>
-                <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
-                     alt="Álbum do Lúcio" 
-                     id="albumCover">
-                <div class="equalizer" id="equalizer">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </div>
-
-            <!-- Informações da Música -->
-            <div class="track-info">
-                <div class="track-badge">TOCANDO AGORA</div>
-                <h2 id="trackTitle">Synaesthesia Auditiva</h2>
-                <p id="trackArtist">Lúcio Correia dos Santos</p>
-            </div>
-
-            <!-- Barra de Progresso estilo Overwatch -->
-            <div class="progress-container">
-                <span id="currentTime">0:00</span>
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress" id="progress">
-                        <div class="progress-dot"></div>
+    <!-- Player Overlay (Modal) -->
+    <div class="player-overlay" id="playerOverlay">
+        <div class="player-modal">
+            <button class="close-player" id="closePlayerBtn">✕</button>
+            
+            <!-- Aqui vai o player que já tinhas antes -->
+            <div class="player-full">
+                <div class="album-art">
+                    <div class="vinyl-disc" id="vinylDisc"></div>
+                    <div class="album-glow"></div>
+                    <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
+                         alt="Álbum do Lúcio" 
+                         id="albumCover">
+                    <div class="equalizer" id="equalizer">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
                     </div>
                 </div>
-                <span id="duration">0:00</span>
-            </div>
 
-            <!-- Controlos -->
-            <div class="controls">
-                <button class="control-btn ability-btn" id="speedBoost" title="Speed Boost">⚡</button>
-                <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
-                <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
-                <button class="play-btn" id="playBtn" title="Play/Pause">
-                    <span class="play-icon">▶️</span>
-                </button>
-                <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
-                <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
-                <button class="control-btn ability-btn" id="healBoost" title="Healing Boost">💚</button>
-            </div>
+                <div class="track-info">
+                    <h2 id="trackTitle">Escolhe uma faixa</h2>
+                    <p id="trackArtist">Lúcio Correia dos Santos</p>
+                </div>
 
-            <!-- Volume e habilidades -->
-            <div class="abilities-bar">
+                <div class="progress-container">
+                    <span id="currentTime">0:00</span>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress" id="progress">
+                            <div class="progress-dot"></div>
+                        </div>
+                    </div>
+                    <span id="duration">0:00</span>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn ability-btn" id="speedBoost" title="Speed Boost">⚡</button>
+                    <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
+                    <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
+                    <button class="play-btn" id="playBtn" title="Play/Pause">▶️</button>
+                    <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
+                    <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
+                    <button class="control-btn ability-btn" id="healBoost" title="Healing Boost">💚</button>
+                </div>
+
                 <div class="volume-container">
-                    <span class="volume-icon">🔊</span>
+                    <span>🔊</span>
                     <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
                 </div>
-                <div class="crossfade-indicator">
-                    <span>CROSSFADE</span>
-                    <div class="crossfade-bar">
-                        <div class="crossfade-fill" id="crossfadeFill"></div>
-                    </div>
+
+                <div class="playlist-section">
+                    <h3>🎵 Playlist</h3>
+                    <ul class="playlist" id="playlist"></ul>
                 </div>
             </div>
-
-            <!-- Playlist -->
-            <div class="playlist-section">
-                <div class="playlist-header">
-                    <h3>🎵 TRILHAS DE COMBATE</h3>
-                    <span class="song-count" id="songCount"></span>
-                </div>
-                <ul class="playlist" id="playlist">
-                    <!-- As músicas serão inseridas aqui via JavaScript -->
-                </ul>
-            </div>
-        </main>
-
-        <!-- Footer com voicelines -->
-        <footer class="footer">
-            <div class="voicelines">
-                <p class="voiceline active">"Isso é Lúcio-oh-oh!"</p>
-                <p class="voiceline">"Vamos aumentar o som!"</p>
-                <p class="voiceline">"Vocês pediram, o Lúcio atendeu!"</p>
-                <p class="voiceline">"Solta o som!"</p>
-            </div>
-            <p class="footer-credit">Overwatch & Lúcio © Blizzard Entertainment</p>
-        </footer>
+        </div>
     </div>
 
     <script src="js/playlist.js"></script>
     <script src="js/player.js"></script>
-    <script src="js/supabase.js"></script>
+    <script src="js/landing.js"></script>
 </body>
 </html>
