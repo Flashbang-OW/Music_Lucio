@@ -3,74 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lúcio Music Player - Vamos Aumentar o Som!</title>
+    <title>Lúcio Music Player - Oh, vamos aumentar o som!</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Partículas de fundo (efeito sonoro) -->
+    <div class="sound-waves">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+        <div class="wave wave4"></div>
+    </div>
+
     <div class="container">
-        <!-- Cabeçalho -->
+        <!-- Cabeçalho estilo Overwatch -->
         <header class="header">
-            <div class="logo">
-                <span class="frog-icon">🐸</span>
-                <h1>LÚCIO<span class="accent">.FM</span></h1>
+            <div class="ultimate-badge">
+                <span class="ultimate-text">ULTIMATE READY</span>
             </div>
-            <p class="tagline">Vamos aumentar o som!</p>
+            <div class="hero-logo">
+                <span class="frog-icon">🐸</span>
+                <div class="logo-text">
+                    <h1 class="hero-name">LÚCIO</h1>
+                    <p class="hero-title">DJ DA LIBERDADE</p>
+                </div>
+            </div>
+            <div class="level-badge">LVL 20</div>
         </header>
 
         <!-- Player Principal -->
         <main class="player-container">
-            <!-- Capa do Álbum -->
+            <!-- Capa do Álbum com efeito de hover -->
             <div class="album-art">
                 <div class="vinyl-disc" id="vinylDisc"></div>
+                <div class="album-glow"></div>
                 <img src="https://via.placeholder.com/300x300/0F2343/A4D615?text=LUCIO" 
-                     alt="Capa do Álbum" 
+                     alt="Álbum do Lúcio" 
                      id="albumCover">
+                <div class="equalizer" id="equalizer">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
             </div>
 
             <!-- Informações da Música -->
             <div class="track-info">
+                <div class="track-badge">TOCANDO AGORA</div>
                 <h2 id="trackTitle">Synaesthesia Auditiva</h2>
                 <p id="trackArtist">Lúcio Correia dos Santos</p>
             </div>
 
-            <!-- Barra de Progresso -->
+            <!-- Barra de Progresso estilo Overwatch -->
             <div class="progress-container">
                 <span id="currentTime">0:00</span>
                 <div class="progress-bar" id="progressBar">
-                    <div class="progress" id="progress"></div>
+                    <div class="progress" id="progress">
+                        <div class="progress-dot"></div>
+                    </div>
                 </div>
                 <span id="duration">0:00</span>
             </div>
 
             <!-- Controlos -->
             <div class="controls">
+                <button class="control-btn ability-btn" id="speedBoost" title="Speed Boost">⚡</button>
                 <button class="control-btn" id="shuffleBtn" title="Aleatório">🔀</button>
                 <button class="control-btn" id="prevBtn" title="Anterior">⏮️</button>
-                <button class="play-btn" id="playBtn" title="Play/Pause">▶️</button>
+                <button class="play-btn" id="playBtn" title="Play/Pause">
+                    <span class="play-icon">▶️</span>
+                </button>
                 <button class="control-btn" id="nextBtn" title="Próximo">⏭️</button>
                 <button class="control-btn" id="repeatBtn" title="Repetir">🔁</button>
+                <button class="control-btn ability-btn" id="healBoost" title="Healing Boost">💚</button>
             </div>
 
-            <!-- Volume -->
-            <div class="volume-container">
-                <span>🔊</span>
-                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
+            <!-- Volume e habilidades -->
+            <div class="abilities-bar">
+                <div class="volume-container">
+                    <span class="volume-icon">🔊</span>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
+                </div>
+                <div class="crossfade-indicator">
+                    <span>CROSSFADE</span>
+                    <div class="crossfade-bar">
+                        <div class="crossfade-fill" id="crossfadeFill"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Playlist -->
             <div class="playlist-section">
-                <h3>🎵 Playlist</h3>
+                <div class="playlist-header">
+                    <h3>🎵 TRILHAS DE COMBATE</h3>
+                    <span class="song-count" id="songCount"></span>
+                </div>
                 <ul class="playlist" id="playlist">
                     <!-- As músicas serão inseridas aqui via JavaScript -->
                 </ul>
             </div>
         </main>
 
-        <!-- Footer com referências -->
+        <!-- Footer com voicelines -->
         <footer class="footer">
-            <p>Inspirado em Overwatch • Feito para os fãs do Lúcio</p>
-            <p class="hashtag">#VamosAumentarOSom</p>
+            <div class="voicelines">
+                <p class="voiceline active">"Isso é Lúcio-oh-oh!"</p>
+                <p class="voiceline">"Vamos aumentar o som!"</p>
+                <p class="voiceline">"Vocês pediram, o Lúcio atendeu!"</p>
+                <p class="voiceline">"Solta o som!"</p>
+            </div>
+            <p class="footer-credit">Overwatch & Lúcio © Blizzard Entertainment</p>
         </footer>
     </div>
 
