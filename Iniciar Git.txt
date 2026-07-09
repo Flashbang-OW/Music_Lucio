@@ -1,0 +1,6 @@
+git init
+git add .
+git commit -m "Primeiro commit - Player de música do Lúcio"
+git branch -M main
+git remote add origin https://github.com/Flashbang-OW/Music_Lucio.git
+git push -u origin main
