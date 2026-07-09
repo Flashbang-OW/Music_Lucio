@@ -1,58 +1,82 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lúcio.fm - Plataforma Musical</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Fontes modernas -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
     <style>
-        /* ============ VARIÁVEIS ============ */
-        :root {
-            --primary: #10B981;
-            --primary-dark: #059669;
-            --primary-light: #34D399;
-            --primary-bg: #ECFDF5;
-            --dark-bg: #0F172A;
-            --card-bg: #1E293B;
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
-            --text-muted: #64748B;
-            --border-color: #334155;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-            --radius: 12px;
-            --transition: all 0.3s ease;
-        }
-
-        /* ============ RESET ============ */
-        * {
+        /* ============================================
+                   RESET & VARIÁVEIS
+                   ============================================ */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1E1E1E;
+            --bg-card: #282828;
+            --bg-input: #2A2A2A;
+            --bg-hover: #333333;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #7A7A7A;
+            --accent: #1DB954;
+            --accent-hover: #1ED760;
+            --border: #2A2A2A;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.2s ease;
+        }
+
+        html,
         body {
+            height: 100%;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--dark-bg);
+            background: var(--bg-primary);
             color: var(--text-primary);
-            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ============ LOGIN SCREEN ============ */
+        /* ============================================
+                   SCROLLBAR
+                   ============================================ */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-hover);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ============================================
+                   LOGIN SCREEN
+                   ============================================ */
         .login-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-bg);
+            inset: 0;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
             z-index: 1000;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
         }
 
         .login-screen.hidden {
@@ -60,55 +84,49 @@
             pointer-events: none;
         }
 
-        .login-container {
+        .login-wrapper {
             width: 100%;
             max-width: 400px;
             padding: 0 24px;
         }
 
-        .login-header {
+        .login-brand {
             text-align: center;
             margin-bottom: 40px;
         }
 
-        .login-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            display: block;
-        }
-
-        .login-title {
+        .login-brand .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             font-size: 28px;
             font-weight: 700;
-            color: var(--text-primary);
             letter-spacing: -0.5px;
+            color: var(--text-primary);
         }
 
-        .login-title span {
-            color: var(--primary);
+        .login-brand .logo span {
+            color: var(--accent);
         }
 
-        .login-subtitle {
+        .login-brand .sub {
             color: var(--text-secondary);
             font-size: 14px;
-            margin-top: 6px;
-            font-weight: 400;
+            margin-top: 4px;
         }
 
-        .login-form {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
+        .login-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
             padding: 32px;
-            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .login-box .field {
+            margin-bottom: 18px;
         }
 
-        .form-group label {
+        .login-box .field label {
             display: block;
             font-size: 13px;
             font-weight: 500;
@@ -116,42 +134,38 @@
             margin-bottom: 6px;
         }
 
-        .form-group input {
+        .login-box .field input {
             width: 100%;
-            padding: 10px 14px;
-            background: var(--dark-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            padding: 12px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             color: var(--text-primary);
             font-size: 14px;
             font-family: 'Inter', sans-serif;
-            transition: var(--transition);
             outline: none;
+            transition: var(--transition);
         }
 
-        .form-group input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        .login-box .field input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.15);
         }
 
-        .form-group input::placeholder {
+        .login-box .field input::placeholder {
             color: var(--text-muted);
         }
 
-        .form-group input.error {
-            border-color: #EF4444;
-        }
-
-        .form-group.hidden {
+        .login-box .field.hidden {
             display: none;
         }
 
-        .btn-primary {
+        .login-box .btn-primary {
             width: 100%;
             padding: 12px;
-            background: var(--primary);
+            background: var(--accent);
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius);
             color: #fff;
             font-size: 15px;
             font-weight: 600;
@@ -161,61 +175,52 @@
             margin-top: 4px;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
+        .login-box .btn-primary:hover {
+            background: var(--accent-hover);
         }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
+        .login-box .btn-primary:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
-        .auth-toggle {
+        .login-box .toggle-link {
+            display: block;
             text-align: center;
             margin-top: 16px;
-        }
-
-        .auth-toggle a {
             color: var(--text-secondary);
             font-size: 14px;
             cursor: pointer;
-            text-decoration: none;
             transition: var(--transition);
         }
 
-        .auth-toggle a:hover {
-            color: var(--primary);
+        .login-box .toggle-link:hover {
+            color: var(--text-primary);
         }
 
-        .divider {
-            text-align: center;
+        .login-box .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin: 20px 0;
             color: var(--text-muted);
             font-size: 13px;
-            position: relative;
         }
 
-        .divider::before,
-        .divider::after {
+        .login-box .divider::before,
+        .login-box .divider::after {
             content: '';
-            position: absolute;
-            top: 50%;
-            width: 30%;
+            flex: 1;
             height: 1px;
-            background: var(--border-color);
+            background: var(--border);
         }
 
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-
-        .btn-ghost {
+        .login-box .btn-ghost {
             width: 100%;
             padding: 12px;
             background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
@@ -224,100 +229,101 @@
             transition: var(--transition);
         }
 
-        .btn-ghost:hover {
+        .login-box .btn-ghost:hover {
             border-color: var(--text-secondary);
             color: var(--text-primary);
         }
 
-        .message {
+        .login-box .msg {
             display: none;
-            padding: 12px 16px;
-            border-radius: 8px;
+            padding: 12px 14px;
+            border-radius: var(--radius);
             font-size: 14px;
             margin-bottom: 16px;
             align-items: center;
             gap: 8px;
         }
 
-        .message.show {
+        .login-box .msg.show {
             display: flex;
         }
 
-        .message.error {
+        .login-box .msg.error {
             background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #FCA5A5;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #F87171;
         }
 
-        .message.success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--primary-light);
+        .login-box .msg.success {
+            background: rgba(29, 185, 84, 0.1);
+            border: 1px solid rgba(29, 185, 84, 0.25);
+            color: var(--accent);
         }
 
-        /* ============ APP CONTAINER ============ */
-        .app-container {
+        /* ============================================
+                   APP LAYOUT
+                   ============================================ */
+        .app {
             display: none;
             height: 100vh;
-            opacity: 0;
-            transition: opacity 0.5s ease;
             flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .app-container.visible {
+        .app.visible {
             display: flex;
             opacity: 1;
         }
 
-        /* ============ HEADER ============ */
-        .app-header {
+        /* ============================================
+                   TOP BAR
+                   ============================================ */
+        .topbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 32px;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
+            padding: 14px 32px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
             flex-shrink: 0;
         }
 
-        .app-logo {
+        .topbar .brand {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .app-logo svg {
-            width: 32px;
-            height: 32px;
-        }
-
-        .app-logo-text {
             font-size: 20px;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
         }
 
-        .app-logo-text span {
-            color: var(--primary);
+        .topbar .brand span {
+            color: var(--accent);
         }
 
-        .app-user {
+        .topbar .brand svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .topbar .user {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
-        .app-user-name {
+        .topbar .user .name {
             color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
         }
 
-        .app-user-avatar {
-            width: 36px;
-            height: 36px;
+        .topbar .user .avatar {
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -326,10 +332,10 @@
             color: #fff;
         }
 
-        .btn-logout {
+        .topbar .user .logout {
             padding: 6px 16px;
             background: transparent;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 6px;
             color: var(--text-secondary);
             font-size: 13px;
@@ -338,135 +344,151 @@
             transition: var(--transition);
         }
 
-        .btn-logout:hover {
+        .topbar .user .logout:hover {
             border-color: #EF4444;
             color: #EF4444;
         }
 
-        /* ============ MAIN CONTENT ============ */
-        .main-content {
+        /* ============================================
+                   MAIN CONTENT
+                   ============================================ */
+        .main {
             flex: 1;
             overflow-y: auto;
-            padding: 40px 32px;
-            background: var(--dark-bg);
+            padding: 32px;
+            background: var(--bg-primary);
         }
 
-        .dashboard {
-            max-width: 1200px;
+        .main .container {
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .dashboard-header {
+        .main .header {
             margin-bottom: 32px;
         }
 
-        .dashboard-header h1 {
-            font-size: 28px;
+        .main .header h1 {
+            font-size: 26px;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
         }
 
-        .dashboard-header p {
+        .main .header p {
             color: var(--text-secondary);
             font-size: 15px;
             margin-top: 4px;
         }
 
-        .stats-grid {
+        /* ============================================
+                   STATS ROW
+                   ============================================ */
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 16px;
             margin-bottom: 32px;
         }
 
-        .stat-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 20px 24px;
+        .stats .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
         }
 
-        .stat-card .label {
-            color: var(--text-secondary);
+        .stats .card .label {
             font-size: 13px;
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
-        .stat-card .value {
-            font-size: 28px;
+        .stats .card .value {
+            font-size: 22px;
             font-weight: 700;
-            margin-top: 4px;
-            color: var(--text-primary);
+            margin-top: 2px;
         }
 
-        .stat-card .value.green {
-            color: var(--primary);
+        .stats .card .value.green {
+            color: var(--accent);
         }
 
-        .content-grid {
+        /* ============================================
+                   GRID
+                   ============================================ */
+        .grid-2 {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 24px;
         }
 
         @media (max-width: 768px) {
-            .content-grid {
+            .grid-2 {
                 grid-template-columns: 1fr;
+            }
+            .topbar {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .main {
+                padding: 16px;
+            }
+            .login-box {
+                padding: 24px 20px;
             }
         }
 
-        .content-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
+        /* ============================================
+                   CARDS
+                   ============================================ */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
             padding: 24px;
         }
 
-        .content-card h3 {
+        .card h3 {
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 16px;
-            color: var(--text-primary);
         }
 
-        .playlist-item {
+        .card .item {
             display: flex;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: var(--transition);
+            border-bottom: 1px solid var(--border);
+            cursor: default;
         }
 
-        .playlist-item:last-child {
+        .card .item:last-child {
             border-bottom: none;
         }
 
-        .playlist-item:hover {
-            padding-left: 8px;
+        .card .item .icon {
+            font-size: 18px;
+            margin-right: 14px;
+            flex-shrink: 0;
         }
 
-        .playlist-item .icon {
-            font-size: 20px;
-            margin-right: 12px;
-        }
-
-        .playlist-item .info {
+        .card .item .info {
             flex: 1;
         }
 
-        .playlist-item .info .title {
+        .card .item .info .title {
             font-size: 14px;
             font-weight: 500;
         }
 
-        .playlist-item .info .sub {
-            color: var(--text-secondary);
+        .card .item .info .sub {
             font-size: 13px;
+            color: var(--text-secondary);
         }
 
-        .playlist-item .badge {
-            background: var(--primary);
+        .card .item .badge {
+            background: var(--accent);
             color: #fff;
             font-size: 11px;
             font-weight: 600;
@@ -474,10 +496,13 @@
             border-radius: 20px;
         }
 
-        .status-indicator {
+        /* ============================================
+                   STATUS INDICATOR
+                   ============================================ */
+        .status-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             color: var(--text-secondary);
             font-size: 14px;
         }
@@ -486,169 +511,185 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--accent);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.35;
+            }
         }
 
-        .empty-state {
+        .status-row .green {
+            color: var(--accent);
+        }
+
+        .code-block {
+            margin-top: 16px;
+            padding: 12px 14px;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-family: 'Inter', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* ============================================
+                   EMPTY / GUEST STATE
+                   ============================================ */
+        .empty {
             text-align: center;
-            padding: 40px 20px;
+            padding: 32px 20px;
             color: var(--text-secondary);
         }
 
-        .empty-state .emoji {
-            font-size: 48px;
+        .empty .emoji {
+            font-size: 40px;
             margin-bottom: 12px;
         }
 
-        .empty-state p {
+        .empty p {
             font-size: 15px;
-        }
-
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 640px) {
-            .app-header {
-                padding: 12px 16px;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-
-            .app-user {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-
-            .main-content {
-                padding: 20px 16px;
-            }
-
-            .login-form {
-                padding: 24px 20px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .dashboard-header h1 {
-                font-size: 22px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- ============ LOGIN SCREEN ============ -->
+
+    <!-- ============================================================
+    LOGIN SCREEN
+    ============================================================ -->
     <div class="login-screen" id="loginScreen">
-        <div class="login-container">
-            <div class="login-header">
-                <svg class="login-icon" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#10B981" stroke-width="3"/>
-                    <circle cx="50" cy="45" r="15" fill="#10B981" opacity="0.8"/>
-                    <circle cx="42" cy="40" r="4" fill="#0F172A"/>
-                    <circle cx="58" cy="40" r="4" fill="#0F172A"/>
-                    <path d="M42 52 Q50 60 58 52" stroke="#0F172A" stroke-width="2" fill="none"/>
-                </svg>
-                <h1 class="login-title">Lúcio<span>.fm</span></h1>
-                <p class="login-subtitle">Plataforma de gestão musical</p>
+        <div class="login-wrapper">
+            <div class="login-brand">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#1DB954" stroke-width="3" />
+                        <circle cx="50" cy="45" r="15" fill="#1DB954" opacity="0.8" />
+                        <circle cx="42" cy="40" r="4" fill="#121212" />
+                        <circle cx="58" cy="40" r="4" fill="#121212" />
+                        <path d="M42 52 Q50 60 58 52" stroke="#121212" stroke-width="2" fill="none" />
+                    </svg>
+                    Lúcio<span>.fm</span>
+                </div>
+                <div class="sub">Plataforma musical</div>
             </div>
 
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="username">Nome de utilizador</label>
-                    <input type="text" id="username" placeholder="Ex: DJ_Lucio" required>
-                </div>
+            <div class="login-box">
+                <form id="loginForm">
+                    <!-- Username -->
+                    <div class="field">
+                        <label for="username">Utilizador</label>
+                        <input type="text" id="username" placeholder="Ex: DJ_Lucio" required />
+                    </div>
 
-                <div class="form-group">
-                    <label for="password" id="passwordLabel">Palavra-passe</label>
-                    <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6">
-                </div>
+                    <!-- Password -->
+                    <div class="field">
+                        <label for="password" id="passwordLabel">Palavra-passe</label>
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6" />
+                    </div>
 
-                <div class="form-group hidden" id="confirmPasswordGroup">
-                    <label for="confirmPassword">Confirmar palavra-passe</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirme a palavra-passe">
-                </div>
+                    <!-- Confirm Password (registo) -->
+                    <div class="field hidden" id="confirmGroup">
+                        <label for="confirmPassword">Confirmar palavra-passe</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirme a palavra-passe" />
+                    </div>
 
-                <div class="form-group hidden" id="emailGroup">
-                    <label for="email">Email (opcional)</label>
-                    <input type="email" id="email" placeholder="exemplo@email.com">
-                </div>
+                    <!-- Email (opcional, registo) -->
+                    <div class="field hidden" id="emailGroup">
+                        <label for="email">Email (opcional)</label>
+                        <input type="email" id="email" placeholder="exemplo@email.com" />
+                    </div>
 
-                <div class="message error" id="errorMessage">
-                    <span>⚠️</span> <span id="errorText">Erro!</span>
-                </div>
+                    <!-- Messages -->
+                    <div class="msg error" id="errorMsg">
+                        <span>⚠️</span> <span id="errorText">Erro</span>
+                    </div>
+                    <div class="msg success" id="successMsg">
+                        <span>✅</span> <span id="successText">Sucesso</span>
+                    </div>
 
-                <div class="message success" id="successMessage">
-                    <span>✅</span> <span id="successText">Sucesso!</span>
-                </div>
+                    <!-- Submit -->
+                    <button type="submit" class="btn-primary" id="loginBtn">
+                        <span id="loginBtnText">Entrar</span>
+                    </button>
 
-                <button type="submit" class="btn-primary" id="loginButton">
-                    <span id="loginButtonText">Entrar</span>
-                </button>
+                    <!-- Toggle mode -->
+                    <span class="toggle-link" id="toggleMode">Criar conta</span>
 
-                <div class="auth-toggle">
-                    <a id="toggleAuthMode">Criar conta</a>
-                </div>
+                    <div class="divider">ou</div>
 
-                <div class="divider">ou</div>
-
-                <button type="button" class="btn-ghost" id="skipLoginBtn">
-                    Entrar como convidado
-                </button>
-            </form>
+                    <!-- Guest -->
+                    <button type="button" class="btn-ghost" id="guestBtn">Entrar como convidado</button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- ============ APP ============ -->
-    <div class="app-container" id="appContainer">
-        <header class="app-header">
-            <div class="app-logo">
-                <svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#10B981" stroke-width="3"/>
-                    <circle cx="50" cy="45" r="15" fill="#10B981" opacity="0.8"/>
-                    <circle cx="42" cy="40" r="4" fill="#0F172A"/>
-                    <circle cx="58" cy="40" r="4" fill="#0F172A"/>
-                    <path d="M42 52 Q50 60 58 52" stroke="#0F172A" stroke-width="2" fill="none"/>
+    <!-- ============================================================
+    APP
+    ============================================================ -->
+    <div class="app" id="app">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="brand">
+                <svg width="28" height="28" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#1DB954" stroke-width="3" />
+                    <circle cx="50" cy="45" r="15" fill="#1DB954" opacity="0.8" />
+                    <circle cx="42" cy="40" r="4" fill="#121212" />
+                    <circle cx="58" cy="40" r="4" fill="#121212" />
+                    <path d="M42 52 Q50 60 58 52" stroke="#121212" stroke-width="2" fill="none" />
                 </svg>
-                <span class="app-logo-text">Lúcio<span>.fm</span></span>
+                Lúcio<span>.fm</span>
             </div>
-            <div class="app-user">
-                <span class="app-user-name" id="displayName">Utilizador</span>
-                <div class="app-user-avatar" id="userAvatar">U</div>
-                <button class="btn-logout" id="logoutBtn">Sair</button>
+            <div class="user">
+                <span class="name" id="userName">Utilizador</span>
+                <div class="avatar" id="userAvatar">U</div>
+                <button class="logout" id="logoutBtn">Sair</button>
             </div>
         </header>
 
-        <main class="main-content">
-            <div class="dashboard">
-                <div class="dashboard-header">
-                    <h1>Painel de Controlo</h1>
-                    <p>Bem-vindo de volta, <strong id="welcomeName">utilizador</strong></p>
+        <!-- Main -->
+        <main class="main">
+            <div class="container">
+
+                <!-- Header -->
+                <div class="header">
+                    <h1>Dashboard</h1>
+                    <p>Bem-vindo, <strong id="welcomeName">utilizador</strong></p>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
+                <!-- Stats -->
+                <div class="stats">
+                    <div class="card">
                         <div class="label">Status</div>
                         <div class="value green">● Online</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="card">
                         <div class="label">Conexão</div>
                         <div class="value green">Supabase</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="card">
                         <div class="label">Conta</div>
                         <div class="value" id="accountStatus">Ativa</div>
                     </div>
                 </div>
 
-                <div class="content-grid">
-                    <div class="content-card">
-                        <h3>📋 Atividade Recente</h3>
-                        <div class="playlist-item">
+                <!-- Grid -->
+                <div class="grid-2">
+
+                    <!-- Actividade -->
+                    <div class="card">
+                        <h3>📋 Atividade recente</h3>
+                        <div class="item">
                             <span class="icon">🎵</span>
                             <div class="info">
                                 <div class="title">Playlist carregada</div>
@@ -656,14 +697,14 @@
                             </div>
                             <span class="badge">Nova</span>
                         </div>
-                        <div class="playlist-item">
+                        <div class="item">
                             <span class="icon">👤</span>
                             <div class="info">
                                 <div class="title">Login realizado</div>
                                 <div class="sub">Hoje, 14:30</div>
                             </div>
                         </div>
-                        <div class="playlist-item">
+                        <div class="item">
                             <span class="icon">🔗</span>
                             <div class="info">
                                 <div class="title">Supabase conectada</div>
@@ -673,120 +714,129 @@
                         </div>
                     </div>
 
-                    <div class="content-card">
+                    <!-- Status API -->
+                    <div class="card">
                         <h3>🔗 Estado da API</h3>
-                        <div class="status-indicator">
+                        <div class="status-row">
                             <span class="status-dot"></span>
-                            Supabase
+                            <span>Supabase</span>
+                            <span style="margin-left:auto;color:var(--accent);">● Ativa</span>
                         </div>
-                        <div style="margin-top: 12px; color: var(--text-secondary); font-size: 14px;">
-                            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color);">
+                        <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
+                            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:var(--text-secondary);">
                                 <span>Autenticação</span>
-                                <span style="color: var(--primary);">● Ativa</span>
+                                <span style="color:var(--accent);">● OK</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                            <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:var(--text-secondary);">
                                 <span>Base de Dados</span>
-                                <span style="color: var(--primary);">● Disponível</span>
+                                <span style="color:var(--accent);">● Disponível</span>
                             </div>
                         </div>
-                        <div style="margin-top: 16px; padding: 12px; background: var(--dark-bg); border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
-                            <code>URL: hijrhoujydouxkvwupgw.supabase.co</code>
+                        <div class="code-block">
+                            URL: hijrhoujydouxkvwupgw.supabase.co
                         </div>
                     </div>
+
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- ============================================================
+    SCRIPT
+    ============================================================ -->
     <script>
-        // =====================================================
+        // ============================================
         // SUPABASE CONFIG
-        // =====================================================
+        // ============================================
         const SUPABASE_URL = 'https://hijrhoujydouxkvwupgw.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_FrehZQeVQthZW9uQSpAyqg_acRKGIQo';
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =====================================================
-        // DOM ELEMENTS
-        // =====================================================
-        const loginScreen = document.getElementById('loginScreen');
-        const appContainer = document.getElementById('appContainer');
-        const loginForm = document.getElementById('loginForm');
-        const loginButton = document.getElementById('loginButton');
-        const loginButtonText = document.getElementById('loginButtonText');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const emailInput = document.getElementById('email');
-        const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
-        const emailGroup = document.getElementById('emailGroup');
-        const errorMessage = document.getElementById('errorMessage');
-        const errorText = document.getElementById('errorText');
-        const successMessage = document.getElementById('successMessage');
-        const successText = document.getElementById('successText');
-        const toggleAuthMode = document.getElementById('toggleAuthMode');
-        const skipLoginBtn = document.getElementById('skipLoginBtn');
-        const displayName = document.getElementById('displayName');
-        const welcomeName = document.getElementById('welcomeName');
-        const userAvatar = document.getElementById('userAvatar');
-        const logoutBtn = document.getElementById('logoutBtn');
+        // ============================================
+        // DOM REFS
+        // ============================================
+        const $ = (id) => document.getElementById(id);
+
+        const loginScreen = $('loginScreen');
+        const app = $('app');
+        const loginForm = $('loginForm');
+        const loginBtn = $('loginBtn');
+        const loginBtnText = $('loginBtnText');
+        const usernameInput = $('username');
+        const passwordInput = $('password');
+        const confirmInput = $('confirmPassword');
+        const emailInput = $('email');
+        const confirmGroup = $('confirmGroup');
+        const emailGroup = $('emailGroup');
+        const errorMsg = $('errorMsg');
+        const errorText = $('errorText');
+        const successMsg = $('successMsg');
+        const successText = $('successText');
+        const toggleMode = $('toggleMode');
+        const guestBtn = $('guestBtn');
+        const userName = $('userName');
+        const welcomeName = $('welcomeName');
+        const userAvatar = $('userAvatar');
+        const logoutBtn = $('logoutBtn');
+        const accountStatus = $('accountStatus');
 
         let isRegistering = false;
         let currentUser = null;
 
-        // =====================================================
+        // ============================================
         // UI HELPERS
-        // =====================================================
+        // ============================================
         function showError(msg) {
             errorText.textContent = msg;
-            errorMessage.classList.add('show');
-            successMessage.classList.remove('show');
-            setTimeout(() => errorMessage.classList.remove('show'), 4000);
+            errorMsg.classList.add('show');
+            successMsg.classList.remove('show');
+            setTimeout(() => errorMsg.classList.remove('show'), 4000);
         }
 
         function showSuccess(msg) {
             successText.textContent = msg;
-            successMessage.classList.add('show');
-            errorMessage.classList.remove('show');
-            setTimeout(() => successMessage.classList.remove('show'), 4000);
+            successMsg.classList.add('show');
+            errorMsg.classList.remove('show');
+            setTimeout(() => successMsg.classList.remove('show'), 4000);
         }
 
         function setLoading(loading) {
-            loginButton.disabled = loading;
-            loginButtonText.textContent = loading ? 'A processar...' : (isRegistering ? 'Criar conta' : 'Entrar');
+            loginBtn.disabled = loading;
+            loginBtnText.textContent = loading ? 'A processar…' : (isRegistering ? 'Criar conta' : 'Entrar');
         }
 
-        function toggleMode() {
+        function toggleModeFn() {
             isRegistering = !isRegistering;
-            toggleAuthMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
-            loginButtonText.textContent = isRegistering ? 'Criar conta' : 'Entrar';
+            toggleMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
+            loginBtnText.textContent = isRegistering ? 'Criar conta' : 'Entrar';
 
             if (isRegistering) {
-                confirmPasswordGroup.classList.remove('hidden');
+                confirmGroup.classList.remove('hidden');
                 emailGroup.classList.remove('hidden');
                 passwordInput.placeholder = 'Mínimo 6 caracteres';
             } else {
-                confirmPasswordGroup.classList.add('hidden');
+                confirmGroup.classList.add('hidden');
                 emailGroup.classList.add('hidden');
                 passwordInput.placeholder = 'Palavra-passe';
-                confirmPasswordInput.value = '';
+                confirmInput.value = '';
                 emailInput.value = '';
             }
 
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
+            errorMsg.classList.remove('show');
+            successMsg.classList.remove('show');
         }
 
-        // =====================================================
+        // ============================================
         // AUTH
-        // =====================================================
+        // ============================================
         async function handleLogin(e) {
             e.preventDefault();
 
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
-            const confirmPassword = confirmPasswordInput.value.trim();
+            const confirm = confirmInput.value.trim();
             const email = emailInput.value.trim();
 
             if (!username || !password) {
@@ -799,7 +849,7 @@
                 return;
             }
 
-            if (isRegistering && password !== confirmPassword) {
+            if (isRegistering && password !== confirm) {
                 showError('As palavras-passe não coincidem.');
                 return;
             }
@@ -814,10 +864,7 @@
                         email: userEmail,
                         password: password,
                         options: {
-                            data: {
-                                username: username,
-                                display_name: username
-                            }
+                            data: { username, display_name: username }
                         }
                     });
 
@@ -826,9 +873,9 @@
                     if (data.user) {
                         showSuccess('✅ Conta criada! Faça login para continuar.');
                         setTimeout(() => {
-                            if (isRegistering) toggleMode();
+                            if (isRegistering) toggleModeFn();
                             passwordInput.value = '';
-                            confirmPasswordInput.value = '';
+                            confirmInput.value = '';
                         }, 1500);
                         setLoading(false);
                         return;
@@ -844,19 +891,19 @@
 
                     if (data.user) {
                         currentUser = data.user;
-                        const displayName_ = data.user.user_metadata?.username || username;
-                        enterApp(displayName_);
+                        const displayName = data.user.user_metadata?.username || username;
+                        enterApp(displayName);
                         return;
                     }
                 }
-            } catch (error) {
-                console.error('Erro:', error);
-                if (error.message.includes('Invalid login credentials')) {
+            } catch (err) {
+                console.error('Erro:', err);
+                if (err.message.includes('Invalid login credentials')) {
                     showError('Credenciais inválidas. Verifique os dados.');
-                } else if (error.message.includes('User already registered')) {
+                } else if (err.message.includes('User already registered')) {
                     showError('Utilizador já registado. Faça login.');
                 } else {
-                    showError('Erro: ' + error.message);
+                    showError('Erro: ' + err.message);
                 }
             }
 
@@ -864,49 +911,41 @@
         }
 
         function enterApp(username) {
-            displayName.textContent = username;
+            userName.textContent = username;
             welcomeName.textContent = username;
             userAvatar.textContent = username.charAt(0).toUpperCase();
+            accountStatus.textContent = 'Ativa';
 
             loginScreen.classList.add('hidden');
-            appContainer.classList.add('visible');
+            app.classList.add('visible');
         }
 
-        // =====================================================
-        // EVENT LISTENERS
-        // =====================================================
-        loginForm.addEventListener('submit', handleLogin);
-        toggleAuthMode.addEventListener('click', (e) => { e.preventDefault(); toggleMode(); });
-
-        skipLoginBtn.addEventListener('click', () => {
-            const guestName = 'Convidado_' + Math.floor(Math.random() * 1000);
-            currentUser = { user_metadata: { username: guestName }, id: 'guest_' + Date.now() };
-            enterApp(guestName);
-        });
-
-        logoutBtn.addEventListener('click', async () => {
+        // ============================================
+        // LOGOUT
+        // ============================================
+        async function doLogout() {
             try {
                 if (currentUser && !currentUser.id.startsWith('guest_')) {
                     await supabase.auth.signOut();
                 }
                 currentUser = null;
-                appContainer.classList.remove('visible');
+                app.classList.remove('visible');
                 setTimeout(() => {
-                    appContainer.style.display = 'none';
+                    app.style.display = 'none';
                     loginScreen.classList.remove('hidden');
                     usernameInput.value = '';
                     passwordInput.value = '';
-                    confirmPasswordInput.value = '';
+                    confirmInput.value = '';
                     emailInput.value = '';
                 }, 300);
-            } catch (error) {
-                console.error('Erro ao sair:', error);
+            } catch (err) {
+                console.error('Erro ao sair:', err);
             }
-        });
+        }
 
-        // =====================================================
-        // CHECK SESSION
-        // =====================================================
+        // ============================================
+        // SESSION CHECK
+        // ============================================
         async function checkSession() {
             try {
                 const { data, error } = await supabase.auth.getSession();
@@ -917,16 +956,35 @@
                     const username = currentUser.user_metadata?.username || 'DJ_Lucio';
                     enterApp(username);
                 }
-            } catch (error) {
-                console.error('Erro ao verificar sessão:', error);
+            } catch (err) {
+                console.error('Erro ao verificar sessão:', err);
             }
         }
 
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        loginForm.addEventListener('submit', handleLogin);
+        toggleMode.addEventListener('click', (e) => { e.preventDefault();
+            toggleModeFn(); });
+
+        guestBtn.addEventListener('click', () => {
+            const guest = 'Convidado_' + Math.floor(Math.random() * 1000);
+            currentUser = { user_metadata: { username: guest }, id: 'guest_' + Date.now() };
+            enterApp(guest);
+        });
+
+        logoutBtn.addEventListener('click', doLogout);
+
+        // ============================================
+        // INIT
+        // ============================================
         checkSession();
 
-        console.log('🔐 Lúcio.fm - Autenticação com Supabase');
+        console.log('🎵 Lúcio.fm — Autenticação com Supabase');
         console.log('📝 Para criar conta, clique em "Criar conta"');
-        console.log('👤 Ou clique em "Entrar como convidado"');
+        console.log('👤 Ou entre como convidado');
     </script>
+
 </body>
 </html>
