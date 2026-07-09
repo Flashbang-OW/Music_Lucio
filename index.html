@@ -139,6 +139,11 @@
         .input-group {
             margin-bottom: 20px;
             text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .input-group.hidden {
+            display: none;
         }
 
         .input-group label {
@@ -183,6 +188,10 @@
 
         .input-wrapper input::placeholder {
             color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-wrapper input.error {
+            border-color: #ff6b6b;
         }
 
         .login-button {
@@ -537,24 +546,47 @@
             </div>
 
             <form class="login-form" id="loginForm">
+                <!-- Campo Username - sempre visível -->
                 <div class="input-group">
-                    <label for="username">Nome de Herói</label>
+                    <label for="username" id="usernameLabel">Nome de Herói</label>
                     <div class="input-wrapper">
                         <span class="input-icon">🦸</span>
                         <input type="text" id="username" placeholder="Ex: DJ_Lucio_OW" required>
                     </div>
                 </div>
+
+                <!-- Campo Senha - sempre visível -->
                 <div class="input-group">
-                    <label for="password">Código de Acesso</label>
+                    <label for="password" id="passwordLabel">Código de Acesso</label>
                     <div class="input-wrapper">
                         <span class="input-icon">🔐</span>
                         <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6">
                     </div>
                 </div>
+
+                <!-- Campo Confirmar Senha - visível apenas no modo registo -->
+                <div class="input-group hidden" id="confirmPasswordGroup">
+                    <label for="confirmPassword">Confirmar Código</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔐</span>
+                        <input type="password" id="confirmPassword" placeholder="Confirma a senha">
+                    </div>
+                </div>
+
+                <!-- Campo Email (opcional) - visível apenas no modo registo -->
+                <div class="input-group hidden" id="emailGroup">
+                    <label for="email">Email (opcional)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📧</span>
+                        <input type="email" id="email" placeholder="email@exemplo.com">
+                    </div>
+                </div>
+
                 <button type="submit" class="login-button" id="loginButton">
                     <span id="loginButtonText">ENTRAR NO JOGO</span>
                     <span class="button-icon">🎧</span>
                 </button>
+                
                 <div class="login-options">
                     <a id="toggleAuthMode">Criar conta</a>
                 </div>
@@ -630,6 +662,12 @@
         const loginButtonText = document.getElementById('loginButtonText');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const emailInput = document.getElementById('email');
+        const usernameLabel = document.getElementById('usernameLabel');
+        const passwordLabel = document.getElementById('passwordLabel');
+        const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+        const emailGroup = document.getElementById('emailGroup');
         const errorMessage = document.getElementById('errorMessage');
         const errorText = document.getElementById('errorText');
         const successMessage = document.getElementById('successMessage');
@@ -709,15 +747,57 @@
         }
 
         // =====================================================
+        // ALTERNAR MODO (Login / Registo)
+        // =====================================================
+        function toggleMode() {
+            isRegistering = !isRegistering;
+            
+            // Atualiza o texto do link
+            toggleAuthMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
+            
+            // Atualiza o texto do botão
+            loginButtonText.textContent = isRegistering ? 'CRIAR CONTA' : 'ENTRAR NO JOGO';
+            
+            // Mostra/esconde campos adicionais
+            if (isRegistering) {
+                // Modo REGISTO
+                confirmPasswordGroup.classList.remove('hidden');
+                emailGroup.classList.remove('hidden');
+                passwordInput.placeholder = 'Mínimo 6 caracteres';
+                passwordLabel.textContent = 'Código de Acesso';
+                usernameLabel.textContent = 'Nome de Herói';
+                
+                // Limpa campos de confirmação
+                confirmPasswordInput.value = '';
+                emailInput.value = '';
+            } else {
+                // Modo LOGIN
+                confirmPasswordGroup.classList.add('hidden');
+                emailGroup.classList.add('hidden');
+                passwordInput.placeholder = '••••••••';
+                passwordLabel.textContent = 'Código de Acesso';
+                usernameLabel.textContent = 'Nome de Herói';
+            }
+            
+            // Limpa mensagens
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+        }
+
+        // =====================================================
         // AUTENTICAÇÃO
         // =====================================================
         async function handleLogin(e) {
             e.preventDefault();
+            
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+            const email = emailInput.value.trim();
 
+            // Validações básicas
             if (!username || !password) {
-                showError('Preenche todos os campos!');
+                showError('Preenche todos os campos obrigatórios!');
                 return;
             }
 
@@ -726,53 +806,73 @@
                 return;
             }
 
+            if (isRegistering) {
+                // Validações específicas do registo
+                if (password !== confirmPassword) {
+                    showError('As senhas não coincidem!');
+                    return;
+                }
+            }
+
             setLoading(true);
 
             try {
                 // Cria um email a partir do username (remove espaços e caracteres especiais)
-                const email = username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
+                const userEmail = email || username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
 
                 if (isRegistering) {
                     // REGISTO
+                    console.log('📝 A criar conta para:', username, userEmail);
+                    
                     const { data, error } = await supabase.auth.signUp({
-                        email: email,
+                        email: userEmail,
                         password: password,
                         options: {
                             data: { 
                                 username: username,
-                                display_name: username
+                                display_name: username,
+                                email: email || ''
                             }
                         }
                     });
 
                     if (error) {
-                        console.error('Erro de registo:', error);
+                        console.error('❌ Erro de registo:', error);
                         throw error;
                     }
 
                     if (data.user) {
-                        showSuccess('✅ Conta criada com sucesso! Faz login para continuar.');
-                        // Volta para modo login
-                        isRegistering = false;
-                        toggleAuthMode.textContent = 'Criar conta';
-                        loginButtonText.textContent = 'ENTRAR NO JOGO';
-                        passwordInput.value = '';
+                        console.log('✅ Conta criada com sucesso!', data.user);
+                        showSuccess('✅ Conta criada com sucesso! Agora faz login.');
+                        
+                        // Volta para modo login automaticamente
+                        setTimeout(() => {
+                            if (isRegistering) {
+                                toggleMode();
+                            }
+                            passwordInput.value = '';
+                            confirmPasswordInput.value = '';
+                        }, 1500);
+                        
                         setLoading(false);
                         return;
                     }
                 } else {
                     // LOGIN
+                    console.log('🔑 A fazer login para:', username, userEmail);
+                    
                     const { data, error } = await supabase.auth.signInWithPassword({
-                        email: email,
+                        email: userEmail,
                         password: password
                     });
 
                     if (error) {
-                        console.error('Erro de login:', error);
+                        console.error('❌ Erro de login:', error);
                         throw error;
                     }
 
                     if (data.user) {
+                        console.log('✅ Login bem-sucedido!', data.user);
                         currentUser = data.user;
                         const displayName_ = data.user.user_metadata?.username || username;
                         enterApp(displayName_);
@@ -780,7 +880,7 @@
                     }
                 }
             } catch (error) {
-                console.error('Erro completo:', error);
+                console.error('❌ Erro completo:', error);
                 
                 // Tratamento de erros específicos da Supabase
                 if (error.message.includes('Invalid login credentials')) {
@@ -801,15 +901,13 @@
             setLoading(false);
         }
 
-        // Alternar entre login e registo
+        // =====================================================
+        // EVENT LISTENERS
+        // =====================================================
+        loginForm.addEventListener('submit', handleLogin);
         toggleAuthMode.addEventListener('click', (e) => {
             e.preventDefault();
-            isRegistering = !isRegistering;
-            toggleAuthMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
-            loginButtonText.textContent = isRegistering ? 'CRIAR CONTA' : 'ENTRAR NO JOGO';
-            passwordInput.placeholder = isRegistering ? 'Mínimo 6 caracteres' : '••••••••';
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
+            toggleMode();
         });
 
         // Login como convidado
@@ -832,6 +930,8 @@
                     loginScreen.classList.remove('hidden');
                     usernameInput.value = '';
                     passwordInput.value = '';
+                    confirmPasswordInput.value = '';
+                    emailInput.value = '';
                 }, 300);
             } catch (error) {
                 console.error('Erro ao sair:', error);
@@ -869,21 +969,18 @@
         }
 
         // =====================================================
-        // EVENT LISTENERS
-        // =====================================================
-        loginForm.addEventListener('submit', handleLogin);
-
-        // =====================================================
         // INICIALIZAÇÃO
         // =====================================================
         checkSession();
 
         console.log('🔐 Lúcio.fm - Autenticação com Supabase');
         console.log('📝 Para criar conta:');
-        console.log('   1. Preenche o "Nome de Herói" (ex: lucio)');
-        console.log('   2. Clica em "Criar conta"');
+        console.log('   1. Clica em "Criar conta"');
+        console.log('   2. Preenche o "Nome de Herói" (ex: lucio)');
         console.log('   3. Define uma senha com 6+ caracteres');
-        console.log('   4. Faz login com as mesmas credenciais');
+        console.log('   4. Confirma a senha');
+        console.log('   5. Clica em "CRIAR CONTA"');
+        console.log('   6. Depois faz login com as mesmas credenciais');
         console.log('');
         console.log('👤 Ou clica em "Entrar como convidado" para testar sem registo');
     </script>
