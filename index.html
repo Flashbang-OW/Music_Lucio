@@ -124,6 +124,10 @@
             margin-bottom: 5px;
         }
 
+        .login-title .highlight {
+            color: var(--lucio-green);
+        }
+
         .login-subtitle {
             color: var(--lucio-green);
             font-size: 18px;
@@ -232,8 +236,8 @@
             color: var(--text-gray);
             text-decoration: none;
             font-size: 14px;
-            transition: color 0.3s;
             cursor: pointer;
+            transition: color 0.3s;
         }
 
         .login-options a:hover { color: var(--lucio-green); }
@@ -357,12 +361,12 @@
         .app-header .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .app-header .logo svg {
-            width: 40px;
-            height: 40px;
+        .app-header .logo-symbol {
+            width: 45px;
+            height: 45px;
         }
 
         .app-header .logo-text {
@@ -528,7 +532,7 @@
                         <path d="M42 52 Q50 60 58 52" stroke="#0F2343" stroke-width="2" fill="none"/>
                     </svg>
                 </div>
-                <h1 class="login-title">LÚCIO<span style="color:#A4D615">.fm</span></h1>
+                <h1 class="login-title">LÚCIO<span class="highlight">.fm</span></h1>
                 <p class="login-subtitle">Vamos aumentar o som!</p>
             </div>
 
@@ -548,7 +552,7 @@
                     </div>
                 </div>
                 <button type="submit" class="login-button" id="loginButton">
-                    <span>ENTRAR NO JOGO</span>
+                    <span id="loginButtonText">ENTRAR NO JOGO</span>
                     <span class="button-icon">🎧</span>
                 </button>
                 <div class="login-options">
@@ -576,7 +580,7 @@
     <div class="app-container" id="appContainer">
         <header class="app-header">
             <div class="logo">
-                <svg viewBox="0 0 100 100" width="40" height="40">
+                <svg class="logo-symbol" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="#A4D615" stroke-width="3"/>
                     <circle cx="50" cy="45" r="15" fill="#A4D615" opacity="0.8"/>
                     <circle cx="42" cy="40" r="4" fill="#0F2343"/>
@@ -623,6 +627,7 @@
         const appContainer = document.getElementById('appContainer');
         const loginForm = document.getElementById('loginForm');
         const loginButton = document.getElementById('loginButton');
+        const loginButtonText = document.getElementById('loginButtonText');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('errorMessage');
@@ -696,11 +701,10 @@
         function setLoading(loading) {
             if (loading) {
                 loginButton.disabled = true;
-                loginButton.innerHTML = '<span>⏳</span><span>A CARREGAR...</span>';
+                loginButtonText.textContent = '⏳ A CARREGAR...';
             } else {
                 loginButton.disabled = false;
-                const label = isRegistering ? 'CRIAR CONTA' : 'ENTRAR NO JOGO';
-                loginButton.innerHTML = `<span>${label}</span><span class="button-icon">🎧</span>`;
+                loginButtonText.textContent = isRegistering ? 'CRIAR CONTA' : 'ENTRAR NO JOGO';
             }
         }
 
@@ -725,7 +729,8 @@
             setLoading(true);
 
             try {
-                const email = username.toLowerCase().replace(/\s/g, '') + '@lucio.fm';
+                // Cria um email a partir do username (remove espaços e caracteres especiais)
+                const email = username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@lucio.fm';
 
                 if (isRegistering) {
                     // REGISTO
@@ -733,18 +738,24 @@
                         email: email,
                         password: password,
                         options: {
-                            data: { username: username }
+                            data: { 
+                                username: username,
+                                display_name: username
+                            }
                         }
                     });
 
-                    if (error) throw error;
+                    if (error) {
+                        console.error('Erro de registo:', error);
+                        throw error;
+                    }
 
                     if (data.user) {
-                        showSuccess('Conta criada com sucesso! Faz login para continuar.');
+                        showSuccess('✅ Conta criada com sucesso! Faz login para continuar.');
                         // Volta para modo login
                         isRegistering = false;
                         toggleAuthMode.textContent = 'Criar conta';
-                        loginButton.innerHTML = '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+                        loginButtonText.textContent = 'ENTRAR NO JOGO';
                         passwordInput.value = '';
                         setLoading(false);
                         return;
@@ -756,7 +767,10 @@
                         password: password
                     });
 
-                    if (error) throw error;
+                    if (error) {
+                        console.error('Erro de login:', error);
+                        throw error;
+                    }
 
                     if (data.user) {
                         currentUser = data.user;
@@ -766,15 +780,21 @@
                     }
                 }
             } catch (error) {
-                console.error('Erro:', error);
+                console.error('Erro completo:', error);
+                
+                // Tratamento de erros específicos da Supabase
                 if (error.message.includes('Invalid login credentials')) {
-                    showError('Credenciais inválidas! Verifica o código de acesso.');
+                    showError('❌ Credenciais inválidas! Verifica o código de acesso.');
                 } else if (error.message.includes('User already registered')) {
-                    showError('Este nome já está registado! Faz login.');
+                    showError('❌ Este nome já está registado! Faz login.');
                 } else if (error.message.includes('Password should be at least 6 characters')) {
-                    showError('A senha deve ter pelo menos 6 caracteres.');
+                    showError('❌ A senha deve ter pelo menos 6 caracteres.');
+                } else if (error.message.includes('Email not confirmed')) {
+                    showError('📧 Confirma o teu email antes de fazer login.');
+                } else if (error.message.includes('Network')) {
+                    showError('🌐 Erro de rede! Verifica a tua ligação à internet.');
                 } else {
-                    showError('Erro: ' + error.message);
+                    showError('❌ Erro: ' + error.message);
                 }
             }
 
@@ -786,9 +806,7 @@
             e.preventDefault();
             isRegistering = !isRegistering;
             toggleAuthMode.textContent = isRegistering ? 'Fazer login' : 'Criar conta';
-            loginButton.innerHTML = isRegistering 
-                ? '<span>CRIAR CONTA</span><span class="button-icon">🎧</span>'
-                : '<span>ENTRAR NO JOGO</span><span class="button-icon">🎧</span>';
+            loginButtonText.textContent = isRegistering ? 'CRIAR CONTA' : 'ENTRAR NO JOGO';
             passwordInput.placeholder = isRegistering ? 'Mínimo 6 caracteres' : '••••••••';
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
@@ -860,11 +878,14 @@
         // =====================================================
         checkSession();
 
-        // Mostra a senha como "lucio123" para teste rápido
-        console.log('🔑 Para teste rápido, podes usar:');
-        console.log('   Utilizador: lucio');
-        console.log('   Senha: lucio123');
-        console.log('   Ou cria uma conta nova!');
+        console.log('🔐 Lúcio.fm - Autenticação com Supabase');
+        console.log('📝 Para criar conta:');
+        console.log('   1. Preenche o "Nome de Herói" (ex: lucio)');
+        console.log('   2. Clica em "Criar conta"');
+        console.log('   3. Define uma senha com 6+ caracteres');
+        console.log('   4. Faz login com as mesmas credenciais');
+        console.log('');
+        console.log('👤 Ou clica em "Entrar como convidado" para testar sem registo');
     </script>
 </body>
 </html>
