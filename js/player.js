@@ -1,156 +1,61 @@
-// Elementos do DOM
-const playBtn = document.getElementById('playBtn');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const shuffleBtn = document.getElementById('shuffleBtn');
-const repeatBtn = document.getElementById('repeatBtn');
-const progressBar = document.getElementById('progressBar');
-const progress = document.getElementById('progress');
-const currentTimeEl = document.getElementById('currentTime');
-const durationEl = document.getElementById('duration');
-const volumeSlider = document.getElementById('volumeSlider');
-const trackTitle = document.getElementById('trackTitle');
-const trackArtist = document.getElementById('trackArtist');
-const albumCover = document.getElementById('albumCover');
+// Adiciona no início do player.js existente:
 
-// Estado do player
-let currentSongIndex = 0;
-let isPlaying = false;
-let isShuffled = false;
-let isRepeated = false;
+// Elementos adicionais
+const speedBoost = document.getElementById('speedBoost');
+const healBoost = document.getElementById('healBoost');
+const crossfadeFill = document.getElementById('crossfadeFill');
+const equalizerBars = document.querySelectorAll('.equalizer .bar');
 
-// Criar elemento de áudio
-const audio = new Audio();
-
-// Função para tocar uma música específica
-function playSong(index) {
-    currentSongIndex = index;
-    const song = playlist[index];
-    
-    audio.src = song.src;
-    trackTitle.textContent = song.title;
-    trackArtist.textContent = song.artist;
-    albumCover.src = song.cover;
-    
-    audio.play();
-    isPlaying = true;
-    updatePlayButton();
-    albumCover.classList.add('playing');
-    
-    // Atualizar playlist visual
-    updateActiveSong();
-}
-
-// Play/Pause
-function togglePlay() {
-    if (isPlaying) {
-        audio.pause();
-        albumCover.classList.remove('playing');
+// Controlo de velocidade (Speed Boost)
+let currentSpeed = 1;
+speedBoost.addEventListener('click', () => {
+    if (currentSpeed === 1) {
+        currentSpeed = 1.5;
+        speedBoost.style.color = 'var(--speed-green)';
+        speedBoost.style.filter = 'drop-shadow(0 0 10px var(--speed-green))';
+    } else if (currentSpeed === 1.5) {
+        currentSpeed = 2;
+        speedBoost.style.color = 'var(--speed-green)';
     } else {
-        if (!audio.src) {
-            playSong(0);
-        } else {
-            audio.play();
-            albumCover.classList.add('playing');
-        }
+        currentSpeed = 1;
+        speedBoost.style.color = '';
+        speedBoost.style.filter = '';
     }
-    isPlaying = !isPlaying;
-    updatePlayButton();
-}
-
-// Atualizar botão play/pause
-function updatePlayButton() {
-    playBtn.textContent = isPlaying ? '⏸️' : '▶️';
-}
-
-// Próxima música
-function nextSong() {
-    if (isShuffled) {
-        const randomIndex = Math.floor(Math.random() * playlist.length);
-        playSong(randomIndex);
-    } else {
-        currentSongIndex = (currentSongIndex + 1) % playlist.length;
-        playSong(currentSongIndex);
-    }
-}
-
-// Música anterior
-function prevSong() {
-    currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
-    playSong(currentSongIndex);
-}
-
-// Atualizar barra de progresso
-audio.addEventListener('timeupdate', () => {
-    if (audio.duration) {
-        const progressPercent = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = `${progressPercent}%`;
-        
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-        durationEl.textContent = formatTime(audio.duration);
-    }
+    audio.playbackRate = currentSpeed;
 });
 
-// Clique na barra de progresso
-progressBar.addEventListener('click', (e) => {
-    const width = progressBar.clientWidth;
-    const clickX = e.offsetX;
-    const duration = audio.duration;
+// Simulação de Healing Boost (efeito visual)
+healBoost.addEventListener('click', () => {
+    const playerContainer = document.querySelector('.player-container');
+    playerContainer.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.6)';
     
-    if (duration) {
-        audio.currentTime = (clickX / width) * duration;
-    }
+    setTimeout(() => {
+        playerContainer.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(164, 214, 21, 0.2)';
+    }, 2000);
 });
 
-// Volume
-volumeSlider.addEventListener('input', (e) => {
-    audio.volume = e.target.value / 100;
-});
-
-// Quando a música terminar
-audio.addEventListener('ended', () => {
-    if (isRepeated) {
-        playSong(currentSongIndex);
-    } else {
-        nextSong();
-    }
-});
-
-// Botões de shuffle e repeat
-shuffleBtn.addEventListener('click', () => {
-    isShuffled = !isShuffled;
-    shuffleBtn.style.color = isShuffled ? 'var(--lucio-green)' : '';
-});
-
-repeatBtn.addEventListener('click', () => {
-    isRepeated = !isRepeated;
-    repeatBtn.style.color = isRepeated ? 'var(--lucio-green)' : '';
-});
-
-// Event listeners dos botões
-playBtn.addEventListener('click', togglePlay);
-prevBtn.addEventListener('click', prevSong);
-nextBtn.addEventListener('click', nextSong);
-
-// Atualizar música ativa na playlist
-function updateActiveSong() {
-    const playlistItems = document.querySelectorAll('.playlist li');
-    playlistItems.forEach((item, index) => {
-        if (index === currentSongIndex) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
+// Animar equalizer quando está a tocar
+function updateEqualizer(isPlaying) {
+    equalizerBars.forEach(bar => {
+        bar.style.animationPlayState = isPlaying ? 'running' : 'paused';
     });
 }
 
-// Formatar tempo (segundos -> mm:ss)
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-}
+// Modificar a função togglePlay existente para incluir:
+const originalTogglePlay = togglePlay;
+togglePlay = function() {
+    originalTogglePlay();
+    updateEqualizer(isPlaying);
+};
 
-// Inicializar
-renderPlaylist();
-playSong(0);
+// Atualizar crossfade com base no volume
+volumeSlider.addEventListener('input', (e) => {
+    audio.volume = e.target.value / 100;
+    crossfadeFill.style.width = e.target.value + '%';
+});
+
+// Rotação de voicelines a cada 8 segundos
+setInterval(rotateVoiceline, 8000);
+
+// Inicializar equalizer
+updateEqualizer(false);
